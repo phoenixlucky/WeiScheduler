@@ -165,6 +165,36 @@ body {
   gap: 8px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.auto-refresh-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(40, 88, 71, 0.12);
+  color: var(--primary-dark);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.auto-refresh-toggle input {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbar-select {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(40, 88, 71, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--primary-dark);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.9rem;
 }
 
 .section-head h2 {

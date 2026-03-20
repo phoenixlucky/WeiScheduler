@@ -5,12 +5,16 @@ const refreshButton = document.getElementById("refresh-list");
 const exportButton = document.getElementById("export-tasks");
 const importButton = document.getElementById("import-tasks");
 const importFileInput = document.getElementById("import-file");
+const autoRefreshEnabledInput = document.getElementById("auto-refresh-enabled");
+const autoRefreshIntervalInput = document.getElementById("auto-refresh-interval");
 const formTitle = document.getElementById("form-title");
 const taskTemplate = document.getElementById("task-template");
 const scheduleInput = document.getElementById("schedule");
 const heroTotal = document.getElementById("hero-total");
 const heroRunning = document.getElementById("hero-running");
 const heroEnabled = document.getElementById("hero-enabled");
+const AUTO_REFRESH_ENABLED_KEY = "weischeduler:auto-refresh-enabled";
+const AUTO_REFRESH_INTERVAL_KEY = "weischeduler:auto-refresh-interval";
 let loadTimer = null;
 const expandedTaskIds = new Set();
 
@@ -36,6 +40,52 @@ function formatDisplayTime(value) {
   }
 
   return beijingDateTimeFormatter.format(date).replace(/\//g, "-");
+}
+
+function getAutoRefreshEnabled() {
+  return autoRefreshEnabledInput.checked;
+}
+
+function getAutoRefreshInterval() {
+  const interval = Number(autoRefreshIntervalInput.value);
+  return Number.isFinite(interval) && interval > 0 ? interval : 10000;
+}
+
+function persistAutoRefreshPreferences() {
+  window.localStorage.setItem(AUTO_REFRESH_ENABLED_KEY, String(getAutoRefreshEnabled()));
+  window.localStorage.setItem(AUTO_REFRESH_INTERVAL_KEY, String(getAutoRefreshInterval()));
+}
+
+function hydrateAutoRefreshPreferences() {
+  const savedEnabled = window.localStorage.getItem(AUTO_REFRESH_ENABLED_KEY);
+  const savedInterval = window.localStorage.getItem(AUTO_REFRESH_INTERVAL_KEY);
+
+  if (savedEnabled !== null) {
+    autoRefreshEnabledInput.checked = savedEnabled === "true";
+  }
+  if (savedInterval && [...autoRefreshIntervalInput.options].some((option) => option.value === savedInterval)) {
+    autoRefreshIntervalInput.value = savedInterval;
+  }
+}
+
+function clearLoadTimer() {
+  if (loadTimer) {
+    window.clearTimeout(loadTimer);
+    loadTimer = null;
+  }
+}
+
+function scheduleAutoRefresh() {
+  clearLoadTimer();
+  if (!getAutoRefreshEnabled()) {
+    return;
+  }
+
+  loadTimer = window.setTimeout(() => {
+    loadTasks().catch((error) => {
+      taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
+    });
+  }, getAutoRefreshInterval());
 }
 
 function formToPayload() {
@@ -220,9 +270,7 @@ async function importTasks(file) {
 async function triggerManualRun(taskId) {
   await request(`/api/tasks/${taskId}/run`, { method: "POST" });
   await loadTasks();
-  if (loadTimer) {
-    window.clearTimeout(loadTimer);
-  }
+  clearLoadTimer();
   loadTimer = window.setTimeout(() => {
     loadTasks().catch((error) => {
       taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
@@ -385,18 +433,7 @@ async function loadTasks() {
     taskList.appendChild(node);
   }
 
-  const hasRunningTask = tasks.some((task) => task.running);
-  if (loadTimer) {
-    window.clearTimeout(loadTimer);
-    loadTimer = null;
-  }
-  if (hasRunningTask) {
-    loadTimer = window.setTimeout(() => {
-      loadTasks().catch((error) => {
-        taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
-      });
-    }, 2000);
-  }
+  scheduleAutoRefresh();
 }
 
 taskForm.addEventListener("submit", async (event) => {
@@ -426,6 +463,14 @@ taskForm.addEventListener("submit", async (event) => {
 
 resetButton.addEventListener("click", resetForm);
 refreshButton.addEventListener("click", loadTasks);
+autoRefreshEnabledInput.addEventListener("change", () => {
+  persistAutoRefreshPreferences();
+  scheduleAutoRefresh();
+});
+autoRefreshIntervalInput.addEventListener("change", () => {
+  persistAutoRefreshPreferences();
+  scheduleAutoRefresh();
+});
 exportButton.addEventListener("click", async () => {
   try {
     await exportTasks();
@@ -460,6 +505,7 @@ document.querySelectorAll(".cron-preset").forEach((button) => {
   });
 });
 
+hydrateAutoRefreshPreferences();
 updateRunnerFields();
 loadTasks().catch((error) => {
   taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;

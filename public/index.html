@@ -132,6 +132,15 @@
           <div class="section-head">
             <h2>任务列表</h2>
             <div class="toolbar-actions">
+              <label class="auto-refresh-toggle">
+                <input id="auto-refresh-enabled" type="checkbox" checked />
+                自动刷新
+              </label>
+              <select id="auto-refresh-interval" class="toolbar-select">
+                <option value="5000">5 秒</option>
+                <option value="10000" selected>10 秒</option>
+                <option value="30000">30 秒</option>
+              </select>
               <input id="import-file" type="file" accept="application/json" hidden />
               <button id="import-tasks" class="ghost-button" type="button">导入</button>
               <button id="export-tasks" class="ghost-button" type="button">导出</button>
