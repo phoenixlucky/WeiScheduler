@@ -1,14 +1,26 @@
 {
-  "name": "weipython-script-scheduler",
-  "version": "1.0.0",
+  "name": "weischeduler",
+  "version": "1.0.1",
   "private": true,
-  "description": "WeiPython scheduled task manager for running Python scripts with configurable environments and cron schedules.",
+  "description": "WeiScheduler scheduled task manager for running Python scripts with configurable environments and cron schedules.",
   "main": "server.js",
+  "bin": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build:exe": "node scripts/build-app-bundle.js",
+    "build:installer": "node scripts/build-installer.js"
   },
   "dependencies": {
     "express": "^4.21.2",
     "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "assets": [
+      "public/**/*"
+    ],
+    "outputPath": "dist"
   }
 }

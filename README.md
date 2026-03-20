@@ -1,4 +1,4 @@
-# WeiPython 定时任务
+# WeiScheduler 定时任务
 
 一个基于 npm 启动的网页端调度器，用来配置指定 Python 环境中的指定脚本，并按 Cron 时间表达式执行。
 

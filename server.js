@@ -13,7 +13,8 @@ const {
 } = require("./storage");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = Number(process.env.PORT || 3000);
+const shouldOpenBrowser = process.pkg || process.env.WEISCHEDULER_OPEN_BROWSER === "1";
 const scheduledJobs = new Map();
 const activeProcesses = new Map();
 const activeRunState = new Map();
@@ -22,6 +23,13 @@ ensureStore();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+function openBrowser(url) {
+  if (process.platform === "win32") {
+    execFile("cmd", ["/c", "start", "", url], { windowsHide: true });
+    return;
+  }
+}
 
 function normalizeTask(payload) {
   const now = new Date().toISOString();
@@ -390,6 +398,24 @@ app.get("*", (_req, res) => {
 
 refreshSchedules();
 
-app.listen(PORT, () => {
-  console.log(`Scheduler running at http://localhost:${PORT}`);
-});
+function listenOnPort(port, retriesLeft) {
+  const server = app.listen(port, () => {
+    console.log(`Scheduler running at http://localhost:${port}`);
+    if (shouldOpenBrowser) {
+      openBrowser(`http://localhost:${port}`);
+    }
+  });
+
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE" && retriesLeft > 0) {
+      console.warn(`Port ${port} is in use, retrying with ${port + 1}`);
+      listenOnPort(port + 1, retriesLeft - 1);
+      return;
+    }
+
+    console.error(`Failed to start server on port ${port}:`, error.message);
+    process.exit(1);
+  });
+}
+
+listenOnPort(DEFAULT_PORT, 20);

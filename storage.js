@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const dataDir = path.join(__dirname, "data");
+const appRoot = process.pkg ? path.dirname(process.execPath) : __dirname;
+const dataDir = path.join(appRoot, "data");
 const storeFile = path.join(dataDir, "tasks.json");
 
 function ensureStore() {
