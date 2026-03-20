@@ -1,11 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 
-const appRoot = process.pkg ? path.dirname(process.execPath) : __dirname;
-const dataDir = path.join(appRoot, "data");
-const storeFile = path.join(dataDir, "tasks.json");
+function getDataPaths() {
+  const appRoot = process.env.WEISCHEDULER_DATA_DIR || (process.pkg ? path.dirname(process.execPath) : __dirname);
+  return {
+    dataDir: path.join(appRoot, "data"),
+    storeFile: path.join(appRoot, "data", "tasks.json"),
+  };
+}
 
 function ensureStore() {
+  const { dataDir, storeFile } = getDataPaths();
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
@@ -15,11 +20,13 @@ function ensureStore() {
 }
 
 function readStore() {
+  const { storeFile } = getDataPaths();
   ensureStore();
   return JSON.parse(fs.readFileSync(storeFile, "utf8"));
 }
 
 function writeStore(store) {
+  const { storeFile } = getDataPaths();
   fs.writeFileSync(storeFile, JSON.stringify(store, null, 2), "utf8");
 }
 

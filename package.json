@@ -1,26 +1,60 @@
 {
   "name": "weischeduler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
+  "author": "WeiScheduler",
   "description": "WeiScheduler scheduled task manager for running Python scripts with configurable environments and cron schedules.",
-  "main": "server.js",
-  "bin": "server.js",
+  "main": "electron-main.js",
   "scripts": {
-    "start": "node server.js",
-    "build:exe": "node scripts/build-app-bundle.js",
-    "build:installer": "node scripts/build-installer.js"
+    "start": "electron .",
+    "start:web": "node server.js",
+    "build:installer": "electron-builder --win nsis"
   },
   "dependencies": {
     "express": "^4.21.2",
     "node-cron": "^3.0.3"
   },
   "devDependencies": {
-    "pkg": "^5.8.1"
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
   },
-  "pkg": {
-    "assets": [
-      "public/**/*"
+  "build": {
+    "appId": "com.weischeduler.desktop",
+    "productName": "WeiScheduler",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron-main.js",
+      "server.js",
+      "storage.js",
+      "public/**/*",
+      "build/icon.ico",
+      "package.json"
     ],
-    "outputPath": "dist"
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/installerIcon.ico",
+      "uninstallerIcon": "build/uninstallerIcon.ico",
+      "installerHeaderIcon": "build/installerHeaderIcon.ico",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "shortcutName": "WeiScheduler",
+      "artifactName": "WeiScheduler-Setup-${version}.${ext}"
+    }
   }
 }

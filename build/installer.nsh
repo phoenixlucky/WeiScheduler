@@ -1,11 +1,5 @@
-InstallDir "D:\Program Files\WeiScheduler"
-
 !macro customInstall
-  ${if} $installMode == "all"
-    SetShellVarContext all
-  ${else}
-    SetShellVarContext current
-  ${endif}
+  SetShellVarContext all
 
   Delete "$DESKTOP\${SHORTCUT_NAME}.lnk"
   CreateShortCut "$DESKTOP\${SHORTCUT_NAME}.lnk" "$appExe" "" "$appExe" 0 "" "" "${APP_DESCRIPTION}"

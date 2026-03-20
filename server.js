@@ -12,24 +12,12 @@ const {
   clearActiveRun,
 } = require("./storage");
 
-const app = express();
 const DEFAULT_PORT = Number(process.env.PORT || 3000);
-const shouldOpenBrowser = process.pkg || process.env.WEISCHEDULER_OPEN_BROWSER === "1";
 const scheduledJobs = new Map();
 const activeProcesses = new Map();
 const activeRunState = new Map();
 
-ensureStore();
-
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
-
-function openBrowser(url) {
-  if (process.platform === "win32") {
-    execFile("cmd", ["/c", "start", "", url], { windowsHide: true });
-    return;
-  }
-}
+let serverInstance = null;
 
 function normalizeTask(payload) {
   const now = new Date().toISOString();
@@ -292,130 +280,179 @@ async function runTask(taskId, trigger) {
   });
 }
 
-app.get("/api/tasks", (_req, res) => {
-  const tasks = getTasks().map((task) => ({
-    ...task,
-    running: activeProcesses.has(task.id),
-    liveLog: activeRunState.get(task.id) || null,
-  }));
-  res.json(tasks);
-});
+function createApp() {
+  const app = express();
 
-app.get("/api/tasks/:id", (req, res) => {
-  const task = getTask(req.params.id);
-  if (!task) {
-    return res.status(404).json({ error: "任务不存在" });
-  }
-  return res.json({
-    ...task,
-    running: activeProcesses.has(task.id),
-    liveLog: activeRunState.get(task.id) || null,
+  ensureStore();
+  app.use(express.json());
+  app.use(express.static(path.join(__dirname, "public")));
+
+  app.get("/api/tasks", (_req, res) => {
+    const tasks = getTasks().map((task) => ({
+      ...task,
+      running: activeProcesses.has(task.id),
+      liveLog: activeRunState.get(task.id) || null,
+    }));
+    res.json(tasks);
   });
-});
 
-app.post("/api/tasks", (req, res) => {
-  try {
-    const task = normalizeTask(req.body);
-    saveTask(task);
-    scheduleTask(task);
-    res.status(201).json(task);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+  app.get("/api/tasks/:id", (req, res) => {
+    const task = getTask(req.params.id);
+    if (!task) {
+      return res.status(404).json({ error: "任务不存在" });
+    }
+    return res.json({
+      ...task,
+      running: activeProcesses.has(task.id),
+      liveLog: activeRunState.get(task.id) || null,
+    });
+  });
 
-app.put("/api/tasks/:id", (req, res) => {
-  try {
+  app.post("/api/tasks", (req, res) => {
+    try {
+      const task = normalizeTask(req.body);
+      saveTask(task);
+      scheduleTask(task);
+      res.status(201).json(task);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/tasks/:id", (req, res) => {
+    try {
+      const existing = getTask(req.params.id);
+      if (!existing) {
+        return res.status(404).json({ error: "任务不存在" });
+      }
+
+      const task = normalizeTask({
+        ...existing,
+        ...req.body,
+        id: req.params.id,
+        createdAt: existing.createdAt,
+      });
+
+      saveTask(task);
+      scheduleTask(task);
+      return res.json(task);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/tasks/:id", (req, res) => {
     const existing = getTask(req.params.id);
     if (!existing) {
       return res.status(404).json({ error: "任务不存在" });
     }
 
-    const task = normalizeTask({
-      ...existing,
-      ...req.body,
-      id: req.params.id,
-      createdAt: existing.createdAt,
-    });
-
-    saveTask(task);
-    scheduleTask(task);
-    return res.json(task);
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-});
-
-app.delete("/api/tasks/:id", (req, res) => {
-  const existing = getTask(req.params.id);
-  if (!existing) {
-    return res.status(404).json({ error: "任务不存在" });
-  }
-
-  if (activeProcesses.has(req.params.id)) {
-    return res.status(409).json({ error: "任务正在运行，无法删除" });
-  }
-
-  unscheduleTask(req.params.id);
-  deleteTask(req.params.id);
-  return res.status(204).end();
-});
-
-app.post("/api/tasks/:id/run", async (req, res) => {
-  try {
-    await runTask(req.params.id, "manual");
-    return res.json({ ok: true });
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-});
-
-app.post("/api/tasks/:id/stop", async (req, res) => {
-  const child = activeProcesses.get(req.params.id);
-  if (!child) {
-    return res.status(409).json({ error: "任务未在运行" });
-  }
-
-  const current = activeRunState.get(req.params.id);
-  if (current) {
-    current.stopRequested = true;
-  }
-
-  try {
-    await terminateProcessTree(child);
-    return res.status(202).json({ ok: true });
-  } catch (error) {
-    if (current) {
-      current.stopRequested = false;
+    if (activeProcesses.has(req.params.id)) {
+      return res.status(409).json({ error: "任务正在运行，无法删除" });
     }
-    return res.status(500).json({ error: `终止任务失败: ${error.message}` });
-  }
-});
 
-app.get("*", (_req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+    unscheduleTask(req.params.id);
+    deleteTask(req.params.id);
+    return res.status(204).end();
+  });
 
-refreshSchedules();
-
-function listenOnPort(port, retriesLeft) {
-  const server = app.listen(port, () => {
-    console.log(`Scheduler running at http://localhost:${port}`);
-    if (shouldOpenBrowser) {
-      openBrowser(`http://localhost:${port}`);
+  app.post("/api/tasks/:id/run", async (req, res) => {
+    try {
+      await runTask(req.params.id, "manual");
+      return res.json({ ok: true });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
   });
 
-  server.on("error", (error) => {
-    if (error.code === "EADDRINUSE" && retriesLeft > 0) {
-      console.warn(`Port ${port} is in use, retrying with ${port + 1}`);
-      listenOnPort(port + 1, retriesLeft - 1);
-      return;
+  app.post("/api/tasks/:id/stop", async (req, res) => {
+    const child = activeProcesses.get(req.params.id);
+    if (!child) {
+      return res.status(409).json({ error: "任务未在运行" });
     }
 
-    console.error(`Failed to start server on port ${port}:`, error.message);
-    process.exit(1);
+    const current = activeRunState.get(req.params.id);
+    if (current) {
+      current.stopRequested = true;
+    }
+
+    try {
+      await terminateProcessTree(child);
+      return res.status(202).json({ ok: true });
+    } catch (error) {
+      if (current) {
+        current.stopRequested = false;
+      }
+      return res.status(500).json({ error: `终止任务失败: ${error.message}` });
+    }
+  });
+
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+
+  return app;
+}
+
+function startServer({ port = DEFAULT_PORT, retries = 20 } = {}) {
+  if (serverInstance) {
+    return Promise.resolve({
+      server: serverInstance,
+      port: serverInstance.address().port,
+    });
+  }
+
+  refreshSchedules();
+  const app = createApp();
+
+  return new Promise((resolve, reject) => {
+    const tryListen = (candidatePort, retriesLeft) => {
+      const server = app.listen(candidatePort, () => {
+        serverInstance = server;
+        console.log(`Scheduler running at http://localhost:${candidatePort}`);
+        resolve({ server, port: candidatePort });
+      });
+
+      server.on("error", (error) => {
+        if (error.code === "EADDRINUSE" && retriesLeft > 0) {
+          console.warn(`Port ${candidatePort} is in use, retrying with ${candidatePort + 1}`);
+          tryListen(candidatePort + 1, retriesLeft - 1);
+          return;
+        }
+
+        reject(error);
+      });
+    };
+
+    tryListen(port, retries);
   });
 }
 
-listenOnPort(DEFAULT_PORT, 20);
+function stopServer() {
+  if (!serverInstance) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) => {
+    serverInstance.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      serverInstance = null;
+      resolve();
+    });
+  });
+}
+
+module.exports = {
+  startServer,
+  stopServer,
+};
+
+if (require.main === module) {
+  startServer().catch((error) => {
+    console.error(`Failed to start server: ${error.message}`);
+    process.exit(1);
+  });
+}
