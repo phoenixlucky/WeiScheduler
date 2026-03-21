@@ -1,42 +1,63 @@
 const path = require("path");
 const { app, BrowserWindow, Menu, dialog } = require("electron");
-const packageJson = require("./package.json");
 
 let mainWindow = null;
 let startServer;
 let stopServer;
 
-function showAboutDialog() {
-  const detailLines = [
-    `产品名称: ${app.getName()}`,
-    `版本: ${app.getVersion()}`,
-    "作者: Ethan Wilkins",
-    "定位: 面向 Python 脚本的桌面定时任务调度工具",
-    packageJson.description,
-    `Electron: ${process.versions.electron}`,
-    `Node.js: ${process.versions.node}`,
-    `数据目录: ${app.getPath("userData")}`,
-  ];
+const APP_NAME = "WeiScheduler";
+const APP_AUTHOR = "Ethan Wilkins";
+const APP_ID = "com.weischeduler.desktop";
+const APP_DESCRIPTION = "一个面向 Windows 的本地桌面工具，用于集中管理和调度 Python 脚本任务。";
+const APP_FEATURES = [
+  "创建和编辑 Python / Conda 定时任务",
+  "支持 Cron 表达式配置执行计划",
+  "手动触发、停止与启停任务",
+  "查看最近运行日志与执行状态",
+];
 
-  dialog.showMessageBox({
+function isAutoLaunchEnabled() {
+  return app.getLoginItemSettings().openAtLogin;
+}
+
+function setAutoLaunchEnabled(enabled) {
+  app.setLoginItemSettings({
+    openAtLogin: enabled,
+    openAsHidden: false,
+    path: process.execPath,
+  });
+}
+
+function getAboutMessage() {
+  return [
+    `软件名称：${APP_NAME}`,
+    `版本：${app.getVersion()}`,
+    `作者：${APP_AUTHOR}`,
+    `应用标识：${APP_ID}`,
+    "",
+    "软件简介：",
+    APP_DESCRIPTION,
+    "",
+    "主要功能：",
+    ...APP_FEATURES.map((feature) => `- ${feature}`),
+  ].join("\n");
+}
+
+async function showAboutDialog() {
+  const version = app.getVersion();
+
+  await dialog.showMessageBox(mainWindow, {
     type: "info",
-    title: "关于 WeiScheduler",
-    message: "WeiScheduler",
-    detail: detailLines.join("\n"),
+    title: `关于 ${APP_NAME}`,
+    message: `${APP_NAME} v${version}`,
+    detail: getAboutMessage(),
     buttons: ["确定"],
     icon: path.join(__dirname, "build", "icon.ico"),
   });
 }
 
-function setOpenAtLogin(enabled) {
-  app.setLoginItemSettings({
-    openAtLogin: enabled,
-    path: process.execPath,
-  });
-}
-
 function buildApplicationMenu() {
-  const openAtLogin = app.getLoginItemSettings().openAtLogin;
+  const openAtLogin = isAutoLaunchEnabled();
   const template = [
     {
       label: "设置",
@@ -46,7 +67,7 @@ function buildApplicationMenu() {
           type: "checkbox",
           checked: openAtLogin,
           click: (menuItem) => {
-            setOpenAtLogin(menuItem.checked);
+            setAutoLaunchEnabled(menuItem.checked);
           },
         },
       ],
