@@ -5,8 +5,8 @@ WeiScheduler 是一个基于 Node.js 的本地网页调度工具，用于按 Cro
 English:
 WeiScheduler is a web-based local task scheduler built on Node.js, designed to execute Python scripts based on Cron expressions. It supports multiple Python and Conda environment configurations, making it suitable for data processing, automation workflows, and scheduled scripting tasks.
 
-当前版本：`1.2.2`
-Latest Version: `1.2.2`
+当前版本：`1.3.0`
+Latest Version: `1.3.0`
 
 核心定位：
 一个轻量级、本地优先的 Python 定时任务调度器，强调环境兼容性和可视化管理。
@@ -34,6 +34,10 @@ A lightweight, local-first Python task scheduler focused on environment compatib
 - Windows 安装器按系统语言显示名称：英文环境 `WeiScheduler`，中文环境 `尉定时任务调度器`
 
 ## 版本亮点
+
+`1.3.0`：
+
+- 全面优化页面显示和布局：表单分组、任务卡片视觉升级、响应式三阶断点、状态圆点指示器、CSS 细节打磨。
 
 `1.2.2`：
 

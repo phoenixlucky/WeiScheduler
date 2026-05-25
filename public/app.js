@@ -457,17 +457,42 @@ async function loadTasks() {
     const nextRunText = task.nextRunAt ? formatDisplayTime(task.nextRunAt) : task.enabled ? "暂未计算" : "已暂停";
     const failedLog = getMostRelevantFailedLog(task);
     const failureText = task.lastStatus === "failed" ? task.lastError || summarizeTaskError(failedLog) : "";
-    node.querySelector(".task-meta").textContent = task.running
-      ? `触发方式：${task.liveLog?.trigger || "manual"} · 开始于 ${formatDisplayTime(task.liveLog?.startedAt)} · 下次执行：${nextRunText}`
-      : task.lastStatus === "failed"
-        ? `状态：failed · 原因：${failureText} · 最近执行：${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"} · 下次执行：${nextRunText}`
-        : `状态：${task.lastStatus} · 最近执行：${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"} · 下次执行：${nextRunText}`;
+    const metaEl = node.querySelector(".task-meta");
+    if (task.running) {
+      metaEl.innerHTML = `
+        <span class="task-meta-line"><span class="task-meta-label">触发方式</span> ${task.liveLog?.trigger || "manual"}</span>
+        <span class="task-meta-line"><span class="task-meta-label">开始于</span> ${formatDisplayTime(task.liveLog?.startedAt)}</span>
+        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
+      `.trim();
+    } else if (task.lastStatus === "failed") {
+      metaEl.innerHTML = `
+        <span class="task-meta-line task-meta-error">${failureText}</span>
+        <span class="task-meta-line"><span class="task-meta-label">最近执行</span> ${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"}</span>
+        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
+      `.trim();
+    } else {
+      metaEl.innerHTML = `
+        <span class="task-meta-line"><span class="task-meta-label">最近执行</span> ${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"}</span>
+        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
+      `.trim();
+    }
 
     const status = node.querySelector(".task-status");
-    status.textContent = task.running ? (task.liveLog?.stopRequested ? "终止中" : "运行中") : task.lastStatus;
-    status.classList.toggle("failed", task.lastStatus === "failed");
-    status.classList.toggle("never", task.lastStatus === "never");
-    status.classList.toggle("stopped", task.lastStatus === "stopped");
+    const isRunning = task.running;
+    const statusText = isRunning ? (task.liveLog?.stopRequested ? "终止中" : "运行中") : task.lastStatus;
+    status.textContent = statusText;
+    status.className = "task-status";
+    if (isRunning) {
+      status.classList.add("running");
+    } else if (task.lastStatus === "failed") {
+      status.classList.add("failed");
+    } else if (task.lastStatus === "never") {
+      status.classList.add("never");
+    } else if (task.lastStatus === "stopped") {
+      status.classList.add("stopped");
+    } else {
+      status.classList.add("success");
+    }
 
     const toggleButton = node.querySelector(".action-toggle");
     const startButton = node.querySelector(".action-start");

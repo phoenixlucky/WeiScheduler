@@ -17,16 +17,25 @@
           </p>
           <div class="hero-stats">
             <div class="hero-stat">
-              <span class="hero-stat-label">总任务</span>
-              <strong id="hero-total">0</strong>
+              <div class="hero-stat-icon total">📋</div>
+              <div class="hero-stat-body">
+                <span class="hero-stat-label">总任务</span>
+                <strong id="hero-total">0</strong>
+              </div>
             </div>
             <div class="hero-stat">
-              <span class="hero-stat-label">运行中</span>
-              <strong id="hero-running">0</strong>
+              <div class="hero-stat-icon running">▶</div>
+              <div class="hero-stat-body">
+                <span class="hero-stat-label">运行中</span>
+                <strong id="hero-running">0</strong>
+              </div>
             </div>
             <div class="hero-stat">
-              <span class="hero-stat-label">已启用</span>
-              <strong id="hero-enabled">0</strong>
+              <div class="hero-stat-icon enabled">⚙</div>
+              <div class="hero-stat-body">
+                <span class="hero-stat-label">已启用</span>
+                <strong id="hero-enabled">0</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -42,113 +51,125 @@
           <form id="task-form" class="task-form">
             <input type="hidden" id="task-id" name="id" />
 
-            <label>
-              任务名称
-              <input id="name" name="name" placeholder="例如：日报生成" required />
-            </label>
+            <div class="form-section">
+              <h3 class="form-section-title">基本信息</h3>
 
-            <label>
-              执行方式
-              <select id="runnerType" name="runnerType">
-                <option value="python">直接调用 Python</option>
-                <option value="conda-name">Conda 环境名</option>
-                <option value="conda-path">Conda 环境路径</option>
-              </select>
-            </label>
+              <label>
+                任务名称
+                <input id="name" name="name" placeholder="例如：日报生成" required />
+              </label>
 
-            <label id="command-path-row">
-              <span class="field-label">Python 路径</span>
-              <input
-                id="commandPath"
-                name="commandPath"
-                placeholder="例如：D:\ProgramData\miniconda3\envs\py3143\python.exe"
-              />
-            </label>
+              <label>
+                脚本路径
+                <input
+                  id="scriptPath"
+                  name="scriptPath"
+                  placeholder="例如：D:\jobs\report.py"
+                  required
+                />
+              </label>
 
-            <label id="conda-target-row">
-              Conda 环境名或路径
-              <input
-                id="condaTarget"
-                name="condaTarget"
-                placeholder="环境名如 myenv，或环境路径如 D:\miniconda3\envs\myenv"
-              />
-            </label>
+              <label>
+                启动参数
+                <input id="args" name="args" placeholder='例如：--date "2026-03-19"' />
+              </label>
 
-            <label>
-              脚本路径
-              <input
-                id="scriptPath"
-                name="scriptPath"
-                placeholder="例如：D:\jobs\report.py"
-                required
-              />
-            </label>
+              <label>
+                工作目录
+                <input id="workingDirectory" name="workingDirectory" placeholder="可选，默认脚本所在目录" />
+              </label>
+            </div>
 
-            <label>
-              启动参数
-              <input id="args" name="args" placeholder='例如：--date "2026-03-19"' />
-            </label>
+            <div class="form-section">
+              <h3 class="form-section-title">执行配置</h3>
 
-            <label>
-              时间参数名
-              <input id="timeArgName" name="timeArgName" placeholder="例如：--run-time" />
-            </label>
+              <label>
+                执行方式
+                <select id="runnerType" name="runnerType">
+                  <option value="python">直接调用 Python</option>
+                  <option value="conda-name">Conda 环境名</option>
+                  <option value="conda-path">Conda 环境路径</option>
+                </select>
+              </label>
 
-            <label>
-              时间参数值
-              <input id="timeArgValue" name="timeArgValue" type="datetime-local" />
-            </label>
+              <label id="command-path-row">
+                <span class="field-label">Python 路径</span>
+                <input
+                  id="commandPath"
+                  name="commandPath"
+                  placeholder="例如：D:\ProgramData\miniconda3\envs\py3143\python.exe"
+                />
+              </label>
 
-            <label>
-              工作目录
-              <input id="workingDirectory" name="workingDirectory" placeholder="可选，默认脚本所在目录" />
-            </label>
+              <label id="conda-target-row">
+                Conda 环境名或路径
+                <input
+                  id="condaTarget"
+                  name="condaTarget"
+                  placeholder="环境名如 myenv，或环境路径如 D:\miniconda3\envs\myenv"
+                />
+              </label>
 
-            <label>
-              Cron 时间表达式
-              <input id="schedule" name="schedule" placeholder="例如：*/10 * * * *" required />
-              <div class="cron-builder">
-                <div class="cron-builder-grid">
-                  <label>
-                    分钟
-                    <input id="cron-minute" placeholder="* / */10 / 0,30" />
-                  </label>
-                  <label>
-                    小时
-                    <input id="cron-hour" placeholder="* / 9 / 9-18" />
-                  </label>
-                  <label>
-                    日
-                    <input id="cron-day" placeholder="* / 1 / 1-5" />
-                  </label>
-                  <label>
-                    月
-                    <input id="cron-month" placeholder="* / 1 / 1,6,12" />
-                  </label>
-                  <label>
-                    周
+              <label>
+                时间参数名
+                <input id="timeArgName" name="timeArgName" placeholder="例如：--run-time" />
+              </label>
+
+              <label>
+                时间参数值
+                <input id="timeArgValue" name="timeArgValue" type="datetime-local" />
+              </label>
+            </div>
+
+            <div class="form-section">
+              <h3 class="form-section-title">调度配置</h3>
+
+              <label>
+                Cron 时间表达式
+                <input id="schedule" name="schedule" placeholder="例如：*/10 * * * *" required />
+                <div class="cron-builder">
+                  <div class="cron-builder-grid">
+                    <label>
+                      分钟
+                      <input id="cron-minute" placeholder="* / */10 / 0,30" />
+                    </label>
+                    <label>
+                      小时
+                      <input id="cron-hour" placeholder="* / 9 / 9-18" />
+                    </label>
+                    <label>
+                      日
+                      <input id="cron-day" placeholder="* / 1 / 1-5" />
+                    </label>
+                    <label>
+                      月
+                      <input id="cron-month" placeholder="* / 1 / 1,6,12" />
+                    </label>
+                    <label>
+                      周
                     <input id="cron-weekday" placeholder="* / 1-5 / 0,6" />
-                  </label>
+                    </label>
+                  </div>
+                  <span class="field-help">自由组合 5 段时间，留空会按 `*` 处理。支持 `*`、`*/10`、`1,15,30`、`1-5` 这类 Cron 写法。</span>
                 </div>
-                <span class="field-help">自由组合 5 段时间，留空会按 `*` 处理。支持 `*`、`*/10`、`1,15,30`、`1-5` 这类 Cron 写法。</span>
-              </div>
-              <div class="cron-presets">
-                <button class="ghost-button cron-preset" type="button" data-cron="*/5 * * * *">每 5 分钟</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 * * * *">每小时</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 */3 * * *">每 3 小时</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 */6 * * *">每 6 小时</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * *">每天 09:00</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 0 */3 * *">每 3 天</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * 1-5">工作日 09:00</button>
-                <button class="ghost-button cron-preset" type="button" data-cron="0 0 1 * *">每月 1 日</button>
-              </div>
-              <span class="field-help">格式：分 时 日 月 周。示例：`*/10 * * * *` 每 10 分钟执行，`0 9 * * 1-5` 工作日 09:00 执行。</span>
-            </label>
+                <div class="cron-presets">
+                  <button class="ghost-button cron-preset" type="button" data-cron="*/5 * * * *">每 5 分钟</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 * * * *">每小时</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 */3 * * *">每 3 小时</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 */6 * * *">每 6 小时</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * *">每天 09:00</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 0 */3 * *">每 3 天</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * 1-5">工作日 09:00</button>
+                  <button class="ghost-button cron-preset" type="button" data-cron="0 0 1 * *">每月 1 日</button>
+                </div>
+                <span class="field-help">格式：分 时 日 月 周。示例：`*/10 * * * *` 每 10 分钟执行，`0 9 * * 1-5` 工作日 09:00 执行。</span>
+              </label>
 
-            <label class="checkbox-row">
-              <input id="enabled" name="enabled" type="checkbox" checked />
-              启用调度
-            </label>
+              <label class="checkbox-row">
+                <input id="enabled" name="enabled" type="checkbox" checked />
+                <span>启用调度</span>
+              </label>
+            </div>
 
             <button class="primary-button" type="submit">保存任务</button>
           </form>
