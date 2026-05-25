@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
-    "node-cron": "^4.2.1"
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "electron": "^42.2.0",
