@@ -88,10 +88,19 @@ Remove-Item -Recurse -Force release, dist
 然后执行打包：
 
 ```bash
-npm run build:installer
+npm run dist
 ```
 
 打包完成后，安装包和解包目录会生成在 `release/` 下。
+
+## 脚本说明
+
+| 命令 | 说明 |
+|------|------|
+| `npm run start` | 启动 Electron 桌面应用 |
+| `npm run start:web` | 启动纯 Web 服务（浏览器访问 `localhost:3000`） |
+| `npm run dist` | 打包为 Windows 安装包（NSIS） |
+| `npm run build:installer` | `dist` 的别名，等同上述打包命令 |
 
 ## 字段说明
 
