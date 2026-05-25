@@ -1,24 +1,32 @@
+/* ==============================
+   时间老人 — Timekeeper Theme
+   Warm vintage / scholarly / heirloom aesthetic
+   ============================== */
+
 :root {
-  --bg: #f4efe6;
-  --bg-deep: #d8e2cf;
-  --panel: rgba(255, 250, 242, 0.86);
-  --panel-strong: #fffaf2;
-  --panel-border: rgba(70, 82, 55, 0.14);
-  --text: #1e261b;
-  --muted: #66705d;
-  --primary: #285847;
-  --primary-dark: #17362b;
-  --primary-soft: rgba(40, 88, 71, 0.1);
-  --accent: #b98445;
-  --danger: #9d3d2f;
-  --danger-soft: rgba(157, 61, 47, 0.1);
-  --success: #3a7a5a;
-  --shadow: 0 22px 60px rgba(31, 42, 28, 0.12);
-  --shadow-soft: 0 10px 24px rgba(31, 42, 28, 0.08);
-  --shadow-sm: 0 4px 12px rgba(31, 42, 28, 0.06);
-  --radius: 28px;
-  --radius-sm: 14px;
-  --radius-xs: 10px;
+  --bg: #f0e6d3;
+  --bg-deep: #dccdb5;
+  --panel: rgba(248, 240, 226, 0.9);
+  --panel-strong: #fbf3e4;
+  --panel-border: rgba(60, 40, 28, 0.12);
+  --text: #2c1810;
+  --muted: #7a6a58;
+  --primary: #8a6d3b;
+  --primary-dark: #5a3e20;
+  --primary-soft: rgba(138, 109, 59, 0.12);
+  --accent: #c49a45;
+  --accent-glow: rgba(196, 154, 69, 0.2);
+  --danger: #8a2a1a;
+  --danger-soft: rgba(138, 42, 26, 0.1);
+  --success: #3a6a4a;
+  --gold: #b8943a;
+  --gold-light: #d4b86a;
+  --shadow: 0 22px 60px rgba(40, 28, 18, 0.18);
+  --shadow-soft: 0 10px 24px rgba(40, 28, 18, 0.1);
+  --shadow-sm: 0 4px 12px rgba(40, 28, 18, 0.06);
+  --radius: 24px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
   --transition: 0.2s ease;
 }
 
@@ -29,12 +37,19 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Cambria", "Noto Serif SC", "Microsoft YaHei UI", sans-serif;
+  font-family: "Georgia", "Noto Serif SC", "SimSun", "KaiTi", serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(185, 132, 69, 0.12), transparent 24%),
-    linear-gradient(135deg, var(--bg) 0%, var(--bg-deep) 100%);
+    radial-gradient(ellipse at 20% 10%, rgba(255, 248, 234, 0.95) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(196, 154, 69, 0.08) 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(138, 109, 59, 0.015) 2px,
+      rgba(138, 109, 59, 0.015) 4px
+    ),
+    linear-gradient(160deg, var(--bg) 0%, var(--bg-deep) 100%);
   background-attachment: fixed;
 }
 
@@ -49,7 +64,7 @@ body {
 }
 
 /* ==============================
-   Hero / Header
+   Hero — timepiece crown
    ============================== */
 
 .hero {
@@ -60,23 +75,37 @@ body {
 .hero-copy-block {
   position: relative;
   overflow: hidden;
-  padding: 28px 32px;
+  padding: 32px 36px;
   background:
-    linear-gradient(160deg, rgba(255, 250, 242, 0.96), rgba(244, 239, 230, 0.82)),
+    linear-gradient(165deg, rgba(251, 243, 228, 0.97), rgba(240, 230, 210, 0.88)),
     var(--panel);
-  border: 1px solid rgba(40, 88, 71, 0.12);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--gold);
+  box-shadow:
+    var(--shadow),
+    inset 0 0 80px rgba(196, 154, 69, 0.06);
   border-radius: var(--radius);
+}
+
+/* Decorative clock face ornament */
+.hero-copy-block::before {
+  content: "🕰";
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  font-size: 2.2rem;
+  opacity: 0.15;
+  pointer-events: none;
+  transform: rotate(-8deg);
 }
 
 .hero-copy-block::after {
   content: "";
   position: absolute;
-  inset: auto -40px -70px auto;
-  width: 180px;
-  height: 180px;
+  inset: auto -60px -80px auto;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(185, 132, 69, 0.18), transparent 70%);
+  background: radial-gradient(circle, rgba(196, 154, 69, 0.12), transparent 65%);
   pointer-events: none;
 }
 
@@ -89,67 +118,78 @@ body {
 
 .eyebrow {
   margin: 0;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--primary-dark);
-  font-size: 0.72rem;
+  color: var(--gold);
+  font-size: 0.7rem;
   font-weight: 700;
+  font-family: "Georgia", serif;
 }
 
 .hero h1 {
-  margin: 0 0 6px;
-  font-size: clamp(1.6rem, 2.4vw, 2.3rem);
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-  font-weight: 600;
+  margin: 0 0 8px;
+  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-shadow: 0 1px 2px rgba(196, 154, 69, 0.1);
 }
 
 .hero-copy {
   max-width: 680px;
   margin: 0;
   color: var(--muted);
-  font-size: 0.94rem;
-  line-height: 1.65;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
+
+/* ==============================
+   Stats — pocket watch nodules
+   ============================== */
 
 .hero-stats {
   display: flex;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .hero-stat {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 18px;
-  border-radius: 16px;
-  background: rgba(255, 250, 242, 0.75);
-  border: 1px solid rgba(40, 88, 71, 0.1);
-  box-shadow: var(--shadow-sm);
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.8), rgba(240, 230, 210, 0.6));
+  border: 1px solid rgba(196, 154, 69, 0.18);
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .hero-stat-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
+  border: 1px solid rgba(196, 154, 69, 0.2);
 }
 
 .hero-stat-icon.total {
-  background: rgba(40, 88, 71, 0.12);
+  background: linear-gradient(135deg, rgba(138, 109, 59, 0.12), rgba(138, 109, 59, 0.06));
 }
 
 .hero-stat-icon.running {
-  background: rgba(58, 122, 90, 0.14);
+  background: linear-gradient(135deg, rgba(58, 106, 74, 0.14), rgba(58, 106, 74, 0.06));
 }
 
 .hero-stat-icon.enabled {
-  background: rgba(185, 132, 69, 0.14);
+  background: linear-gradient(135deg, rgba(196, 154, 69, 0.14), rgba(196, 154, 69, 0.06));
 }
 
 .hero-stat-body {
@@ -158,14 +198,15 @@ body {
 }
 
 .hero-stat strong {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   color: var(--primary-dark);
   line-height: 1.2;
+  font-family: "Georgia", serif;
 }
 
 .hero-stat-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
   color: var(--muted);
   line-height: 1.3;
 }
@@ -183,16 +224,17 @@ body {
 
 .panel {
   background: var(--panel);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--panel-border);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: 28px;
+  border-top: 2px solid rgba(196, 154, 69, 0.15);
 }
 
 .panel-form {
   background:
-    linear-gradient(180deg, rgba(255, 250, 242, 0.92), rgba(248, 242, 232, 0.82)),
+    linear-gradient(180deg, rgba(251, 243, 228, 0.94), rgba(242, 234, 216, 0.84)),
     var(--panel);
   position: sticky;
   top: 20px;
@@ -200,7 +242,7 @@ body {
 
 .panel-list {
   background:
-    linear-gradient(180deg, rgba(255, 253, 248, 0.94), rgba(248, 242, 232, 0.78)),
+    linear-gradient(180deg, rgba(253, 248, 238, 0.95), rgba(242, 234, 216, 0.8)),
     var(--panel);
   min-height: 300px;
 }
@@ -219,8 +261,10 @@ body {
 
 .section-head h2 {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  letter-spacing: 0.03em;
 }
 
 .toolbar-actions {
@@ -235,20 +279,22 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(40, 88, 71, 0.12);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.85), rgba(240, 230, 210, 0.7));
+  border: 1px solid rgba(196, 154, 69, 0.15);
   color: var(--primary-dark);
   box-shadow: var(--shadow-sm);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   line-height: 1;
   cursor: pointer;
   transition: background var(--transition);
 }
 
 .auto-refresh-toggle:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
 }
 
 .auto-refresh-toggle input {
@@ -258,23 +304,25 @@ body {
 }
 
 .toolbar-select {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(40, 88, 71, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(196, 154, 69, 0.15);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.85), rgba(240, 230, 210, 0.7));
   color: var(--primary-dark);
   box-shadow: var(--shadow-sm);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   cursor: pointer;
   transition: background var(--transition);
 }
 
 .toolbar-select:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
 }
 
 /* ==============================
-   Form — grouped sections
+   Form — journal sections
    ============================== */
 
 .task-form {
@@ -283,8 +331,9 @@ body {
 }
 
 .form-section {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(70, 82, 55, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 245, 0.5), rgba(245, 238, 224, 0.35));
+  border: 1px solid rgba(138, 109, 59, 0.1);
   border-radius: var(--radius-sm);
   padding: 18px;
   display: grid;
@@ -292,20 +341,21 @@ body {
 }
 
 .form-section-title {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--primary);
+  color: var(--gold);
   margin: 0;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(70, 82, 55, 0.08);
+  border-bottom: 1px solid rgba(196, 154, 69, 0.12);
+  font-family: "Georgia", serif;
 }
 
 .task-form label {
   display: grid;
-  gap: 6px;
-  font-size: 0.9rem;
+  gap: 5px;
+  font-size: 0.88rem;
   color: var(--muted);
   font-weight: 600;
 }
@@ -313,34 +363,289 @@ body {
 .task-form input,
 .task-form select {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 14px;
   border-radius: var(--radius-xs);
-  border: 1px solid rgba(49, 65, 45, 0.14);
-  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(138, 109, 59, 0.14);
+  background: rgba(255, 252, 245, 0.88);
   color: var(--text);
-  font-size: 0.95rem;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  font-size: 0.93rem;
+  font-family: inherit;
+  box-shadow: inset 0 1px 3px rgba(60, 40, 28, 0.04);
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .task-form input:focus,
 .task-form select:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft), inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.1), inset 0 1px 3px rgba(60, 40, 28, 0.04);
 }
 
 .task-form input::placeholder {
-  color: #b0b8a8;
+  color: #b8aa92;
 }
 
 .field-help {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.5;
   color: var(--muted);
+  font-style: italic;
 }
 
-/* Cron builder */
+/* ==============================
+   Cron — mode tabs (brass)
+   ============================== */
+
+.cron-mode-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 10px 0 12px;
+  background: rgba(138, 109, 59, 0.06);
+  border-radius: 999px;
+  padding: 3px;
+  border: 1px solid rgba(196, 154, 69, 0.08);
+}
+
+.cron-mode-tab {
+  flex: 1;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.cron-mode-tab.active {
+  background: linear-gradient(160deg, #fbf3e4, #f2e4ca);
+  color: var(--primary-dark);
+  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.12);
+}
+
+.cron-mode-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* ==============================
+   Cron — simple mode
+   ============================== */
+
+.cron-simple {
+  display: grid;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.cron-advanced.hidden,
+.cron-simple.hidden {
+  display: none;
+}
+
+/* Frequency tabs */
+
+.cron-freq-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cron-freq-tab {
+  border: 1px solid rgba(138, 109, 59, 0.14);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.6), rgba(240, 230, 210, 0.4));
+  color: var(--muted);
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.cron-freq-tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fbf3e4;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(138, 109, 59, 0.25);
+}
+
+.cron-freq-tab:hover:not(.active) {
+  border-color: var(--gold);
+  color: var(--primary-dark);
+}
+
+/* Panels */
+
+.cron-panel {
+  padding: 14px 16px;
+  background:
+    linear-gradient(160deg, rgba(255, 252, 245, 0.6), rgba(245, 238, 224, 0.4));
+  border: 1px solid rgba(196, 154, 69, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.cron-panel.hidden {
+  display: none;
+}
+
+/* Slider row */
+
+.cron-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-slider-label {
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cron-slider {
+  flex: 1;
+  min-width: 120px;
+  height: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(138, 109, 59, 0.12) 50%);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cron-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d4b86a, var(--primary) 60%, var(--primary-dark));
+  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.35);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+  border: 1px solid rgba(196, 154, 69, 0.2);
+}
+
+.cron-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+}
+
+.cron-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d4b86a, var(--primary) 60%, var(--primary-dark));
+  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.35);
+  cursor: pointer;
+  border: 1px solid rgba(196, 154, 69, 0.2);
+}
+
+.cron-slider-value {
+  font-size: 0.88rem;
+  color: var(--text);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.cron-slider-value strong {
+  color: var(--primary-dark);
+  font-size: 1.05rem;
+  font-family: "Georgia", serif;
+}
+
+/* Time row */
+
+.cron-time-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-time-input {
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(138, 109, 59, 0.14);
+  background: rgba(255, 252, 245, 0.88);
+  color: var(--text);
+  font-size: 0.93rem;
+  font-family: inherit;
+  transition: border-color var(--transition);
+}
+
+.cron-time-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.1);
+}
+
+/* Weekday pills */
+
+.cron-weekday-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-weekday-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cron-weekday-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(138, 109, 59, 0.14);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.7), rgba(240, 230, 210, 0.5));
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.cron-weekday-btn span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.cron-weekday-btn input {
+  display: none;
+}
+
+.cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: var(--primary);
+  box-shadow: 0 3px 10px rgba(138, 109, 59, 0.2);
+}
+
+.cron-weekday-btn:has(input:checked) span {
+  color: #fbf3e4;
+}
+
+.cron-weekday-btn:hover:not(:has(input:checked)) {
+  border-color: var(--gold);
+  background: rgba(196, 154, 69, 0.06);
+}
+
+/* ==============================
+   Cron — builder grid
+   ============================== */
 
 .cron-builder {
   display: grid;
@@ -377,249 +682,6 @@ body {
   border-radius: 999px;
 }
 
-/* ==============================
-   Cron — mode tabs
-   ============================== */
-
-.cron-mode-tabs {
-  display: flex;
-  gap: 4px;
-  margin: 8px 0 12px;
-  background: rgba(70, 82, 55, 0.06);
-  border-radius: 999px;
-  padding: 3px;
-}
-
-.cron-mode-tab {
-  flex: 1;
-  border: none;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: transparent;
-  color: var(--muted);
-  transition: all 0.18s ease;
-}
-
-.cron-mode-tab.active {
-  background: #fff;
-  color: var(--primary-dark);
-  box-shadow: 0 2px 8px rgba(31, 42, 28, 0.1);
-}
-
-.cron-mode-tab:hover:not(.active) {
-  color: var(--text);
-}
-
-/* ==============================
-   Cron — simple mode (gear/slider)
-   ============================== */
-
-.cron-simple {
-  display: grid;
-  gap: 12px;
-  margin: 10px 0;
-}
-
-.cron-advanced.hidden,
-.cron-simple.hidden {
-  display: none;
-}
-
-/* Frequency tabs */
-
-.cron-freq-tabs {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.cron-freq-tab {
-  border: 1px solid rgba(70, 82, 55, 0.12);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.6);
-  color: var(--muted);
-  transition: all 0.18s ease;
-}
-
-.cron-freq-tab.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(40, 88, 71, 0.25);
-}
-
-.cron-freq-tab:hover:not(.active) {
-  border-color: var(--primary);
-  color: var(--primary-dark);
-}
-
-/* Panels */
-
-.cron-panel {
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(70, 82, 55, 0.08);
-  border-radius: var(--radius-sm);
-}
-
-.cron-panel.hidden {
-  display: none;
-}
-
-/* Slider row */
-
-.cron-slider-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.cron-slider-label {
-  font-size: 0.9rem;
-  color: var(--text);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.cron-slider {
-  flex: 1;
-  min-width: 120px;
-  height: 6px;
-  -webkit-appearance: none;
-  appearance: none;
-  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(70, 82, 55, 0.15) 50%);
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-}
-
-.cron-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  box-shadow: 0 2px 8px rgba(40, 88, 71, 0.3);
-  cursor: pointer;
-  transition: transform 0.12s ease;
-}
-
-.cron-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-}
-
-.cron-slider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  box-shadow: 0 2px 8px rgba(40, 88, 71, 0.3);
-  cursor: pointer;
-  border: none;
-}
-
-.cron-slider-value {
-  font-size: 0.9rem;
-  color: var(--text);
-  white-space: nowrap;
-  min-width: 80px;
-}
-
-.cron-slider-value strong {
-  color: var(--primary-dark);
-  font-size: 1.05rem;
-}
-
-/* Time row */
-
-.cron-time-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.cron-time-input {
-  padding: 8px 12px;
-  border-radius: var(--radius-xs);
-  border: 1px solid rgba(49, 65, 45, 0.14);
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--text);
-  font-size: 0.95rem;
-  font-family: inherit;
-  transition: border-color var(--transition);
-}
-
-.cron-time-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-
-/* Weekday pills */
-
-.cron-weekday-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.cron-weekday-grid {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.cron-weekday-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid rgba(70, 82, 55, 0.14);
-  background: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  user-select: none;
-}
-
-.cron-weekday-btn span {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-  pointer-events: none;
-}
-
-.cron-weekday-btn input {
-  display: none;
-}
-
-.cron-weekday-btn:has(input:checked) {
-  background: var(--primary);
-  border-color: var(--primary);
-  box-shadow: 0 3px 10px rgba(40, 88, 71, 0.2);
-}
-
-.cron-weekday-btn:has(input:checked) span {
-  color: #fff;
-}
-
-.cron-weekday-btn:hover:not(:has(input:checked)) {
-  border-color: var(--primary);
-  background: rgba(40, 88, 71, 0.06);
-}
-
 /* Checkbox row */
 
 .checkbox-row {
@@ -642,7 +704,7 @@ body {
 }
 
 /* ==============================
-   Buttons
+   Buttons — brass / aged metal
    ============================== */
 
 .primary-button,
@@ -650,31 +712,34 @@ body {
   border: none;
   border-radius: 999px;
   padding: 11px 18px;
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   cursor: pointer;
   transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   white-space: nowrap;
+  font-family: inherit;
 }
 
 .primary-button {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: #fff;
+  color: #fbf3e4;
   font-weight: 700;
-  box-shadow: 0 12px 20px rgba(23, 54, 43, 0.2);
+  box-shadow: 0 12px 20px rgba(90, 62, 32, 0.25);
   justify-self: start;
   padding: 13px 28px;
+  letter-spacing: 0.04em;
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(40, 88, 71, 0.12);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.8), rgba(240, 230, 210, 0.6));
+  border: 1px solid rgba(138, 109, 59, 0.12);
   color: var(--primary-dark);
   box-shadow: var(--shadow-sm);
 }
 
 .ghost-button.danger {
   background: var(--danger-soft);
-  border-color: rgba(157, 61, 47, 0.15);
+  border-color: rgba(138, 42, 26, 0.15);
   color: var(--danger);
 }
 
@@ -684,16 +749,17 @@ body {
 }
 
 .primary-button:hover {
-  box-shadow: 0 16px 28px rgba(23, 54, 43, 0.28);
+  box-shadow: 0 16px 28px rgba(90, 62, 32, 0.32);
 }
 
 .ghost-button:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
   box-shadow: var(--shadow-soft);
 }
 
 .ghost-button.danger:hover {
-  background: rgba(157, 61, 47, 0.15);
+  background: rgba(138, 42, 26, 0.15);
 }
 
 .primary-button:active,
@@ -709,7 +775,7 @@ body {
 }
 
 /* ==============================
-   Task list & cards
+   Task list & cards — aged journal
    ============================== */
 
 .task-list {
@@ -722,25 +788,30 @@ body {
   border-radius: var(--radius-sm);
   text-align: center;
   color: var(--muted);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px dashed rgba(40, 88, 71, 0.14);
+  background:
+    linear-gradient(160deg, rgba(251, 243, 228, 0.7), rgba(240, 230, 210, 0.5));
+  border: 1px dashed rgba(138, 109, 59, 0.15);
   font-size: 0.95rem;
+  font-style: italic;
 }
 
 .task-card {
   padding: 20px 22px;
-  border-radius: 24px;
+  border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(248, 242, 232, 0.7)),
-    rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(49, 65, 45, 0.1);
-  box-shadow: var(--shadow-sm);
+    linear-gradient(180deg, rgba(253, 248, 238, 0.88), rgba(245, 238, 224, 0.72));
+  border: 1px solid rgba(138, 109, 59, 0.1);
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition: box-shadow var(--transition), border-color var(--transition);
 }
 
 .task-card:hover {
-  box-shadow: var(--shadow-soft);
-  border-color: rgba(49, 65, 45, 0.16);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-color: rgba(196, 154, 69, 0.15);
 }
 
 /* Card head */
@@ -767,19 +838,21 @@ body {
 
 .task-name {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--primary-dark);
 }
 
 .task-frequency {
   display: none;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  color: var(--primary-dark);
-  background: var(--primary-soft);
+  color: var(--gold);
+  background: rgba(196, 154, 69, 0.08);
   white-space: nowrap;
+  border: 1px solid rgba(196, 154, 69, 0.1);
 }
 
 .task-card.collapsed .task-frequency {
@@ -791,7 +864,7 @@ body {
 .task-meta {
   margin: 0;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   line-height: 1.55;
 }
 
@@ -800,7 +873,7 @@ body {
 }
 
 .task-meta-label {
-  color: #8a9580;
+  color: #9a8a78;
   font-weight: 500;
 }
 
@@ -828,7 +901,7 @@ body {
 
 .task-quick-actions .ghost-button {
   padding: 6px 11px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 
 /* Status badge */
@@ -839,9 +912,10 @@ body {
   gap: 6px;
   padding: 5px 12px;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   white-space: nowrap;
+  font-family: inherit;
 }
 
 .task-status::before {
@@ -853,7 +927,7 @@ body {
 }
 
 .task-status.running {
-  background: rgba(58, 122, 90, 0.12);
+  background: rgba(58, 106, 74, 0.1);
   color: var(--success);
 }
 
@@ -863,7 +937,7 @@ body {
 }
 
 .task-status.success {
-  background: rgba(40, 88, 71, 0.1);
+  background: rgba(138, 109, 59, 0.08);
   color: var(--primary-dark);
 }
 
@@ -881,17 +955,17 @@ body {
 }
 
 .task-status.never {
-  background: rgba(31, 42, 28, 0.06);
+  background: rgba(60, 40, 28, 0.05);
   color: var(--muted);
 }
 
 .task-status.never::before {
-  background: #b0b8a8;
+  background: #b8aa92;
 }
 
 .task-status.stopped {
-  background: rgba(180, 128, 27, 0.12);
-  color: #8a5a00;
+  background: rgba(196, 154, 69, 0.1);
+  color: #8a6a30;
 }
 
 .task-status.stopped::before {
@@ -931,7 +1005,7 @@ body {
   grid-template-columns: 100px 1fr;
   gap: 8px 14px;
   margin: 18px 0 14px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .task-detail dt {
@@ -955,10 +1029,10 @@ body {
 
 .task-actions .ghost-button {
   padding: 7px 14px;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
 }
 
-/* Log block */
+/* Log block — aged parchment terminal */
 
 .log-block {
   margin-top: 6px;
@@ -966,7 +1040,7 @@ body {
 
 .log-block h4 {
   margin: 0 0 8px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--muted);
 }
@@ -978,11 +1052,11 @@ body {
   overflow: auto;
   border-radius: var(--radius-sm);
   background:
-    linear-gradient(180deg, #16201a 0%, #101712 100%);
-  color: #d8f2e4;
-  font-size: 0.8rem;
+    linear-gradient(180deg, #1e1a12 0%, #181410 100%);
+  color: #d8c8a4;
+  font-size: 0.78rem;
   line-height: 1.55;
-  border: 1px solid rgba(216, 242, 228, 0.08);
+  border: 1px solid rgba(196, 154, 69, 0.08);
   font-family: "Cascadia Code", "JetBrains Mono", "Fira Code", "Consolas", monospace;
 }
 
@@ -1082,7 +1156,7 @@ body {
 
   .task-card {
     padding: 16px;
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   .task-detail {
