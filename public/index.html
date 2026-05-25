@@ -127,42 +127,133 @@
               <label>
                 Cron 时间表达式
                 <input id="schedule" name="schedule" placeholder="例如：*/10 * * * *" required />
-                <div class="cron-builder">
-                  <div class="cron-builder-grid">
-                    <label>
-                      分钟
-                      <input id="cron-minute" placeholder="* / */10 / 0,30" />
-                    </label>
-                    <label>
-                      小时
-                      <input id="cron-hour" placeholder="* / 9 / 9-18" />
-                    </label>
-                    <label>
-                      日
-                      <input id="cron-day" placeholder="* / 1 / 1-5" />
-                    </label>
-                    <label>
-                      月
-                      <input id="cron-month" placeholder="* / 1 / 1,6,12" />
-                    </label>
-                    <label>
-                      周
-                    <input id="cron-weekday" placeholder="* / 1-5 / 0,6" />
-                    </label>
+
+                <!-- Mode toggle -->
+                <div class="cron-mode-tabs">
+                  <button class="cron-mode-tab active" type="button" data-mode="simple">齿轮滑块</button>
+                  <button class="cron-mode-tab" type="button" data-mode="advanced">高级编辑</button>
+                </div>
+
+                <!-- Simple mode: visual gear/slider UI -->
+                <div id="cron-simple" class="cron-simple">
+                  <!-- Frequency tabs -->
+                  <div class="cron-freq-tabs">
+                    <button class="cron-freq-tab active" type="button" data-freq="every-n-minutes">每 N 分钟</button>
+                    <button class="cron-freq-tab" type="button" data-freq="hourly">每小时</button>
+                    <button class="cron-freq-tab" type="button" data-freq="daily">每天</button>
+                    <button class="cron-freq-tab" type="button" data-freq="weekly">每周</button>
+                    <button class="cron-freq-tab" type="button" data-freq="monthly">每月</button>
                   </div>
-                  <span class="field-help">自由组合 5 段时间，留空会按 `*` 处理。支持 `*`、`*/10`、`1,15,30`、`1-5` 这类 Cron 写法。</span>
+
+                  <!-- Panel: every N minutes -->
+                  <div class="cron-panel" data-panel="every-n-minutes">
+                    <div class="cron-slider-row">
+                      <span class="cron-slider-label">每隔</span>
+                      <input type="range" id="cron-slider-every-n" class="cron-slider" min="1" max="59" value="5" />
+                      <span class="cron-slider-value">
+                        <strong id="cron-every-n-display">5</strong> 分钟执行一次
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Panel: hourly -->
+                  <div class="cron-panel hidden" data-panel="hourly">
+                    <div class="cron-slider-row">
+                      <span class="cron-slider-label">在第</span>
+                      <input type="range" id="cron-slider-hourly" class="cron-slider" min="0" max="59" value="0" />
+                      <span class="cron-slider-value">
+                        <strong id="cron-hourly-display">0</strong> 分钟执行
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Panel: daily -->
+                  <div class="cron-panel hidden" data-panel="daily">
+                    <div class="cron-time-row">
+                      <span class="cron-slider-label">在</span>
+                      <input type="time" id="cron-daily-time" class="cron-time-input" value="09:00" />
+                      <span class="cron-slider-value">执行</span>
+                    </div>
+                  </div>
+
+                  <!-- Panel: weekly -->
+                  <div class="cron-panel hidden" data-panel="weekly">
+                    <div class="cron-weekday-row">
+                      <span class="cron-slider-label">在</span>
+                      <div class="cron-weekday-grid" id="cron-weekday-grid">
+                        <label class="cron-weekday-btn" data-day="1"><input type="checkbox" /><span>一</span></label>
+                        <label class="cron-weekday-btn" data-day="2"><input type="checkbox" /><span>二</span></label>
+                        <label class="cron-weekday-btn" data-day="3"><input type="checkbox" /><span>三</span></label>
+                        <label class="cron-weekday-btn" data-day="4"><input type="checkbox" /><span>四</span></label>
+                        <label class="cron-weekday-btn" data-day="5"><input type="checkbox" /><span>五</span></label>
+                        <label class="cron-weekday-btn" data-day="6"><input type="checkbox" /><span>六</span></label>
+                        <label class="cron-weekday-btn" data-day="0"><input type="checkbox" /><span>日</span></label>
+                      </div>
+                    </div>
+                    <div class="cron-time-row" style="margin-top:10px">
+                      <span class="cron-slider-label">在</span>
+                      <input type="time" id="cron-weekly-time" class="cron-time-input" value="09:00" />
+                      <span class="cron-slider-value">执行</span>
+                    </div>
+                  </div>
+
+                  <!-- Panel: monthly -->
+                  <div class="cron-panel hidden" data-panel="monthly">
+                    <div class="cron-slider-row">
+                      <span class="cron-slider-label">在第</span>
+                      <input type="range" id="cron-slider-monthly" class="cron-slider" min="1" max="31" value="1" />
+                      <span class="cron-slider-value">
+                        <strong id="cron-monthly-display">1</strong> 日
+                      </span>
+                    </div>
+                    <div class="cron-time-row" style="margin-top:10px">
+                      <span class="cron-slider-label">在</span>
+                      <input type="time" id="cron-monthly-time" class="cron-time-input" value="09:00" />
+                      <span class="cron-slider-value">执行</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="cron-presets">
-                  <button class="ghost-button cron-preset" type="button" data-cron="*/5 * * * *">每 5 分钟</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 * * * *">每小时</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 */3 * * *">每 3 小时</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 */6 * * *">每 6 小时</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * *">每天 09:00</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 0 */3 * *">每 3 天</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * 1-5">工作日 09:00</button>
-                  <button class="ghost-button cron-preset" type="button" data-cron="0 0 1 * *">每月 1 日</button>
+
+                <!-- Advanced mode: 5-field builder + presets -->
+                <div id="cron-advanced" class="cron-advanced hidden">
+                  <div class="cron-builder">
+                    <div class="cron-builder-grid">
+                      <label>
+                        分钟
+                        <input id="cron-minute" placeholder="* / */10 / 0,30" />
+                      </label>
+                      <label>
+                        小时
+                        <input id="cron-hour" placeholder="* / 9 / 9-18" />
+                      </label>
+                      <label>
+                        日
+                        <input id="cron-day" placeholder="* / 1 / 1-5" />
+                      </label>
+                      <label>
+                        月
+                        <input id="cron-month" placeholder="* / 1 / 1,6,12" />
+                      </label>
+                      <label>
+                        周
+                        <input id="cron-weekday" placeholder="* / 1-5 / 0,6" />
+                      </label>
+                    </div>
+                    <span class="field-help">支持 `*`、`*/10`、`1,15,30`、`1-5` 等 Cron 写法。留空按 `*` 处理。</span>
+                  </div>
+                  <div class="cron-presets">
+                    <button class="ghost-button cron-preset" type="button" data-cron="*/5 * * * *">每 5 分钟</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 * * * *">每小时</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 */3 * * *">每 3 小时</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 */6 * * *">每 6 小时</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * *">每天 09:00</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 0 */3 * *">每 3 天</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 9 * * 1-5">工作日 09:00</button>
+                    <button class="ghost-button cron-preset" type="button" data-cron="0 0 1 * *">每月 1 日</button>
+                  </div>
                 </div>
-                <span class="field-help">格式：分 时 日 月 周。示例：`*/10 * * * *` 每 10 分钟执行，`0 9 * * 1-5` 工作日 09:00 执行。</span>
+
+                <span class="field-help">齿轮滑块模式下自动生成表达式。也可切换高级模式手动编辑。</span>
               </label>
 
               <label class="checkbox-row">

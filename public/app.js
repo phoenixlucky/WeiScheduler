@@ -24,6 +24,29 @@ let loadTimer = null;
 const expandedTaskIds = new Set();
 const cronPartInputs = [cronMinuteInput, cronHourInput, cronDayInput, cronMonthInput, cronWeekdayInput];
 
+// New simple-mode (gear/slider) elements
+const cronSimple = document.getElementById("cron-simple");
+const cronAdvanced = document.getElementById("cron-advanced");
+const cronModeTabs = document.querySelectorAll(".cron-mode-tab");
+const cronFreqTabs = document.querySelectorAll(".cron-freq-tab");
+const cronPanels = document.querySelectorAll(".cron-panel");
+
+const cronSliderEveryN = document.getElementById("cron-slider-every-n");
+const cronEveryNDisplay = document.getElementById("cron-every-n-display");
+const cronSliderHourly = document.getElementById("cron-slider-hourly");
+const cronHourlyDisplay = document.getElementById("cron-hourly-display");
+const cronSliderMonthly = document.getElementById("cron-slider-monthly");
+const cronMonthlyDisplay = document.getElementById("cron-monthly-display");
+
+const cronDailyTime = document.getElementById("cron-daily-time");
+const cronWeeklyTime = document.getElementById("cron-weekly-time");
+const cronMonthlyTime = document.getElementById("cron-monthly-time");
+
+const cronWeekdayGrid = document.getElementById("cron-weekday-grid");
+const cronWeekdayBtns = cronWeekdayGrid?.querySelectorAll(".cron-weekday-btn");
+
+let cronSimpleMode = true; // true = simple (gear), false = advanced
+
 const beijingDateTimeFormatter = new Intl.DateTimeFormat("zh-CN", {
   timeZone: "Asia/Shanghai",
   year: "numeric",
@@ -143,7 +166,7 @@ function resetForm() {
   document.getElementById("enabled").checked = true;
   document.getElementById("runnerType").value = "python";
   updateRunnerFields();
-  syncCronBuilderFromSchedule("");
+  syncFromSchedule();
   formTitle.textContent = "新建任务";
 }
 
@@ -220,6 +243,187 @@ function composeCronFromBuilder() {
   return cronPartInputs
     .map((input) => String(input.value || "").trim() || "*")
     .join(" ");
+}
+
+/* ==============================
+   Simple mode (gear/slider) ↔ Cron
+   ============================== */
+
+function getActiveFreq() {
+  const active = document.querySelector(".cron-freq-tab.active");
+  return active ? active.dataset.freq : "every-n-minutes";
+}
+
+function setActiveFreq(freq) {
+  cronFreqTabs.forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.freq === freq);
+  });
+  cronPanels.forEach((panel) => {
+    panel.classList.toggle("hidden", panel.dataset.panel !== freq);
+  });
+}
+
+function getWeekdayValues() {
+  if (!cronWeekdayBtns) return [];
+  const checked = [];
+  cronWeekdayBtns.forEach((btn) => {
+    const cb = btn.querySelector("input[type=checkbox]");
+    if (cb && cb.checked) {
+      checked.push(btn.dataset.day);
+    }
+  });
+  return checked;
+}
+
+function setWeekdayValues(values) {
+  if (!cronWeekdayBtns) return;
+  cronWeekdayBtns.forEach((btn) => {
+    const cb = btn.querySelector("input[type=checkbox]");
+    if (cb) {
+      cb.checked = values.includes(btn.dataset.day);
+    }
+  });
+}
+
+function simpleModeToCron() {
+  const freq = getActiveFreq();
+  const minute = "0";
+  const hour = "9";
+  const day = "*";
+  const month = "*";
+  const weekday = "*";
+  let m = minute, h = hour, d = day, mo = month, w = weekday;
+
+  switch (freq) {
+    case "every-n-minutes": {
+      const n = parseInt(cronSliderEveryN?.value, 10) || 5;
+      m = `*/${n}`;
+      h = "*";
+      d = "*";
+      break;
+    }
+    case "hourly": {
+      const min = parseInt(cronSliderHourly?.value, 10) || 0;
+      m = `${min}`;
+      h = "*";
+      d = "*";
+      break;
+    }
+    case "daily": {
+      const timeVal = cronDailyTime?.value || "09:00";
+      const parts = timeVal.split(":");
+      h = parseInt(parts[0], 10).toString();
+      m = parseInt(parts[1], 10).toString();
+      d = "*";
+      break;
+    }
+    case "weekly": {
+      const wTime = cronWeeklyTime?.value || "09:00";
+      const wParts = wTime.split(":");
+      h = parseInt(wParts[0], 10).toString();
+      m = parseInt(wParts[1], 10).toString();
+      const days = getWeekdayValues();
+      w = days.length ? days.sort((a, b) => parseInt(a) - parseInt(b)).join(",") : "*";
+      d = "*";
+      break;
+    }
+    case "monthly": {
+      const mTime = cronMonthlyTime?.value || "09:00";
+      const mParts = mTime.split(":");
+      h = parseInt(mParts[0], 10).toString();
+      m = parseInt(mParts[1], 10).toString();
+      d = cronSliderMonthly?.value || "1";
+      break;
+    }
+  }
+
+  return `${m} ${h} ${d} ${mo} ${w}`;
+}
+
+function syncSimpleFromCron(schedule) {
+  const parts = splitCronExpression(schedule);
+  if (!parts) {
+    // Reset simple mode to default (every 5 min)
+    setActiveFreq("every-n-minutes");
+    if (cronSliderEveryN) cronSliderEveryN.value = "5";
+    if (cronEveryNDisplay) cronEveryNDisplay.textContent = "5";
+    if (cronSliderHourly) cronSliderHourly.value = "0";
+    if (cronHourlyDisplay) cronHourlyDisplay.textContent = "0";
+    if (cronSliderMonthly) cronSliderMonthly.value = "1";
+    if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = "1";
+    if (cronDailyTime) cronDailyTime.value = "09:00";
+    if (cronWeeklyTime) cronWeeklyTime.value = "09:00";
+    if (cronMonthlyTime) cronMonthlyTime.value = "09:00";
+    setWeekdayValues(["1", "2", "3", "4", "5"]);
+    return;
+  }
+
+  const [pMinute, pHour, pDay, pMonth, pWeekday] = parts;
+
+  // Detect frequency pattern
+  const everyNMatch = pMinute.match(/^\*\/(\d+)$/);
+  if (everyNMatch && pHour === "*" && pDay === "*" && pMonth === "*" && pWeekday === "*") {
+    // every N minutes
+    setActiveFreq("every-n-minutes");
+    if (cronSliderEveryN) cronSliderEveryN.value = everyNMatch[1];
+    if (cronEveryNDisplay) cronEveryNDisplay.textContent = everyNMatch[1];
+    return;
+  }
+
+  const isSimpleMinute = /^\d+$/.test(pMinute);
+  if (isSimpleMinute && pHour === "*" && pDay === "*" && pMonth === "*" && pWeekday === "*") {
+    // hourly — at specific minute
+    setActiveFreq("hourly");
+    if (cronSliderHourly) cronSliderHourly.value = pMinute;
+    if (cronHourlyDisplay) cronHourlyDisplay.textContent = pMinute;
+    return;
+  }
+
+  const isSimpleHour = /^\d+$/.test(pHour);
+  const isSimpleDay = /^\d+$/.test(pDay);
+  const noCommaWeekday = !pWeekday.includes(",");
+
+  if (isSimpleMinute && isSimpleHour && pDay === "*" && pMonth === "*" && pWeekday === "*") {
+    // daily
+    setActiveFreq("daily");
+    if (cronDailyTime) cronDailyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
+    return;
+  }
+
+  if (isSimpleMinute && isSimpleHour && pDay === "*" && pMonth === "*" && pWeekday !== "*") {
+    // weekly
+    setActiveFreq("weekly");
+    if (cronWeeklyTime) cronWeeklyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
+    const days = pWeekday.split(",").map((d) => d.trim()).filter(Boolean);
+    setWeekdayValues(days);
+    return;
+  }
+
+  if (isSimpleMinute && isSimpleHour && isSimpleDay && pMonth === "*" && pWeekday === "*") {
+    // monthly
+    setActiveFreq("monthly");
+    if (cronMonthlyTime) cronMonthlyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
+    if (cronSliderMonthly) cronSliderMonthly.value = pDay;
+    if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = pDay;
+    return;
+  }
+
+  // Fallback — can't parse, show every-n-minutes
+  setActiveFreq("every-n-minutes");
+  if (cronSliderEveryN) cronSliderEveryN.value = "5";
+  if (cronEveryNDisplay) cronEveryNDisplay.textContent = "5";
+}
+
+function syncAllCron() {
+  if (cronSimpleMode) {
+    scheduleInput.value = simpleModeToCron();
+  }
+  syncCronBuilderFromSchedule(scheduleInput.value);
+}
+
+function syncFromSchedule() {
+  syncCronBuilderFromSchedule(scheduleInput.value);
+  syncSimpleFromCron(scheduleInput.value);
 }
 
 function sleep(ms) {
@@ -539,7 +743,7 @@ async function loadTasks() {
       document.getElementById("timeArgValue").value = task.timeArgValue || "";
       document.getElementById("workingDirectory").value = task.workingDirectory || "";
       document.getElementById("schedule").value = task.schedule;
-      syncCronBuilderFromSchedule(task.schedule);
+      syncFromSchedule();
       document.getElementById("enabled").checked = task.enabled;
       updateRunnerFields();
       formTitle.textContent = `编辑任务: ${task.name}`;
@@ -691,23 +895,95 @@ importFileInput.addEventListener("change", async (event) => {
 document.getElementById("runnerType").addEventListener("change", updateRunnerFields);
 cronPartInputs.forEach((input) => {
   input.addEventListener("input", () => {
-    scheduleInput.value = composeCronFromBuilder();
+    if (!cronSimpleMode) {
+      scheduleInput.value = composeCronFromBuilder();
+    }
   });
 });
 scheduleInput.addEventListener("input", () => {
-  syncCronBuilderFromSchedule(scheduleInput.value);
+  syncFromSchedule();
 });
+
+/* ==============================
+   Cron mode tab switching
+   ============================== */
+
+cronModeTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    cronSimpleMode = tab.dataset.mode === "simple";
+    cronModeTabs.forEach((t) => t.classList.toggle("active", t === tab));
+    cronSimple.classList.toggle("hidden", !cronSimpleMode);
+    cronAdvanced.classList.toggle("hidden", cronSimpleMode);
+    if (cronSimpleMode) {
+      syncSimpleFromCron(scheduleInput.value);
+    }
+  });
+});
+
+/* ==============================
+   Cron frequency tab switching
+   ============================== */
+
+cronFreqTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    setActiveFreq(tab.dataset.freq);
+    syncAllCron();
+  });
+});
+
+/* ==============================
+   Simple mode control listeners
+   ============================== */
+
+function onSimpleChange() {
+  syncAllCron();
+}
+
+// Sliders
+if (cronSliderEveryN) {
+  cronSliderEveryN.addEventListener("input", () => {
+    if (cronEveryNDisplay) cronEveryNDisplay.textContent = cronSliderEveryN.value;
+    onSimpleChange();
+  });
+}
+if (cronSliderHourly) {
+  cronSliderHourly.addEventListener("input", () => {
+    if (cronHourlyDisplay) cronHourlyDisplay.textContent = cronSliderHourly.value;
+    onSimpleChange();
+  });
+}
+if (cronSliderMonthly) {
+  cronSliderMonthly.addEventListener("input", () => {
+    if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = cronSliderMonthly.value;
+    onSimpleChange();
+  });
+}
+
+// Time inputs
+if (cronDailyTime) cronDailyTime.addEventListener("change", onSimpleChange);
+if (cronWeeklyTime) cronWeeklyTime.addEventListener("change", onSimpleChange);
+if (cronMonthlyTime) cronMonthlyTime.addEventListener("change", onSimpleChange);
+
+// Weekday checkboxes
+if (cronWeekdayBtns) {
+  cronWeekdayBtns.forEach((btn) => {
+    const cb = btn.querySelector("input[type=checkbox]");
+    if (cb) {
+      cb.addEventListener("change", onSimpleChange);
+    }
+  });
+}
 document.querySelectorAll(".cron-preset").forEach((button) => {
   button.addEventListener("click", () => {
     scheduleInput.value = button.dataset.cron || "";
-    syncCronBuilderFromSchedule(scheduleInput.value);
+    syncFromSchedule();
     scheduleInput.focus();
   });
 });
 
 hydrateAutoRefreshPreferences();
 updateRunnerFields();
-syncCronBuilderFromSchedule(scheduleInput.value);
+syncFromSchedule();
 loadTasks().catch((error) => {
   taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
 });

@@ -377,6 +377,249 @@ body {
   border-radius: 999px;
 }
 
+/* ==============================
+   Cron — mode tabs
+   ============================== */
+
+.cron-mode-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 12px;
+  background: rgba(70, 82, 55, 0.06);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.cron-mode-tab {
+  flex: 1;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.18s ease;
+}
+
+.cron-mode-tab.active {
+  background: #fff;
+  color: var(--primary-dark);
+  box-shadow: 0 2px 8px rgba(31, 42, 28, 0.1);
+}
+
+.cron-mode-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* ==============================
+   Cron — simple mode (gear/slider)
+   ============================== */
+
+.cron-simple {
+  display: grid;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.cron-advanced.hidden,
+.cron-simple.hidden {
+  display: none;
+}
+
+/* Frequency tabs */
+
+.cron-freq-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cron-freq-tab {
+  border: 1px solid rgba(70, 82, 55, 0.12);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--muted);
+  transition: all 0.18s ease;
+}
+
+.cron-freq-tab.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(40, 88, 71, 0.25);
+}
+
+.cron-freq-tab:hover:not(.active) {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* Panels */
+
+.cron-panel {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(70, 82, 55, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.cron-panel.hidden {
+  display: none;
+}
+
+/* Slider row */
+
+.cron-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-slider-label {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cron-slider {
+  flex: 1;
+  min-width: 120px;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(70, 82, 55, 0.15) 50%);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cron-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 2px 8px rgba(40, 88, 71, 0.3);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.cron-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.cron-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 2px 8px rgba(40, 88, 71, 0.3);
+  cursor: pointer;
+  border: none;
+}
+
+.cron-slider-value {
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.cron-slider-value strong {
+  color: var(--primary-dark);
+  font-size: 1.05rem;
+}
+
+/* Time row */
+
+.cron-time-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-time-input {
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(49, 65, 45, 0.14);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color var(--transition);
+}
+
+.cron-time-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* Weekday pills */
+
+.cron-weekday-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cron-weekday-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cron-weekday-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(70, 82, 55, 0.14);
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.cron-weekday-btn span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.cron-weekday-btn input {
+  display: none;
+}
+
+.cron-weekday-btn:has(input:checked) {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 3px 10px rgba(40, 88, 71, 0.2);
+}
+
+.cron-weekday-btn:has(input:checked) span {
+  color: #fff;
+}
+
+.cron-weekday-btn:hover:not(:has(input:checked)) {
+  border-color: var(--primary);
+  background: rgba(40, 88, 71, 0.06);
+}
+
 /* Checkbox row */
 
 .checkbox-row {
