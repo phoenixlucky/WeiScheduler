@@ -22,7 +22,6 @@
   "build": {
     "appId": "com.weischeduler.desktop",
     "productName": "WeiScheduler",
-    "electronDist": "node_modules/electron/dist",
     "copyright": "Copyright © 2026 Ethan Wilkins",
     "directories": {
       "output": "release"
