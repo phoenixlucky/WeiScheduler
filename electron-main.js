@@ -109,51 +109,209 @@ function setAutoLaunchEnabled(enabled) {
   });
 }
 
-function getAboutMessage() {
-  const version = `v${app.getVersion()}`;
-  return [
-    `软件名称：${APP_NAME_FULL}`,
-    `Software Name: ${APP_NAME_EN}`,
-    "",
-    `当前版本：${version}`,
-    `Latest Version: ${version}`,
-    `作者：${APP_AUTHOR}`,
-    `应用标识：${APP_ID}`,
-    "",
-    "软件简介（中文）：",
-    APP_DESCRIPTION_ZH,
-    "",
-    "Software Description (English):",
-    APP_DESCRIPTION_EN,
-    "",
-    "核心定位（中文）：",
-    APP_POSITIONING_ZH,
-    "",
-    "Core Positioning (English):",
-    APP_POSITIONING_EN,
-    "",
-    "版本说明（简短）：",
-    APP_VERSION_HIGHLIGHT_ZH,
-    "",
-    "Version Summary:",
-    APP_VERSION_HIGHLIGHT_EN,
-    "",
-    "主要功能：",
-    ...APP_FEATURES.map((feature) => `- ${feature}`),
-  ].join("\n");
+const ABOUT_ANCIENT_WISDOM =
+  "举贤任能，不时日而事利；明法审令，不卜筮而获吉；贵功养劳，不祷祠而得福。";
+
+function buildAboutHtml() {
+  const version = app.getVersion();
+  const featuresHtml = APP_FEATURES.map((f) => `<li>${f}</li>`).join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>关于 ${APP_NAME_FULL}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+    background: linear-gradient(160deg, #f0e6d3 0%, #dccdb5 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #2c1810;
+  }
+  .about-card {
+    max-width: 520px;
+    width: 100%;
+    background: linear-gradient(165deg, rgba(251,243,228,0.97), rgba(240,230,210,0.88));
+    border: 1px solid #b8943a;
+    border-radius: 24px;
+    padding: 32px 36px;
+    box-shadow: 0 22px 60px rgba(40,28,18,0.18);
+  }
+  .about-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .about-header h1 {
+    font-size: 1.5rem;
+    color: #5a3e20;
+    margin-bottom: 4px;
+  }
+  .about-header .version {
+    font-size: 0.95rem;
+    color: #8a6d3b;
+    font-weight: 600;
+  }
+  .about-author {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7a6a58;
+    margin-bottom: 20px;
+  }
+  .about-section {
+    margin-bottom: 16px;
+  }
+  .about-section h2 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #b8943a;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(196,154,69,0.12);
+  }
+  .about-section p, .about-section ul {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: #2c1810;
+  }
+  .about-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  .about-section li {
+    padding: 2px 0;
+  }
+  .about-section li::before {
+    content: "• ";
+    color: #b8943a;
+    font-weight: bold;
+  }
+  .about-feature-hl {
+    margin-top: 4px;
+  }
+  .wisdom-block {
+    margin: 20px 0 8px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(196,154,69,0.12), rgba(196,154,69,0.06));
+    border-left: 4px solid #b8943a;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: #5a3e20;
+    font-weight: 600;
+    text-align: center;
+  }
+  .wisdom-block::before {
+    content: "✦ ";
+    color: #b8943a;
+  }
+  .wisdom-block::after {
+    content: " ✦";
+    color: #b8943a;
+  }
+  .about-version-hl {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #7a6a58;
+    line-height: 1.5;
+  }
+  .about-version-hl strong {
+    color: #5a3e20;
+  }
+  .about-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(196,154,69,0.12);
+  }
+  .about-footer button {
+    background: linear-gradient(135deg, #8a6d3b 0%, #5a3e20 100%);
+    color: #fbf3e4;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 28px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 20px rgba(90,62,32,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .about-footer button:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 16px 28px rgba(90,62,32,0.32);
+  }
+  .about-footer button:active {
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="about-card">
+  <div class="about-header">
+    <h1>${APP_NAME_FULL}</h1>
+    <div class="version">v${version}</div>
+  </div>
+  <div class="about-author">作者：${APP_AUTHOR} &middot; ${APP_ID}</div>
+
+  <div class="about-section">
+    <h2>软件简介</h2>
+    <p>${APP_DESCRIPTION_ZH}</p>
+  </div>
+
+  <div class="about-section">
+    <h2>Core Positioning</h2>
+    <p>${APP_POSITIONING_EN}</p>
+  </div>
+
+  <div class="about-section">
+    <h2>主要功能</h2>
+    <ul>${featuresHtml}</ul>
+  </div>
+
+  <div class="about-section about-version-hl">
+    <h2>版本说明</h2>
+    <p><strong>v${version}</strong> &mdash; ${APP_VERSION_HIGHLIGHT_ZH}</p>
+    <p>${APP_VERSION_HIGHLIGHT_EN}</p>
+  </div>
+
+  <div class="wisdom-block">${ABOUT_ANCIENT_WISDOM}</div>
+
+  <div class="about-footer">
+    <button onclick="window.close()" id="btn-ok">确定</button>
+  </div>
+</div>
+</body>
+</html>`;
 }
 
-async function showAboutDialog() {
+function showAboutDialog() {
   const version = app.getVersion();
 
-  await dialog.showMessageBox(mainWindow, {
-    type: "info",
+  const aboutWin = new BrowserWindow({
+    width: 540,
+    height: 620,
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
     title: `关于 ${APP_NAME_FULL}`,
-    message: `${APP_NAME_FULL} v${version}`,
-    detail: getAboutMessage(),
-    buttons: ["确定"],
     icon: getAppIconPath(),
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      sandbox: false,
+    },
   });
+
+  aboutWin.removeMenu();
+  aboutWin.setMenu(null);
+  aboutWin.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(buildAboutHtml())}`);
 }
 
 function buildApplicationMenu() {

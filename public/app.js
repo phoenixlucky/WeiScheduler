@@ -202,9 +202,15 @@ function renderLog(task) {
 function describeSchedule(schedule) {
   const presets = {
     "*/5 * * * *": "每 5 分钟",
+    "*/10 * * * *": "每 10 分钟",
+    "*/15 * * * *": "每 15 分钟",
+    "*/30 * * * *": "每 30 分钟",
     "0 * * * *": "每小时",
+    "0 */2 * * *": "每 2 小时",
     "0 */3 * * *": "每 3 小时",
     "0 */6 * * *": "每 6 小时",
+    "0 */8 * * *": "每 8 小时",
+    "0 */12 * * *": "每 12 小时",
     "0 9 * * *": "每天 09:00",
     "0 0 */3 * *": "每 3 天",
     "0 9 * * 1-5": "工作日 09:00",
@@ -215,9 +221,49 @@ function describeSchedule(schedule) {
     return presets[schedule];
   }
 
+  // 每 N 分钟: */N * * * *
   const everyMinutes = schedule.match(/^\*\/(\d+) \* \* \* \*$/);
   if (everyMinutes) {
     return `每 ${everyMinutes[1]} 分钟`;
+  }
+
+  // 每 N 小时（指定分钟）: M */N * * *
+  const everyNHoursWithMinute = schedule.match(/^(\d+|\*) \*\/(\d+) \* \* \*$/);
+  if (everyNHoursWithMinute) {
+    const min = everyNHoursWithMinute[1];
+    const hour = everyNHoursWithMinute[2];
+    if (min === "0") {
+      return `每 ${hour} 小时`;
+    }
+    return `每 ${hour} 小时（第 ${min} 分）`;
+  }
+
+  // 每天固定时间: M H * * *
+  const dailyFixed = schedule.match(/^(\d+) (\d+) \* \* \*$/);
+  if (dailyFixed) {
+    const h = dailyFixed[2].padStart(2, "0");
+    const m = dailyFixed[1].padStart(2, "0");
+    return `每天 ${h}:${m}`;
+  }
+
+  // 每周固定时间: M H * * <days>
+  const weeklyFixed = schedule.match(/^(\d+) (\d+) \* \* (\d[\d,]*)$/);
+  if (weeklyFixed) {
+    const h = weeklyFixed[2].padStart(2, "0");
+    const m = weeklyFixed[1].padStart(2, "0");
+    const days = weeklyFixed[3];
+    const dayLabels = { "0": "日", "1": "一", "2": "二", "3": "三", "4": "四", "5": "五", "6": "六" };
+    const dayNames = days.split(",").map((d) => dayLabels[d] || `周${d}`).join("、");
+    return `每周${dayNames} ${h}:${m}`;
+  }
+
+  // 每月固定日: M H D * *
+  const monthlyFixed = schedule.match(/^(\d+) (\d+) (\d+) \* \*$/);
+  if (monthlyFixed) {
+    const h = monthlyFixed[2].padStart(2, "0");
+    const m = monthlyFixed[1].padStart(2, "0");
+    const d = monthlyFixed[3];
+    return `每月 ${d} 日 ${h}:${m}`;
   }
 
   return schedule;
