@@ -1,0 +1,200 @@
+/* ==============================
+   🌸 豆蔻少女 — Cardamom Maiden
+   Sakura pink × Cream white × Lavender
+   Glassmorphism · Dreamy · Anime × Heal
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+[data-theme="cardamom-maiden"] {
+  --bg-start: #fce8ee;
+  --bg-mid: #f0dce8;
+  --bg-end: #e8dcf0;
+  --panel: rgba(255, 248, 245, 0.6);
+  --panel-strong: rgba(255, 250, 248, 0.85);
+  --panel-border: rgba(255, 255, 255, 0.35);
+  --text: #5a3e4a;
+  --muted: #b08a98;
+  --primary: #f2a6b0;
+  --primary-dark: #e88da0;
+  --primary-soft: rgba(242, 166, 176, 0.15);
+  --accent: #fddce8;
+  --accent-glow: rgba(242, 166, 176, 0.15);
+  --danger: #d46a7a;
+  --danger-soft: rgba(212, 106, 122, 0.1);
+  --success: #88b8a0;
+  --gold: #d4a0b8;
+  --shadow: 0 20px 60px rgba(180, 120, 140, 0.12);
+  --shadow-soft: 0 10px 28px rgba(180, 120, 140, 0.08);
+  --shadow-sm: 0 4px 16px rgba(180, 120, 140, 0.06);
+  --glow: 0 0 40px rgba(242, 166, 176, 0.06);
+  --scrollbar-track: rgba(242, 166, 176, 0.06);
+  --scrollbar-thumb: rgba(242, 166, 176, 0.2);
+  --font-family: "M PLUS Rounded 1c", "Nunito", "PingFang SC", "Microsoft YaHei", "Hiragino Sans", sans-serif;
+}
+
+[data-theme="cardamom-maiden"] body,
+body[data-theme="cardamom-maiden"] {
+  font-family: var(--font-family);
+  background:
+    radial-gradient(ellipse at 15% 8%, rgba(253, 226, 216, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 12%, rgba(216, 200, 240, 0.4) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 92%, rgba(242, 166, 176, 0.15) 0%, transparent 40%),
+    linear-gradient(165deg, var(--bg-start) 0%, var(--bg-mid) 45%, var(--bg-end) 100%);
+}
+
+/* Floating decorative orbs */
+[data-theme="cardamom-maiden"] body::before,
+[data-theme="cardamom-maiden"] body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+[data-theme="cardamom-maiden"] body::before {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(242, 166, 176, 0.12) 0%, transparent 70%);
+  top: -80px;
+  right: -60px;
+  animation: float-orb 8s ease-in-out infinite alternate;
+}
+
+[data-theme="cardamom-maiden"] body::after {
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(216, 200, 240, 0.12) 0%, transparent 70%);
+  bottom: -40px;
+  left: -40px;
+  animation: float-orb 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float-orb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(20px, -20px) scale(1.05); }
+}
+
+/* Decorative floating orbs (extra) */
+[data-theme="cardamom-maiden"] .deco-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+[data-theme="cardamom-maiden"] .deco-orb--1 {
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(248, 200, 216, 0.2) 0%, transparent 65%);
+  top: 20%; left: 5%;
+  animation: float-orb-slow 12s ease-in-out infinite alternate;
+}
+
+[data-theme="cardamom-maiden"] .deco-orb--2 {
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(216, 200, 240, 0.18) 0%, transparent 65%);
+  bottom: 15%; right: 8%;
+  animation: float-orb-slow 9s ease-in-out infinite alternate-reverse;
+}
+
+[data-theme="cardamom-maiden"] .deco-orb--3 {
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, rgba(253, 226, 216, 0.22) 0%, transparent 65%);
+  top: 45%; right: 15%;
+  animation: float-orb-slow 7s ease-in-out infinite alternate;
+}
+
+[data-theme="cardamom-maiden"] .deco-orb--4 {
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(242, 166, 176, 0.15) 0%, transparent 65%);
+  bottom: 30%; left: 3%;
+  animation: float-orb-slow 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float-orb-slow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -25px) scale(1.08); }
+}
+
+/* Petal canvas */
+[data-theme="cardamom-maiden"] #petal-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hero sakura ornament */
+[data-theme="cardamom-maiden"] .hero-copy-block::before {
+  content: "🌸";
+  position: absolute;
+  top: 14px; right: 24px;
+  font-size: 2rem;
+  opacity: 0.12;
+  pointer-events: none;
+  transform: rotate(12deg);
+  animation: gentle-sway 4s ease-in-out infinite;
+}
+
+@keyframes gentle-sway {
+  0%, 100% { transform: rotate(12deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-4px); }
+}
+
+[data-theme="cardamom-maiden"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  inset: auto -60px -80px auto;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 166, 176, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Gradient bar on top */
+[data-theme="cardamom-maiden"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60%; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--gold-light), var(--primary), transparent);
+  border-radius: 0 0 999px 999px;
+  opacity: 0.6;
+}
+
+/* Eyebrow branding */
+[data-theme="cardamom-maiden"] .eyebrow {
+  font-family: "Nunito", "M PLUS Rounded 1c", sans-serif;
+  color: var(--primary);
+  opacity: 0.7;
+}
+
+/* Slider thumb gradient */
+[data-theme="cardamom-maiden"] .cron-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #fcc8d8, var(--primary) 50%, var(--primary-dark));
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="cardamom-maiden"] .cron-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, #fcc8d8, var(--primary) 50%, var(--primary-dark));
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Weekday pill active */
+[data-theme="cardamom-maiden"] .cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: var(--primary);
+  box-shadow: 0 3px 10px rgba(242, 166, 176, 0.2);
+}
+
+/* Log terminal dark theme */
+[data-theme="cardamom-maiden"] .task-log {
+  background: linear-gradient(180deg, #2a1e28 0%, #1e141c 100%);
+  color: #e8c8d8;
+  border: 1px solid rgba(242, 166, 176, 0.06);
+}

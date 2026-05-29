@@ -1,0 +1,443 @@
+/* ==============================
+   🏯 秦帝国黑金风 — Qin Empire
+   Mysterious black × Dark gold × Bronze
+   Imperial · Authoritative · Ancient scroll
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+[data-theme="qin-empire"] {
+  --bg-start: #0a0806;
+  --bg-mid: #12100c;
+  --bg-end: #1a1610;
+  --panel: rgba(10, 8, 6, 0.6);
+  --panel-strong: rgba(14, 12, 8, 0.8);
+  --panel-border: rgba(180, 140, 60, 0.08);
+  --text: #d4c8a8;
+  --muted: #7a6e50;
+  --primary: #c49430;
+  --primary-dark: #a07a20;
+  --primary-soft: rgba(180, 140, 60, 0.08);
+  --accent: #d4a840;
+  --accent-glow: rgba(180, 140, 60, 0.04);
+  --danger: #8a2a20;
+  --danger-soft: rgba(138, 42, 32, 0.1);
+  --success: #5a8a5a;
+  --gold: #b8862a;
+  --gold-light: #d4a840;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.18);
+  --glow: 0 0 40px rgba(180, 140, 60, 0.03);
+  --scrollbar-track: rgba(180, 140, 60, 0.03);
+  --scrollbar-thumb: rgba(180, 140, 60, 0.1);
+  --font-family: "Noto Serif SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif;
+  --radius: 4px;
+  --radius-sm: 2px;
+  --radius-xs: 1px;
+  --transition: 0.35s ease;
+}
+
+[data-theme="qin-empire"] body,
+body[data-theme="qin-empire"] {
+  font-family: var(--font-family);
+  color: var(--text);
+  background:
+    /* Subtle bronze texture overlay */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(180, 140, 60, 0.01) 1px,
+      transparent 2px
+    ),
+    radial-gradient(ellipse at 30% 20%, rgba(180, 140, 60, 0.03) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 80%, rgba(80, 60, 30, 0.04) 0%, transparent 35%),
+    linear-gradient(170deg, #080604 0%, #0e0c08 30%, #14100a 60%, #0a0806 100%);
+  background-attachment: fixed;
+}
+
+/* Decorative — bronze vessel texture corners */
+[data-theme="qin-empire"] body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle at 0 0, rgba(180, 140, 60, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="qin-empire"] body::after {
+  content: "";
+  position: fixed;
+  bottom: 0; right: 0;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle at 100% 100%, rgba(180, 140, 60, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Decorative floating elements — seal script vibes */
+[data-theme="qin-empire"] .deco-orb {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  font-family: "Noto Serif SC", serif;
+}
+
+[data-theme="qin-empire"] .deco-orb--1::after {
+  content: "秦";
+  position: fixed;
+  top: 12%; left: 6%;
+  font-size: 3rem;
+  color: var(--gold);
+  opacity: 0.04;
+  transform: rotate(-4deg);
+}
+
+[data-theme="qin-empire"] .deco-orb--2::after {
+  content: "〰〰〰〰〰〰〰〰〰〰";
+  position: fixed;
+  top: 35%; right: 3%;
+  font-size: 8px;
+  color: var(--gold);
+  opacity: 0.03;
+  letter-spacing: 6px;
+  writing-mode: vertical-rl;
+}
+
+[data-theme="qin-empire"] .deco-orb--3::after {
+  content: "⚔";
+  position: fixed;
+  bottom: 25%; left: 8%;
+  font-size: 2rem;
+  opacity: 0.03;
+  transform: rotate(-15deg);
+}
+
+[data-theme="qin-empire"] .deco-orb--4::after {
+  content: "─── ⋆⋅☆⋅⋆ ───";
+  position: fixed;
+  bottom: 10%; right: 10%;
+  font-size: 10px;
+  color: var(--gold);
+  opacity: 0.03;
+  letter-spacing: 4px;
+}
+
+/* Hero */
+[data-theme="qin-empire"] .hero-copy-block {
+  border: 1px solid rgba(180, 140, 60, 0.12);
+  box-shadow: var(--shadow), inset 0 0 80px rgba(180, 140, 60, 0.02);
+}
+
+[data-theme="qin-empire"] .hero-copy-block::before {
+  content: "秦";
+  position: absolute;
+  top: 12px; right: 20px;
+  font-size: 1.8rem;
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+[data-theme="qin-empire"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(180, 140, 60, 0.08), transparent);
+  pointer-events: none;
+}
+
+/* Top bar */
+[data-theme="qin-empire"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg,
+    transparent 0px, transparent 8px,
+    rgba(180, 140, 60, 0.06) 8px, rgba(180, 140, 60, 0.06) 10px,
+    transparent 10px, transparent 30px,
+    rgba(180, 140, 60, 0.04) 30px, rgba(180, 140, 60, 0.04) 32px,
+    transparent 32px, transparent 100%
+  );
+}
+
+/* Eyebrow */
+[data-theme="qin-empire"] .eyebrow {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+  opacity: 0.5;
+  letter-spacing: 0.35em;
+  text-transform: none;
+  font-weight: 400;
+}
+
+[data-theme="qin-empire"] .hero h1 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Panels — sharp, authoritative */
+[data-theme="qin-empire"] .panel {
+  backdrop-filter: none;
+  border: 1px solid rgba(180, 140, 60, 0.06);
+  border-radius: var(--radius);
+}
+
+[data-theme="qin-empire"] .panel-form {
+  border-top: 2px solid rgba(180, 140, 60, 0.1);
+}
+
+[data-theme="qin-empire"] .hero-stat {
+  background: rgba(10, 8, 6, 0.5);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+}
+
+[data-theme="qin-empire"] .hero-stat-icon {
+  border: 1px solid rgba(180, 140, 60, 0.1);
+}
+
+[data-theme="qin-empire"] .hero-stat strong {
+  font-family: "Noto Serif SC", serif;
+}
+
+/* Forms */
+[data-theme="qin-empire"] .form-section-title {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(180, 140, 60, 0.08);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="qin-empire"] .task-form label {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+[data-theme="qin-empire"] .task-form input,
+[data-theme="qin-empire"] .task-form select {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+  color: var(--text);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="qin-empire"] .task-form input:focus,
+[data-theme="qin-empire"] .task-form select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .task-form input::placeholder {
+  color: #3a3420;
+}
+
+/* Sliders */
+[data-theme="qin-empire"] .cron-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold) 50%, #7a5a10);
+  border: 1px solid rgba(180, 140, 60, 0.2);
+  border-radius: 2px;
+  width: 18px; height: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="qin-empire"] .cron-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold) 50%, #7a5a10);
+  border: 1px solid rgba(180, 140, 60, 0.2);
+  border-radius: 2px;
+  width: 18px; height: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="qin-empire"] .cron-slider {
+  background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, rgba(180, 140, 60, 0.04) 50%);
+}
+
+/* Buttons */
+[data-theme="qin-empire"] .primary-button {
+  background: linear-gradient(135deg, #2a2418 0%, #1a1410 100%);
+  color: var(--gold);
+  border: 1px solid rgba(180, 140, 60, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-family: "Noto Serif SC", serif;
+}
+
+[data-theme="qin-empire"] .primary-button:hover {
+  background: linear-gradient(135deg, #3a3020 0%, #2a2418 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 20px rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .ghost-button {
+  background: rgba(10, 8, 6, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+  color: var(--muted);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="qin-empire"] .ghost-button:hover {
+  background: rgba(20, 16, 10, 0.6);
+  color: var(--text);
+  border-color: rgba(180, 140, 60, 0.08);
+}
+
+[data-theme="qin-empire"] .ghost-button.danger {
+  color: var(--danger);
+  border-color: rgba(138, 42, 32, 0.08);
+}
+
+/* Tabs */
+[data-theme="qin-empire"] .cron-mode-tab.active {
+  background: rgba(20, 16, 10, 0.8);
+  color: var(--gold);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+}
+
+[data-theme="qin-empire"] .cron-mode-tabs {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .cron-freq-tab {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .cron-freq-tab.active {
+  background: linear-gradient(135deg, #3a3020 0%, #2a2418 100%);
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="qin-empire"] .cron-panel {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .cron-slider-value strong {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--gold);
+}
+
+/* Checkbox */
+[data-theme="qin-empire"] .checkbox-row input[type="checkbox"] {
+  accent-color: var(--gold);
+}
+
+[data-theme="qin-empire"] .auto-refresh-toggle input {
+  accent-color: var(--gold);
+}
+
+/* Task cards */
+[data-theme="qin-empire"] .task-card {
+  background: rgba(10, 8, 6, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .task-card:hover {
+  border-color: rgba(180, 140, 60, 0.08);
+}
+
+[data-theme="qin-empire"] .task-name {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+}
+
+[data-theme="qin-empire"] .task-frequency {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--gold);
+  background: rgba(180, 140, 60, 0.04);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+}
+
+/* Status */
+[data-theme="qin-empire"] .task-status.running {
+  background: rgba(90, 138, 90, 0.06);
+  color: var(--success);
+}
+
+[data-theme="qin-empire"] .task-status.success {
+  background: rgba(180, 140, 60, 0.06);
+  color: var(--gold);
+}
+
+[data-theme="qin-empire"] .task-status.failed {
+  background: rgba(138, 42, 32, 0.06);
+  color: var(--danger);
+}
+
+[data-theme="qin-empire"] .task-status.never {
+  background: rgba(180, 140, 60, 0.03);
+  color: var(--muted);
+}
+
+[data-theme="qin-empire"] .task-status.stopped {
+  background: rgba(180, 140, 60, 0.04);
+  color: var(--gold);
+}
+
+/* Weekday */
+[data-theme="qin-empire"] .cron-weekday-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, #3a3020 0%, #2a2418 100%);
+  border-color: var(--gold);
+}
+
+[data-theme="qin-empire"] .cron-weekday-btn:has(input:checked) span {
+  color: var(--gold);
+}
+
+/* Log */
+[data-theme="qin-empire"] .task-log {
+  background: linear-gradient(180deg, #0a0806 0%, #050403 100%);
+  color: #a89870;
+  border: 1px solid rgba(180, 140, 60, 0.03);
+}
+
+/* Select */
+[data-theme="qin-empire"] .toolbar-select,
+[data-theme="qin-empire"] .auto-refresh-toggle {
+  background: rgba(10, 8, 6, 0.5);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+  color: var(--muted);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="qin-empire"] .empty-state {
+  background: rgba(10, 8, 6, 0.4);
+  border: 1px dashed rgba(180, 140, 60, 0.04);
+  color: var(--muted);
+}
+
+/* Misc */
+[data-theme="qin-empire"] .cron-preset {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="qin-empire"] .form-section {
+  background: rgba(10, 8, 6, 0.2);
+  border: 1px solid rgba(180, 140, 60, 0.04);
+}
+
+[data-theme="qin-empire"] .section-head h2 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}

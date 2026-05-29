@@ -1,0 +1,461 @@
+/* ==============================
+   🔮 魔女炼金风 — Witch Alchemy
+   Deep purple × Dark gold × Wine red × Moon silver
+   Mystical · Occult · Alchemical laboratory
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+[data-theme="witch-alchemy"] {
+  --bg-start: #0a0610;
+  --bg-mid: #120a1e;
+  --bg-end: #1a0e28;
+  --panel: rgba(10, 6, 18, 0.55);
+  --panel-strong: rgba(16, 10, 28, 0.8);
+  --panel-border: rgba(200, 160, 220, 0.06);
+  --text: #d4c8d8;
+  --muted: #8a7098;
+  --primary: #c080d0;
+  --primary-dark: #a060b8;
+  --primary-soft: rgba(192, 128, 208, 0.08);
+  --accent: #d4a0e0;
+  --accent-glow: rgba(192, 128, 208, 0.04);
+  --danger: #cc4466;
+  --danger-soft: rgba(204, 68, 102, 0.08);
+  --success: #80b090;
+  --gold: #c89050;
+  --gold-light: #d4a868;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.28);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --glow: 0 0 50px rgba(192, 128, 208, 0.03);
+  --scrollbar-track: rgba(200, 160, 220, 0.02);
+  --scrollbar-thumb: rgba(200, 160, 220, 0.08);
+  --font-family: "Cormorant Garamond", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif;
+}
+
+[data-theme="witch-alchemy"] body,
+body[data-theme="witch-alchemy"] {
+  font-family: var(--font-family);
+  color: var(--text);
+  background:
+    /* Aged parchment / dark vellum texture */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(200, 160, 220, 0.01) 1px,
+      transparent 2px
+    ),
+    radial-gradient(ellipse at 25% 15%, rgba(180, 100, 200, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 75% 85%, rgba(200, 140, 80, 0.03) 0%, transparent 35%),
+    radial-gradient(ellipse at 50% 50%, rgba(30, 14, 48, 0.3) 0%, transparent 50%),
+    linear-gradient(170deg, #080410 0%, #10081e 35%, #1a0e28 65%, #0e0818 100%);
+  background-attachment: fixed;
+}
+
+/* Candle glow / moon light */
+[data-theme="witch-alchemy"] body::before {
+  content: "";
+  position: fixed;
+  width: 250px; height: 250px;
+  top: 8%; right: 12%;
+  background: radial-gradient(circle, rgba(200, 160, 220, 0.03) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  animation: candle-flicker 5s ease-in-out infinite alternate;
+}
+
+[data-theme="witch-alchemy"] body::after {
+  content: "";
+  position: fixed;
+  width: 180px; height: 180px;
+  bottom: 10%; left: 5%;
+  background: radial-gradient(circle, rgba(200, 140, 80, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: candle-flicker 7s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes candle-flicker {
+  0% { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0.9; transform: scale(1.1); }
+}
+
+/* Floating — magic particles */
+[data-theme="witch-alchemy"] .deco-orb {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="witch-alchemy"] .deco-orb--1 {
+  width: 3px; height: 3px;
+  background: rgba(200, 160, 220, 0.3);
+  top: 30%; left: 10%;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(200, 160, 220, 0.1);
+  animation: magic-float 6s ease-in-out infinite alternate;
+}
+
+[data-theme="witch-alchemy"] .deco-orb--2 {
+  width: 4px; height: 4px;
+  background: rgba(200, 140, 80, 0.25);
+  top: 50%; right: 12%;
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(200, 140, 80, 0.08);
+  animation: magic-float 8s ease-in-out infinite alternate-reverse;
+}
+
+[data-theme="witch-alchemy"] .deco-orb--3::after {
+  content: "✦";
+  position: fixed;
+  top: 65%; left: 6%;
+  font-size: 14px;
+  color: rgba(200, 160, 220, 0.1);
+  animation: magic-float 7s ease-in-out infinite alternate;
+}
+
+[data-theme="witch-alchemy"] .deco-orb--4::after {
+  content: "☆";
+  position: fixed;
+  bottom: 30%; right: 8%;
+  font-size: 12px;
+  color: rgba(200, 140, 80, 0.08);
+  animation: magic-float 5s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes magic-float {
+  0% { opacity: 0.2; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0.7; transform: translateY(-12px) rotate(15deg); }
+}
+
+/* Hero */
+[data-theme="witch-alchemy"] .hero-copy-block {
+  border: 1px solid rgba(200, 160, 220, 0.08);
+  box-shadow: var(--shadow), inset 0 0 60px rgba(192, 128, 208, 0.02);
+}
+
+[data-theme="witch-alchemy"] .hero-copy-block::before {
+  content: "✦";
+  position: absolute;
+  top: 14px; right: 22px;
+  font-size: 1.8rem;
+  color: var(--gold);
+  opacity: 0.08;
+  pointer-events: none;
+  animation: magic-spin 12s linear infinite;
+}
+
+@keyframes magic-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+[data-theme="witch-alchemy"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 160, 220, 0.05), rgba(200, 140, 80, 0.05), transparent);
+  pointer-events: none;
+}
+
+/* Top bar */
+[data-theme="witch-alchemy"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200, 160, 220, 0.06) 20%,
+    rgba(200, 140, 80, 0.06) 50%,
+    rgba(200, 160, 220, 0.06) 80%,
+    transparent 100%
+  );
+}
+
+/* Eyebrow */
+[data-theme="witch-alchemy"] .eyebrow {
+  font-family: "Cormorant Garamond", serif;
+  color: var(--gold);
+  opacity: 0.6;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: none;
+  font-style: italic;
+}
+
+[data-theme="witch-alchemy"] .hero h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Panels */
+[data-theme="witch-alchemy"] .panel {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 160, 220, 0.04);
+  box-shadow: var(--shadow);
+}
+
+[data-theme="witch-alchemy"] .panel-form {
+  border-top: 2px solid rgba(200, 160, 220, 0.08);
+}
+
+[data-theme="witch-alchemy"] .hero-stat {
+  background: rgba(10, 6, 18, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.04);
+}
+
+[data-theme="witch-alchemy"] .hero-stat-icon {
+  border: 1px solid rgba(200, 160, 220, 0.06);
+}
+
+/* Forms */
+[data-theme="witch-alchemy"] .form-section-title {
+  font-family: "Cormorant Garamond", serif;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(200, 160, 220, 0.06);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.1em;
+  font-style: italic;
+}
+
+[data-theme="witch-alchemy"] .task-form label {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+[data-theme="witch-alchemy"] .task-form input,
+[data-theme="witch-alchemy"] .task-form select {
+  background: rgba(5, 2, 12, 0.5);
+  border: 1px solid rgba(200, 160, 220, 0.04);
+  color: var(--text);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="witch-alchemy"] .task-form input:focus,
+[data-theme="witch-alchemy"] .task-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(192, 128, 208, 0.04), 0 0 20px rgba(192, 128, 208, 0.02);
+}
+
+[data-theme="witch-alchemy"] .task-form input::placeholder {
+  color: #3a2848;
+}
+
+/* Sliders */
+[data-theme="witch-alchemy"] .cron-slider::-webkit-slider-thumb {
+  background: radial-gradient(circle at 35% 35%, #d4a8e0, var(--primary) 50%, #8840a0);
+  border: 2px solid rgba(200, 160, 220, 0.15);
+  box-shadow: 0 0 16px rgba(192, 128, 208, 0.1);
+}
+
+[data-theme="witch-alchemy"] .cron-slider::-moz-range-thumb {
+  background: radial-gradient(circle at 35% 35%, #d4a8e0, var(--primary) 50%, #8840a0);
+  border: 2px solid rgba(200, 160, 220, 0.15);
+  box-shadow: 0 0 16px rgba(192, 128, 208, 0.1);
+}
+
+[data-theme="witch-alchemy"] .cron-slider {
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(192, 128, 208, 0.03) 50%);
+}
+
+[data-theme="witch-alchemy"] .cron-slider-value strong {
+  font-family: "Cormorant Garamond", serif;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Buttons */
+[data-theme="witch-alchemy"] .primary-button {
+  background: linear-gradient(135deg, #3a2048 0%, #28183a 100%);
+  color: var(--primary);
+  border: 1px solid rgba(200, 160, 220, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="witch-alchemy"] .primary-button:hover {
+  background: linear-gradient(135deg, #4a2858 0%, #3a2048 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 20px rgba(192, 128, 208, 0.03);
+}
+
+[data-theme="witch-alchemy"] .ghost-button {
+  background: rgba(10, 6, 18, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+  color: var(--muted);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="witch-alchemy"] .ghost-button:hover {
+  background: rgba(20, 10, 30, 0.6);
+  color: var(--text);
+  border-color: rgba(200, 160, 220, 0.06);
+}
+
+[data-theme="witch-alchemy"] .ghost-button.danger {
+  color: var(--danger);
+  border-color: rgba(204, 68, 102, 0.06);
+}
+
+/* Tabs */
+[data-theme="witch-alchemy"] .cron-mode-tab.active {
+  background: rgba(20, 12, 32, 0.8);
+  color: var(--primary);
+  border: 1px solid rgba(200, 160, 220, 0.04);
+}
+
+[data-theme="witch-alchemy"] .cron-mode-tabs {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(200, 160, 220, 0.03);
+}
+
+[data-theme="witch-alchemy"] .cron-freq-tab {
+  background: rgba(5, 2, 12, 0.3);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+}
+
+[data-theme="witch-alchemy"] .cron-freq-tab.active {
+  background: linear-gradient(135deg, #4a2858 0%, #3a2048 100%);
+  color: #e0c8e8;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="witch-alchemy"] .cron-panel {
+  background: rgba(5, 2, 12, 0.3);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+}
+
+/* Checkbox */
+[data-theme="witch-alchemy"] .checkbox-row input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
+[data-theme="witch-alchemy"] .auto-refresh-toggle input {
+  accent-color: var(--primary);
+}
+
+/* Task cards */
+[data-theme="witch-alchemy"] .task-card {
+  background: rgba(10, 6, 18, 0.35);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+}
+
+[data-theme="witch-alchemy"] .task-card:hover {
+  border-color: rgba(200, 160, 220, 0.06);
+}
+
+[data-theme="witch-alchemy"] .task-name {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+}
+
+[data-theme="witch-alchemy"] .task-frequency {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--gold);
+  background: rgba(200, 140, 80, 0.04);
+  border: 1px solid rgba(200, 140, 80, 0.06);
+}
+
+/* Status */
+[data-theme="witch-alchemy"] .task-status.running {
+  background: rgba(128, 176, 144, 0.06);
+  color: var(--success);
+}
+
+[data-theme="witch-alchemy"] .task-status.success {
+  background: rgba(200, 160, 220, 0.06);
+  color: var(--primary);
+}
+
+[data-theme="witch-alchemy"] .task-status.failed {
+  background: rgba(204, 68, 102, 0.06);
+  color: var(--danger);
+}
+
+[data-theme="witch-alchemy"] .task-status.never {
+  background: rgba(200, 160, 220, 0.03);
+  color: var(--muted);
+}
+
+[data-theme="witch-alchemy"] .task-status.stopped {
+  background: rgba(200, 140, 80, 0.04);
+  color: var(--gold);
+}
+
+/* Weekday */
+[data-theme="witch-alchemy"] .cron-weekday-btn {
+  background: rgba(5, 2, 12, 0.3);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+}
+
+[data-theme="witch-alchemy"] .cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, #4a2858 0%, #3a2048 100%);
+  border-color: var(--primary);
+}
+
+[data-theme="witch-alchemy"] .cron-weekday-btn:has(input:checked) span {
+  color: #e0c8e8;
+}
+
+[data-theme="witch-alchemy"] .cron-weekday-btn span {
+  color: var(--muted);
+}
+
+/* Log */
+[data-theme="witch-alchemy"] .task-log {
+  background: linear-gradient(180deg, #080410 0%, #040208 100%);
+  color: #b098b8;
+  border: 1px solid rgba(200, 160, 220, 0.02);
+}
+
+/* Select */
+[data-theme="witch-alchemy"] .toolbar-select,
+[data-theme="witch-alchemy"] .auto-refresh-toggle {
+  background: rgba(10, 6, 18, 0.45);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+  color: var(--muted);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="witch-alchemy"] .empty-state {
+  background: rgba(10, 6, 18, 0.35);
+  border: 1px dashed rgba(200, 160, 220, 0.03);
+  color: var(--muted);
+}
+
+/* Misc */
+[data-theme="witch-alchemy"] .cron-preset {
+  background: rgba(5, 2, 12, 0.3);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="witch-alchemy"] .form-section {
+  background: rgba(10, 6, 18, 0.2);
+  border: 1px solid rgba(200, 160, 220, 0.03);
+}
+
+[data-theme="witch-alchemy"] .section-head h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="witch-alchemy"] .field-help {
+  color: var(--muted);
+  font-style: italic;
+}
+
+[data-theme="witch-alchemy"] .cron-mode-tab {
+  font-family: "Noto Sans SC", sans-serif;
+}

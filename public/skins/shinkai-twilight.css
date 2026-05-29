@@ -1,0 +1,414 @@
+/* ==============================
+   🌅 新海诚黄昏风 — Shinkai Twilight
+   Sunset orange × Sky blue × Violet clouds
+   Cinematic · Wistful · Japanese evening
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Zen+Antique&display=swap');
+
+[data-theme="shinkai-twilight"] {
+  --bg-start: #1a1a2e;
+  --bg-mid: #16213e;
+  --bg-end: #0f3460;
+  --panel: rgba(15, 20, 40, 0.55);
+  --panel-strong: rgba(20, 28, 52, 0.8);
+  --panel-border: rgba(255, 180, 100, 0.12);
+  --text: #f0e6d0;
+  --muted: #9a8ea8;
+  --primary: #ff8844;
+  --primary-dark: #e87030;
+  --primary-soft: rgba(255, 136, 68, 0.12);
+  --accent: #ffcc88;
+  --accent-glow: rgba(255, 136, 68, 0.1);
+  --danger: #ff5577;
+  --danger-soft: rgba(255, 85, 119, 0.12);
+  --success: #66ccbb;
+  --gold: #ffaa55;
+  --gold-light: #ffcc88;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --glow: 0 0 40px rgba(255, 136, 68, 0.06);
+  --scrollbar-track: rgba(255, 180, 100, 0.04);
+  --scrollbar-thumb: rgba(255, 180, 100, 0.15);
+  --font-family: "Noto Sans JP", "Zen Antique", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+[data-theme="shinkai-twilight"] body,
+body[data-theme="shinkai-twilight"] {
+  font-family: var(--font-family);
+  color: var(--text);
+  background:
+    /* Distant city glow */
+    radial-gradient(ellipse at 50% 100%, rgba(255, 136, 68, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 85%, rgba(255, 200, 100, 0.04) 0%, transparent 30%),
+    /* Sky layers — dusk gradient */
+    linear-gradient(180deg,
+      #0a0a1a 0%,
+      #1a1a3e 15%,
+      #2a204e 30%,
+      #4a3068 40%,
+      #6a4078 48%,
+      #8a5070 55%,
+      #c07050 65%,
+      #e89040 72%,
+      #f0a040 78%,
+      #e8b050 85%,
+      #c8a860 92%,
+      #a09870 100%
+    );
+  background-attachment: fixed;
+}
+
+/* Light flare / cinematic lens flare */
+[data-theme="shinkai-twilight"] body::before {
+  content: "";
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  top: 55%;
+  left: 35%;
+  background: radial-gradient(circle, rgba(255, 200, 120, 0.06) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  animation: sunset-pulse 6s ease-in-out infinite alternate;
+}
+
+[data-theme="shinkai-twilight"] body::after {
+  content: "";
+  position: fixed;
+  width: 500px;
+  height: 2px;
+  bottom: 30%;
+  left: -10%;
+  background: linear-gradient(90deg, transparent, rgba(255, 180, 100, 0.03), transparent);
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-2deg);
+}
+
+@keyframes sunset-pulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.15); }
+}
+
+/* Floating city light particles */
+[data-theme="shinkai-twilight"] .deco-orb {
+  position: fixed;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+[data-theme="shinkai-twilight"] .deco-orb--1 {
+  width: 3px; height: 3px;
+  background: rgba(255, 200, 150, 0.6);
+  top: 60%; left: 20%;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  box-shadow: 0 0 6px rgba(255, 200, 150, 0.3);
+}
+
+[data-theme="shinkai-twilight"] .deco-orb--2 {
+  width: 2px; height: 2px;
+  background: rgba(255, 180, 200, 0.5);
+  top: 55%; left: 45%;
+  animation: twinkle 3s ease-in-out infinite alternate-reverse;
+  box-shadow: 0 0 4px rgba(255, 180, 200, 0.2);
+}
+
+[data-theme="shinkai-twilight"] .deco-orb--3 {
+  width: 3px; height: 3px;
+  background: rgba(200, 220, 255, 0.4);
+  top: 50%; left: 75%;
+  animation: twinkle 5s ease-in-out infinite alternate;
+  box-shadow: 0 0 8px rgba(200, 220, 255, 0.2);
+}
+
+[data-theme="shinkai-twilight"] .deco-orb--4 {
+  width: 2px; height: 2px;
+  background: rgba(255, 200, 100, 0.7);
+  top: 65%; left: 60%;
+  animation: twinkle 3.5s ease-in-out infinite alternate-reverse;
+  box-shadow: 0 0 5px rgba(255, 200, 100, 0.3);
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: translateY(0); }
+  100% { opacity: 0.8; transform: translateY(-4px); }
+}
+
+/* Hero decoration — silhouette city line */
+[data-theme="shinkai-twilight"] .hero-copy-block::before {
+  content: "🌆";
+  position: absolute;
+  top: 12px; right: 20px;
+  font-size: 2rem;
+  opacity: 0.1;
+  pointer-events: none;
+  transform: rotate(0deg);
+}
+
+[data-theme="shinkai-twilight"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -60px auto;
+  width: 300px; height: 120px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 180, 100, 0.03) 0px,
+      rgba(255, 180, 100, 0.03) 12px,
+      transparent 12px,
+      transparent 18px,
+      rgba(255, 200, 150, 0.02) 18px,
+      rgba(255, 200, 150, 0.02) 30px,
+      transparent 30px,
+      transparent 40px
+    );
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+}
+
+/* Top gradient bar */
+[data-theme="shinkai-twilight"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--gold-light), var(--primary), transparent);
+  opacity: 0.3;
+}
+
+/* Eyebrow */
+[data-theme="shinkai-twilight"] .eyebrow {
+  font-family: "Noto Sans JP", sans-serif;
+  color: var(--gold);
+  opacity: 0.6;
+  letter-spacing: 0.25em;
+}
+
+/* Panel glassmorphism — cooler, darker */
+[data-theme="shinkai-twilight"] .panel {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 180, 100, 0.08);
+}
+
+[data-theme="shinkai-twilight"] .panel-form {
+  border-top: 2px solid rgba(255, 136, 68, 0.15);
+}
+
+[data-theme="shinkai-twilight"] .hero-stat {
+  background: rgba(10, 15, 30, 0.5);
+  border: 1px solid rgba(255, 180, 100, 0.1);
+}
+
+/* Form sections */
+[data-theme="shinkai-twilight"] .form-section-title {
+  color: var(--gold);
+  border-bottom-color: rgba(255, 180, 100, 0.12);
+}
+
+/* Inputs */
+[data-theme="shinkai-twilight"] .task-form input,
+[data-theme="shinkai-twilight"] .task-form select {
+  background: rgba(5, 10, 25, 0.7);
+  border-color: rgba(255, 180, 100, 0.1);
+  color: var(--text);
+}
+
+[data-theme="shinkai-twilight"] .task-form input:focus,
+[data-theme="shinkai-twilight"] .task-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 136, 68, 0.08);
+}
+
+[data-theme="shinkai-twilight"] .task-form input::placeholder {
+  color: #6a6078;
+}
+
+/* Sliders */
+[data-theme="shinkai-twilight"] .cron-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #ffaa55, var(--primary) 50%, #cc6622);
+  border: 2px solid rgba(255, 200, 150, 0.3);
+  box-shadow: 0 2px 10px rgba(255, 136, 68, 0.25);
+}
+
+[data-theme="shinkai-twilight"] .cron-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, #ffaa55, var(--primary) 50%, #cc6622);
+  border: 2px solid rgba(255, 200, 150, 0.3);
+  box-shadow: 0 2px 10px rgba(255, 136, 68, 0.25);
+}
+
+[data-theme="shinkai-twilight"] .cron-slider {
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(255, 136, 68, 0.08) 50%);
+}
+
+/* Buttons */
+[data-theme="shinkai-twilight"] .primary-button {
+  background: linear-gradient(135deg, var(--primary) 0%, #cc6622 100%);
+  box-shadow: 0 12px 20px rgba(200, 80, 30, 0.25);
+}
+
+[data-theme="shinkai-twilight"] .ghost-button {
+  background: rgba(10, 15, 35, 0.6);
+  border-color: rgba(255, 180, 100, 0.08);
+}
+
+[data-theme="shinkai-twilight"] .ghost-button:hover {
+  background: rgba(20, 28, 52, 0.8);
+}
+
+/* Frequency tabs */
+[data-theme="shinkai-twilight"] .cron-freq-tab {
+  background: rgba(5, 10, 25, 0.5);
+  border-color: rgba(255, 180, 100, 0.08);
+}
+
+[data-theme="shinkai-twilight"] .cron-freq-tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, #cc6622 100%);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(255, 136, 68, 0.2);
+}
+
+/* Mode tabs */
+[data-theme="shinkai-twilight"] .cron-mode-tab.active {
+  background: linear-gradient(160deg, rgba(30, 40, 70, 0.8), rgba(20, 28, 52, 0.7));
+  color: var(--gold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="shinkai-twilight"] .cron-mode-tabs {
+  background: rgba(5, 10, 25, 0.3);
+  border-color: rgba(255, 180, 100, 0.06);
+}
+
+/* Checkbox */
+[data-theme="shinkai-twilight"] .checkbox-row input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
+[data-theme="shinkai-twilight"] .auto-refresh-toggle input {
+  accent-color: var(--primary-dark);
+}
+
+/* Task card */
+[data-theme="shinkai-twilight"] .task-card {
+  background: rgba(10, 15, 35, 0.6);
+  backdrop-filter: blur(16px);
+  border-color: rgba(255, 180, 100, 0.06);
+}
+
+[data-theme="shinkai-twilight"] .task-card:hover {
+  border-color: rgba(255, 180, 100, 0.1);
+}
+
+[data-theme="shinkai-twilight"] .task-name {
+  color: var(--text);
+}
+
+[data-theme="shinkai-twilight"] .task-frequency {
+  color: var(--gold);
+  background: rgba(255, 180, 100, 0.06);
+  border-color: rgba(255, 180, 100, 0.08);
+}
+
+/* Status badges */
+[data-theme="shinkai-twilight"] .task-status.running {
+  background: rgba(102, 204, 187, 0.08);
+  color: var(--success);
+}
+
+[data-theme="shinkai-twilight"] .task-status.success {
+  background: rgba(255, 136, 68, 0.08);
+  color: var(--gold);
+}
+
+[data-theme="shinkai-twilight"] .task-status.failed {
+  background: rgba(255, 85, 119, 0.08);
+  color: var(--danger);
+}
+
+[data-theme="shinkai-twilight"] .task-status.never {
+  background: rgba(255, 180, 100, 0.04);
+  color: var(--muted);
+}
+
+[data-theme="shinkai-twilight"] .task-status.stopped {
+  background: rgba(255, 170, 85, 0.06);
+  color: var(--gold);
+}
+
+/* Weekday pills */
+[data-theme="shinkai-twilight"] .cron-weekday-btn {
+  background: rgba(5, 10, 25, 0.5);
+  border-color: rgba(255, 180, 100, 0.08);
+}
+
+[data-theme="shinkai-twilight"] .cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, var(--primary) 0%, #cc6622 100%);
+  border-color: var(--primary);
+}
+
+[data-theme="shinkai-twilight"] .cron-weekday-btn span {
+  color: var(--muted);
+}
+
+[data-theme="shinkai-twilight"] .cron-weekday-btn:has(input:checked) span {
+  color: #fff;
+}
+
+/* Log terminal */
+[data-theme="shinkai-twilight"] .task-log {
+  background: linear-gradient(180deg, #0a0e1e 0%, #050810 100%);
+  color: #c8b898;
+  border: 1px solid rgba(255, 180, 100, 0.04);
+}
+
+/* Select / dropdown */
+[data-theme="shinkai-twilight"] .toolbar-select {
+  background: rgba(5, 10, 25, 0.6);
+  border-color: rgba(255, 180, 100, 0.08);
+  color: var(--text);
+}
+
+[data-theme="shinkai-twilight"] .auto-refresh-toggle {
+  background: rgba(5, 10, 25, 0.6);
+  border-color: rgba(255, 180, 100, 0.08);
+  color: var(--text);
+}
+
+/* Empty state */
+[data-theme="shinkai-twilight"] .empty-state {
+  background: rgba(10, 15, 35, 0.5);
+  border-color: rgba(255, 180, 100, 0.06);
+  color: var(--muted);
+}
+
+/* Danger buttons */
+[data-theme="shinkai-twilight"] .ghost-button.danger {
+  background: rgba(255, 85, 119, 0.08);
+  border-color: rgba(255, 85, 119, 0.1);
+  color: var(--danger);
+}
+
+/* Preset buttons */
+[data-theme="shinkai-twilight"] .cron-preset {
+  background: rgba(5, 10, 25, 0.5);
+}
+
+/* Cron panel */
+[data-theme="shinkai-twilight"] .cron-panel {
+  background: rgba(5, 10, 25, 0.4);
+  border-color: rgba(255, 180, 100, 0.06);
+}
+
+/* Form section */
+[data-theme="shinkai-twilight"] .form-section {
+  background: rgba(10, 15, 35, 0.3);
+  border-color: rgba(255, 180, 100, 0.06);
+}

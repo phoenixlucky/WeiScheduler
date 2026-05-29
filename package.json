@@ -1,6 +1,6 @@
 {
   "name": "weischeduler",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "private": true,
   "author": "Ethan Wilkins",
   "description": "WeiScheduler is a web-based local task scheduler built on Node.js, designed to execute Python scripts based on Cron expressions. It supports multiple Python and Conda environment configurations, making it suitable for data processing, automation workflows, and scheduled scripting tasks.",
@@ -28,6 +28,7 @@
     },
     "files": [
       "electron-main.js",
+      "preload.js",
       "server.js",
       "storage.js",
       "public/**/*",

@@ -1,0 +1,534 @@
+/* ==============================
+   💻 黑客终端风 — Hacker's Terminal
+   Pure black × Neon green × CRT glow
+   Cyberpunk · Underground · Cold future
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+[data-theme="hackers-terminal"] {
+  --bg-start: #050505;
+  --bg-mid: #0a0a0a;
+  --bg-end: #0f0f0f;
+  --panel: rgba(0, 0, 0, 0.7);
+  --panel-strong: rgba(5, 5, 5, 0.85);
+  --panel-border: rgba(0, 255, 65, 0.08);
+  --text: #c8d8c0;
+  --muted: #507050;
+  --primary: #00ff41;
+  --primary-dark: #00cc33;
+  --primary-soft: rgba(0, 255, 65, 0.06);
+  --accent: #33ff77;
+  --accent-glow: rgba(0, 255, 65, 0.05);
+  --danger: #ff3355;
+  --danger-soft: rgba(255, 51, 85, 0.08);
+  --success: #00ff88;
+  --gold: #00dd44;
+  --gold-light: #33ff77;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --glow: 0 0 30px rgba(0, 255, 65, 0.04);
+  --scrollbar-track: rgba(0, 255, 65, 0.02);
+  --scrollbar-thumb: rgba(0, 255, 65, 0.08);
+  --font-family: "JetBrains Mono", "Noto Sans SC", "Consolas", "Courier New", monospace;
+}
+
+[data-theme="hackers-terminal"] body,
+body[data-theme="hackers-terminal"] {
+  font-family: var(--font-family);
+  color: var(--text);
+  background:
+    /* CRT vignette */
+    radial-gradient(ellipse at 50% 50%, rgba(0, 30, 0, 0.05) 0%, rgba(0, 0, 0, 0.15) 70%, rgba(0, 0, 0, 0.3) 100%),
+    /* Scan lines */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 4px
+    ),
+    linear-gradient(180deg, #050505 0%, #0a0a0a 50%, #050505 100%);
+  background-attachment: fixed;
+}
+
+/* Screen scan line overlay + flicker */
+[data-theme="hackers-terminal"] body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(0, 255, 65, 0.01) 1px,
+      transparent 2px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: scanline 8s linear infinite;
+}
+
+[data-theme="hackers-terminal"] body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 40px,
+    rgba(0, 255, 65, 0.005) 40px,
+    rgba(0, 255, 65, 0.005) 42px
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: flicker 0.15s ease-in-out infinite alternate;
+  opacity: 0.03;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+@keyframes flicker {
+  0% { opacity: 0.02; }
+  100% { opacity: 0.05; }
+}
+
+/* Data stream particles — matrix-like rain */
+[data-theme="hackers-terminal"] .deco-orb {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: rgba(0, 255, 65, 0.08);
+  overflow: visible;
+}
+
+[data-theme="hackers-terminal"] .deco-orb--1::after {
+  content: "01001010 01101111 01101001 01101110 00100000 01110100 01101000 01100101 00100000 01101110 01100101 01110100 01110111 01101111 01110010 01101011";
+  position: fixed;
+  top: 10%; left: 3%;
+  font-size: 8px;
+  line-height: 1.4;
+  opacity: 0.04;
+  white-space: pre;
+  transform: rotate(-90deg);
+  transform-origin: left top;
+  animation: data-stream 20s linear infinite;
+}
+
+[data-theme="hackers-terminal"] .deco-orb--2::after {
+  content: "10101010 11001100 11110000 01010101 00110011 00001111 10101010 11001100";
+  position: fixed;
+  bottom: 15%; right: 5%;
+  font-size: 7px;
+  line-height: 1.3;
+  opacity: 0.03;
+  white-space: pre;
+  animation: data-stream 25s linear infinite reverse;
+}
+
+[data-theme="hackers-terminal"] .deco-orb--3::after {
+  content: "> ACCESSING SECURE SHELL... █";
+  position: fixed;
+  top: 45%; right: 8%;
+  font-size: 10px;
+  opacity: 0.04;
+  font-family: "JetBrains Mono", monospace;
+  animation: blink-text 2s step-end infinite;
+}
+
+[data-theme="hackers-terminal"] .deco-orb--4::after {
+  content: "> root@darknet:~$ █";
+  position: fixed;
+  bottom: 40%; left: 5%;
+  font-size: 9px;
+  opacity: 0.03;
+  font-family: "JetBrains Mono", monospace;
+  animation: blink-text 1.5s step-end infinite;
+}
+
+@keyframes data-stream {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes blink-text {
+  0%, 100% { opacity: 0.04; }
+  50% { opacity: 0.01; }
+}
+
+/* Hero */
+[data-theme="hackers-terminal"] .hero-copy-block::before {
+  content: ">";
+  position: absolute;
+  top: 16px; right: 24px;
+  font-size: 2rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+  opacity: 0.08;
+  animation: blink-text 1s step-end infinite;
+}
+
+[data-theme="hackers-terminal"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -60px auto;
+  width: 200px; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.08), transparent);
+  pointer-events: none;
+}
+
+/* Top bar */
+[data-theme="hackers-terminal"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 1px;
+  background: repeating-linear-gradient(90deg,
+    transparent 0px, transparent 20px,
+    rgba(0, 255, 65, 0.06) 20px, rgba(0, 255, 65, 0.06) 21px,
+    transparent 21px, transparent 100%
+  );
+}
+
+/* Eyebrow */
+[data-theme="hackers-terminal"] .eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+  opacity: 0.5;
+  letter-spacing: 0.1em;
+  text-transform: none;
+}
+
+[data-theme="hackers-terminal"] .hero h1 {
+  font-family: "JetBrains Mono", "Noto Sans SC", monospace;
+  font-weight: 300;
+}
+
+/* Panels */
+[data-theme="hackers-terminal"] .panel {
+  backdrop-filter: none;
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  border-radius: 8px;
+}
+
+[data-theme="hackers-terminal"] .panel-form {
+  border-top: 1px solid rgba(0, 255, 65, 0.1);
+}
+
+[data-theme="hackers-terminal"] .hero-stat {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  border-radius: 8px;
+}
+
+[data-theme="hackers-terminal"] .hero-stat-icon {
+  border-radius: 4px;
+}
+
+/* Forms — terminal style */
+[data-theme="hackers-terminal"] .form-section-title {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.08);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="hackers-terminal"] .task-form label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="hackers-terminal"] .task-form input,
+[data-theme="hackers-terminal"] .task-form select {
+  background: #000;
+  border: 1px solid rgba(0, 255, 65, 0.1);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  box-shadow: none;
+}
+
+[data-theme="hackers-terminal"] .task-form input:focus,
+[data-theme="hackers-terminal"] .task-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.06), 0 0 20px rgba(0, 255, 65, 0.02);
+}
+
+[data-theme="hackers-terminal"] .task-form input::placeholder {
+  color: #1a3a1a;
+}
+
+/* Sliders */
+[data-theme="hackers-terminal"] .cron-slider::-webkit-slider-thumb {
+  background: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 2px;
+  width: 16px; height: 20px;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
+}
+
+[data-theme="hackers-terminal"] .cron-slider::-moz-range-thumb {
+  background: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 2px;
+  width: 16px; height: 20px;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
+}
+
+[data-theme="hackers-terminal"] .cron-slider {
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(0, 255, 65, 0.04) 50%);
+  height: 3px;
+  border-radius: 1px;
+}
+
+/* Buttons — sharp, angular */
+[data-theme="hackers-terminal"] .primary-button,
+[data-theme="hackers-terminal"] .ghost-button {
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+[data-theme="hackers-terminal"] .primary-button {
+  background: #000;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.06), inset 0 0 20px rgba(0, 255, 65, 0.02);
+  font-weight: 400;
+}
+
+[data-theme="hackers-terminal"] .primary-button:hover {
+  background: rgba(0, 255, 65, 0.04);
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.1), inset 0 0 30px rgba(0, 255, 65, 0.03);
+}
+
+[data-theme="hackers-terminal"] .ghost-button {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  color: var(--muted);
+}
+
+[data-theme="hackers-terminal"] .ghost-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--text);
+  border-color: rgba(0, 255, 65, 0.15);
+}
+
+[data-theme="hackers-terminal"] .ghost-button.danger {
+  border-color: rgba(255, 51, 85, 0.1);
+  color: var(--danger);
+}
+
+/* Tabs — terminal-like */
+[data-theme="hackers-terminal"] .cron-mode-tab {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+}
+
+[data-theme="hackers-terminal"] .cron-mode-tab.active {
+  background: #000;
+  color: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.04);
+}
+
+[data-theme="hackers-terminal"] .cron-mode-tabs {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+}
+
+[data-theme="hackers-terminal"] .cron-freq-tab {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  background: #000;
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+}
+
+[data-theme="hackers-terminal"] .cron-freq-tab.active {
+  background: var(--primary);
+  color: #000;
+  border-color: var(--primary);
+  box-shadow: 0 0 14px rgba(0, 255, 65, 0.15);
+}
+
+[data-theme="hackers-terminal"] .cron-panel {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+}
+
+/* Checkbox */
+[data-theme="hackers-terminal"] .checkbox-row input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
+[data-theme="hackers-terminal"] .auto-refresh-toggle input {
+  accent-color: var(--primary);
+}
+
+/* Task cards */
+[data-theme="hackers-terminal"] .task-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.03);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+[data-theme="hackers-terminal"] .task-card:hover {
+  border-color: rgba(0, 255, 65, 0.08);
+}
+
+[data-theme="hackers-terminal"] .task-name {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+}
+
+[data-theme="hackers-terminal"] .task-frequency {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+  background: rgba(0, 255, 65, 0.04);
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  font-size: 0.68rem;
+}
+
+/* Status */
+[data-theme="hackers-terminal"] .task-status {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+[data-theme="hackers-terminal"] .task-status.running {
+  background: rgba(0, 255, 136, 0.06);
+  color: var(--success);
+}
+
+[data-theme="hackers-terminal"] .task-status.success {
+  background: rgba(0, 255, 65, 0.06);
+  color: var(--primary);
+}
+
+[data-theme="hackers-terminal"] .task-status.failed {
+  background: rgba(255, 51, 85, 0.06);
+  color: var(--danger);
+}
+
+[data-theme="hackers-terminal"] .task-status.never {
+  background: rgba(0, 255, 65, 0.03);
+  color: var(--muted);
+}
+
+[data-theme="hackers-terminal"] .task-status.stopped {
+  background: rgba(0, 200, 50, 0.04);
+  color: var(--gold);
+}
+
+/* Weekday */
+[data-theme="hackers-terminal"] .cron-weekday-btn {
+  background: #000;
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+}
+
+[data-theme="hackers-terminal"] .cron-weekday-btn:has(input:checked) {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+[data-theme="hackers-terminal"] .cron-weekday-btn:has(input:checked) span {
+  color: #000;
+}
+
+/* Log */
+[data-theme="hackers-terminal"] .task-log {
+  background: #000;
+  color: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Select / dropdown */
+[data-theme="hackers-terminal"] .toolbar-select,
+[data-theme="hackers-terminal"] .auto-refresh-toggle {
+  background: #000;
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+}
+
+/* Empty state */
+[data-theme="hackers-terminal"] .empty-state {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px dashed rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Misc */
+[data-theme="hackers-terminal"] .cron-preset {
+  background: #000;
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+}
+
+[data-theme="hackers-terminal"] .form-section {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+}
+
+[data-theme="hackers-terminal"] .section-head h2 {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+[data-theme="hackers-terminal"] .field-help {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-style: normal;
+}
+
+[data-theme="hackers-terminal"] .cron-slider-label,
+[data-theme="hackers-terminal"] .cron-slider-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+}
+
+[data-theme="hackers-terminal"] .log-block h4 {
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+[data-theme="hackers-terminal"] .task-detail {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+}

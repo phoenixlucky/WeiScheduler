@@ -1033,3 +1033,38 @@ syncFromSchedule();
 loadTasks().catch((error) => {
   taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
 });
+
+// ==============================
+// 🌸 主题切换 — 豆蔻少女皮肤系统
+// ==============================
+(function () {
+  const themeAPI = window.__theme;
+  if (!themeAPI) return;
+
+  // Apply theme: set data-theme on <html>, load/unload skin CSS
+  function applyTheme(name) {
+    document.documentElement.dataset.theme = name;
+
+    // Remove any previously loaded skin CSS
+    document.querySelectorAll('link[data-skin]').forEach(function (el) {
+      el.remove();
+    });
+
+    // Load the skin CSS file dynamically
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/skins/' + name + '.css';
+    link.dataset.skin = name;
+    document.head.appendChild(link);
+  }
+
+  // Listen for theme changes from the main process (menu)
+  themeAPI.onThemeChanged(function (name) {
+    applyTheme(name);
+  });
+
+  // Also fetch the current theme on startup (in case ready-to-show fires before we're ready)
+  themeAPI.getTheme().then(function (name) {
+    applyTheme(name);
+  });
+})();

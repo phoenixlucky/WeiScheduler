@@ -1,0 +1,407 @@
+/* ==============================
+   🌊 深海梦境风 — Deep Dream
+   Ocean blue × Indigo × Glacial cyan
+   Underwater · Meditative · Dreamlike
+   ============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Nunito:wght@200;300;400;600&display=swap');
+
+[data-theme="deep-dream"] {
+  --bg-start: #020b1a;
+  --bg-mid: #051530;
+  --bg-end: #0a2040;
+  --panel: rgba(2, 12, 30, 0.5);
+  --panel-strong: rgba(4, 16, 38, 0.75);
+  --panel-border: rgba(150, 220, 255, 0.06);
+  --text: #c8dce8;
+  --muted: #6a8aa0;
+  --primary: #66ccff;
+  --primary-dark: #44aadd;
+  --primary-soft: rgba(100, 210, 255, 0.08);
+  --accent: #88ddff;
+  --accent-glow: rgba(100, 210, 255, 0.05);
+  --danger: #ff6688;
+  --danger-soft: rgba(255, 102, 136, 0.08);
+  --success: #44ddbb;
+  --gold: #88ccdd;
+  --gold-light: #aaddff;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --glow: 0 0 60px rgba(100, 210, 255, 0.03);
+  --scrollbar-track: rgba(100, 210, 255, 0.03);
+  --scrollbar-thumb: rgba(100, 210, 255, 0.1);
+  --font-family: "Zen Kurenaido", "Nunito", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+[data-theme="deep-dream"] body,
+body[data-theme="deep-dream"] {
+  font-family: var(--font-family);
+  color: var(--text);
+  background:
+    /* Bioluminescent glow from below */
+    radial-gradient(ellipse at 40% 100%, rgba(50, 180, 220, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 90%, rgba(100, 210, 255, 0.03) 0%, transparent 40%),
+    /* Depth layers */
+    radial-gradient(ellipse at 20% 30%, rgba(30, 80, 140, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 20%, rgba(20, 60, 120, 0.04) 0%, transparent 35%),
+    /* Water column */
+    linear-gradient(180deg,
+      #010612 0%,
+      #030d1e 20%,
+      #041628 40%,
+      #061e32 55%,
+      #08263c 70%,
+      #0a2e46 85%,
+      #0c3650 100%
+    );
+  background-attachment: fixed;
+}
+
+/* Caustic light effect */
+[data-theme="deep-dream"] body::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(100, 210, 255, 0.01) 2px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(100, 210, 255, 0.005) 3px,
+      transparent 6px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: caustic-drift 12s ease-in-out infinite alternate;
+}
+
+[data-theme="deep-dream"] body::after {
+  content: "";
+  position: fixed;
+  width: 300px; height: 300px;
+  top: 20%; right: 10%;
+  background: radial-gradient(circle, rgba(100, 210, 255, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: deep-glow 8s ease-in-out infinite alternate;
+}
+
+@keyframes caustic-drift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  100% { transform: translate(30px, -20px) scale(1.02); opacity: 1; }
+}
+
+@keyframes deep-glow {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.2); }
+}
+
+/* Floating bioluminescent particles — jellyfish-like */
+[data-theme="deep-dream"] .deco-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="deep-dream"] .deco-orb--1 {
+  width: 4px; height: 4px;
+  background: rgba(100, 210, 255, 0.4);
+  top: 25%; left: 15%;
+  box-shadow: 0 0 20px rgba(100, 210, 255, 0.15), 0 0 40px rgba(100, 210, 255, 0.05);
+  animation: float-bio 7s ease-in-out infinite alternate;
+}
+
+[data-theme="deep-dream"] .deco-orb--2 {
+  width: 3px; height: 3px;
+  background: rgba(150, 230, 255, 0.35);
+  top: 45%; left: 80%;
+  box-shadow: 0 0 15px rgba(150, 230, 255, 0.12), 0 0 30px rgba(150, 230, 255, 0.04);
+  animation: float-bio 9s ease-in-out infinite alternate-reverse;
+}
+
+[data-theme="deep-dream"] .deco-orb--3 {
+  width: 5px; height: 5px;
+  background: rgba(80, 200, 240, 0.3);
+  top: 70%; left: 30%;
+  box-shadow: 0 0 25px rgba(80, 200, 240, 0.1), 0 0 50px rgba(80, 200, 240, 0.03);
+  animation: float-bio 6s ease-in-out infinite alternate;
+}
+
+[data-theme="deep-dream"] .deco-orb--4 {
+  width: 3px; height: 3px;
+  background: rgba(180, 240, 255, 0.25);
+  top: 35%; left: 55%;
+  box-shadow: 0 0 12px rgba(180, 240, 255, 0.08);
+  animation: float-bio 8s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float-bio {
+  0% { opacity: 0.2; transform: translate(0, 0); }
+  50% { opacity: 0.6; transform: translate(10px, -15px); }
+  100% { opacity: 0.3; transform: translate(-5px, -8px); }
+}
+
+/* Hero decoration — jellyfish */
+[data-theme="deep-dream"] .hero-copy-block::before {
+  content: "🪼";
+  position: absolute;
+  top: 10px; right: 20px;
+  font-size: 2rem;
+  opacity: 0.08;
+  pointer-events: none;
+  animation: jellyfish-float 6s ease-in-out infinite;
+}
+
+@keyframes jellyfish-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+[data-theme="deep-dream"] .hero-copy-block::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -100px auto;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(100, 210, 255, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+  animation: deep-glow 10s ease-in-out infinite alternate-reverse;
+}
+
+/* Top bar */
+[data-theme="deep-dream"] .app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 50%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(100, 210, 255, 0.2), transparent);
+}
+
+/* Eyebrow */
+[data-theme="deep-dream"] .eyebrow {
+  font-family: "Nunito", sans-serif;
+  color: var(--gold);
+  opacity: 0.5;
+  letter-spacing: 0.35em;
+}
+
+/* Panel */
+[data-theme="deep-dream"] .panel {
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(100, 210, 255, 0.04);
+  box-shadow: var(--shadow), 0 0 80px rgba(100, 210, 255, 0.02);
+}
+
+[data-theme="deep-dream"] .panel-form {
+  border-top: 2px solid rgba(100, 210, 255, 0.08);
+}
+
+[data-theme="deep-dream"] .hero-stat {
+  background: rgba(2, 12, 30, 0.4);
+  border: 1px solid rgba(100, 210, 255, 0.04);
+}
+
+/* Forms */
+[data-theme="deep-dream"] .form-section-title {
+  color: var(--gold);
+  border-bottom-color: rgba(100, 210, 255, 0.06);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+}
+
+[data-theme="deep-dream"] .task-form input,
+[data-theme="deep-dream"] .task-form select {
+  background: rgba(2, 8, 20, 0.6);
+  border-color: rgba(100, 210, 255, 0.06);
+  color: var(--text);
+}
+
+[data-theme="deep-dream"] .task-form input:focus,
+[data-theme="deep-dream"] .task-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .task-form input::placeholder {
+  color: #4a6a80;
+}
+
+/* Sliders */
+[data-theme="deep-dream"] .cron-slider::-webkit-slider-thumb {
+  background: radial-gradient(circle at 35% 35%, #88ddff, var(--primary) 50%, #3388bb);
+  border: 2px solid rgba(100, 210, 255, 0.2);
+  box-shadow: 0 0 16px rgba(100, 210, 255, 0.15);
+}
+
+[data-theme="deep-dream"] .cron-slider::-moz-range-thumb {
+  background: radial-gradient(circle at 35% 35%, #88ddff, var(--primary) 50%, #3388bb);
+  border: 2px solid rgba(100, 210, 255, 0.2);
+  box-shadow: 0 0 16px rgba(100, 210, 255, 0.15);
+}
+
+[data-theme="deep-dream"] .cron-slider {
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(100, 210, 255, 0.04) 50%);
+}
+
+/* Buttons */
+[data-theme="deep-dream"] .primary-button {
+  background: linear-gradient(135deg, #3388bb 0%, #1a5580 100%);
+  box-shadow: 0 12px 24px rgba(0, 50, 80, 0.3);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="deep-dream"] .primary-button:hover {
+  box-shadow: 0 16px 32px rgba(0, 50, 80, 0.35);
+}
+
+[data-theme="deep-dream"] .ghost-button {
+  background: rgba(2, 12, 30, 0.4);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .ghost-button:hover {
+  background: rgba(4, 18, 40, 0.6);
+}
+
+/* Tabs */
+[data-theme="deep-dream"] .cron-mode-tab.active {
+  background: linear-gradient(160deg, rgba(10, 30, 60, 0.8), rgba(5, 20, 45, 0.7));
+  color: var(--gold);
+}
+
+[data-theme="deep-dream"] .cron-mode-tabs {
+  background: rgba(2, 8, 20, 0.3);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .cron-freq-tab {
+  background: rgba(2, 8, 20, 0.4);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .cron-freq-tab.active {
+  background: linear-gradient(135deg, #3388bb 0%, #1a5580 100%);
+  color: #d0e8f0;
+  box-shadow: 0 4px 14px rgba(0, 50, 80, 0.2);
+}
+
+/* Checkboxes */
+[data-theme="deep-dream"] .checkbox-row input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
+[data-theme="deep-dream"] .auto-refresh-toggle input {
+  accent-color: var(--primary);
+}
+
+/* Task cards */
+[data-theme="deep-dream"] .task-card {
+  background: rgba(2, 12, 30, 0.45);
+  backdrop-filter: blur(20px);
+  border-color: rgba(100, 210, 255, 0.03);
+}
+
+[data-theme="deep-dream"] .task-card:hover {
+  border-color: rgba(100, 210, 255, 0.06);
+}
+
+[data-theme="deep-dream"] .task-frequency {
+  color: var(--gold);
+  background: rgba(100, 210, 255, 0.04);
+  border-color: rgba(100, 210, 255, 0.06);
+}
+
+/* Status */
+[data-theme="deep-dream"] .task-status.running {
+  background: rgba(68, 221, 187, 0.06);
+  color: var(--success);
+}
+
+[data-theme="deep-dream"] .task-status.success {
+  background: rgba(100, 210, 255, 0.06);
+  color: var(--gold);
+}
+
+[data-theme="deep-dream"] .task-status.failed {
+  background: rgba(255, 102, 136, 0.06);
+  color: var(--danger);
+}
+
+[data-theme="deep-dream"] .task-status.never {
+  background: rgba(100, 210, 255, 0.03);
+  color: var(--muted);
+}
+
+/* Weekday */
+[data-theme="deep-dream"] .cron-weekday-btn {
+  background: rgba(2, 8, 20, 0.4);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .cron-weekday-btn:has(input:checked) {
+  background: linear-gradient(135deg, #3388bb 0%, #1a5580 100%);
+  border-color: var(--primary);
+}
+
+[data-theme="deep-dream"] .cron-weekday-btn span {
+  color: var(--muted);
+}
+
+[data-theme="deep-dream"] .cron-weekday-btn:has(input:checked) span {
+  color: #d0e8f0;
+}
+
+/* Log */
+[data-theme="deep-dream"] .task-log {
+  background: linear-gradient(180deg, #020a18 0%, #010410 100%);
+  color: #88aacc;
+  border: 1px solid rgba(100, 210, 255, 0.03);
+}
+
+/* Misc */
+[data-theme="deep-dream"] .toolbar-select,
+[data-theme="deep-dream"] .auto-refresh-toggle {
+  background: rgba(2, 12, 30, 0.45);
+  border-color: rgba(100, 210, 255, 0.04);
+  color: var(--text);
+}
+
+[data-theme="deep-dream"] .empty-state {
+  background: rgba(2, 12, 30, 0.4);
+  border-color: rgba(100, 210, 255, 0.04);
+  color: var(--muted);
+}
+
+[data-theme="deep-dream"] .ghost-button.danger {
+  background: rgba(255, 102, 136, 0.06);
+  border-color: rgba(255, 102, 136, 0.08);
+  color: var(--danger);
+}
+
+[data-theme="deep-dream"] .cron-preset,
+[data-theme="deep-dream"] .cron-panel {
+  background: rgba(2, 8, 20, 0.35);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .form-section {
+  background: rgba(2, 12, 30, 0.25);
+  border-color: rgba(100, 210, 255, 0.04);
+}
+
+[data-theme="deep-dream"] .section-head h2,
+[data-theme="deep-dream"] .hero h1 {
+  font-weight: 300;
+  letter-spacing: 0.08em;
+}

@@ -1,33 +1,36 @@
 /* ==============================
-   时间老人 — Timekeeper Theme
-   Warm vintage / scholarly / heirloom aesthetic
+   Base — 结构基座
+   Component layout, grid, responsive, animations
+   No theme colors — all provided by skins/<name>.css
    ============================== */
 
 :root {
-  --bg: #f0e6d3;
-  --bg-deep: #dccdb5;
-  --panel: rgba(248, 240, 226, 0.9);
-  --panel-strong: #fbf3e4;
-  --panel-border: rgba(60, 40, 28, 0.12);
-  --text: #2c1810;
-  --muted: #7a6a58;
-  --primary: #8a6d3b;
-  --primary-dark: #5a3e20;
-  --primary-soft: rgba(138, 109, 59, 0.12);
-  --accent: #c49a45;
-  --accent-glow: rgba(196, 154, 69, 0.2);
-  --danger: #8a2a1a;
-  --danger-soft: rgba(138, 42, 26, 0.1);
-  --success: #3a6a4a;
-  --gold: #b8943a;
-  --gold-light: #d4b86a;
-  --shadow: 0 22px 60px rgba(40, 28, 18, 0.18);
-  --shadow-soft: 0 10px 24px rgba(40, 28, 18, 0.1);
-  --shadow-sm: 0 4px 12px rgba(40, 28, 18, 0.06);
-  --radius: 24px;
-  --radius-sm: 12px;
-  --radius-xs: 8px;
-  --transition: 0.2s ease;
+  /* Neutral fallback defaults — overridden by skin CSS under [data-theme="xxx"] */
+  --bg-start: #f0f0f0;
+  --bg-mid: #e8e8e8;
+  --bg-end: #dcdcdc;
+  --panel: rgba(255, 255, 255, 0.6);
+  --panel-strong: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(0, 0, 0, 0.06);
+  --text: #333;
+  --muted: #888;
+  --primary: #999;
+  --primary-dark: #777;
+  --primary-soft: rgba(0, 0, 0, 0.06);
+  --accent: #eee;
+  --accent-glow: rgba(0, 0, 0, 0.04);
+  --danger: #c44;
+  --danger-soft: rgba(204, 68, 68, 0.1);
+  --success: #6a8;
+  --gold: #aaa;
+  --gold-light: #ccc;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.03);
+  --radius: 28px;
+  --radius-sm: 16px;
+  --radius-xs: 10px;
+  --transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 * {
@@ -37,20 +40,10 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans", sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(ellipse at 20% 10%, rgba(255, 248, 234, 0.95) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 90%, rgba(196, 154, 69, 0.08) 0%, transparent 40%),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(138, 109, 59, 0.015) 2px,
-      rgba(138, 109, 59, 0.015) 4px
-    ),
-    linear-gradient(160deg, var(--bg) 0%, var(--bg-deep) 100%);
-  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
 }
 
 /* ==============================
@@ -58,13 +51,15 @@ body {
    ============================== */
 
 .app-shell {
+  position: relative;
+  z-index: 2;
   max-width: 1400px;
   margin: 0 auto;
   padding: 28px 24px 48px;
 }
 
 /* ==============================
-   Hero — timepiece crown
+   Hero
    ============================== */
 
 .hero {
@@ -75,97 +70,67 @@ body {
 .hero-copy-block {
   position: relative;
   overflow: hidden;
-  padding: 32px 36px;
-  background:
-    linear-gradient(165deg, rgba(251, 243, 228, 0.97), rgba(240, 230, 210, 0.88)),
-    var(--panel);
-  border: 1px solid var(--gold);
-  box-shadow:
-    var(--shadow),
-    inset 0 0 80px rgba(196, 154, 69, 0.06);
+  padding: 36px 40px;
+  background: var(--panel-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow);
   border-radius: var(--radius);
 }
 
-/* Decorative clock face ornament */
-.hero-copy-block::before {
-  content: "🕰";
-  position: absolute;
-  top: 12px;
-  right: 24px;
-  font-size: 2.2rem;
-  opacity: 0.15;
-  pointer-events: none;
-  transform: rotate(-8deg);
-}
-
-.hero-copy-block::after {
-  content: "";
-  position: absolute;
-  inset: auto -60px -80px auto;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(196, 154, 69, 0.12), transparent 65%);
-  pointer-events: none;
-}
-
-.hero-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 8px;
-}
-
 .eyebrow {
-  margin: 0;
-  letter-spacing: 0.22em;
+  margin: 0 0 4px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  font-family: "Georgia", serif;
+  opacity: 0.7;
 }
 
 .hero h1 {
-  margin: 0 0 8px;
-  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
-  line-height: 1.12;
-  letter-spacing: 0.02em;
+  margin: 0 0 10px;
+  font-size: clamp(1.7rem, 2.5vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
   font-weight: 700;
-  color: var(--primary-dark);
-  text-shadow: 0 1px 2px rgba(196, 154, 69, 0.1);
+  color: var(--text);
 }
 
 .hero-copy {
   max-width: 680px;
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 0.92rem;
+  line-height: 1.8;
 }
 
 /* ==============================
-   Stats — pocket watch nodules
+   Stats
    ============================== */
 
 .hero-stats {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .hero-stat {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px;
-  border-radius: 14px;
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.8), rgba(240, 230, 210, 0.6));
-  border: 1px solid rgba(196, 154, 69, 0.18);
-  box-shadow:
-    var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  padding: 12px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.hero-stat:hover {
+  transform: translateY(-2px);
 }
 
 .hero-stat-icon {
@@ -177,19 +142,19 @@ body {
   justify-content: center;
   font-size: 1.05rem;
   flex-shrink: 0;
-  border: 1px solid rgba(196, 154, 69, 0.2);
+  border: 1px solid var(--panel-border);
 }
 
 .hero-stat-icon.total {
-  background: linear-gradient(135deg, rgba(138, 109, 59, 0.12), rgba(138, 109, 59, 0.06));
+  background: var(--primary-soft);
 }
 
 .hero-stat-icon.running {
-  background: linear-gradient(135deg, rgba(58, 106, 74, 0.14), rgba(58, 106, 74, 0.06));
+  background: rgba(100, 180, 140, 0.08);
 }
 
 .hero-stat-icon.enabled {
-  background: linear-gradient(135deg, rgba(196, 154, 69, 0.14), rgba(196, 154, 69, 0.06));
+  background: var(--primary-soft);
 }
 
 .hero-stat-body {
@@ -199,14 +164,14 @@ body {
 
 .hero-stat strong {
   font-size: 1.3rem;
-  color: var(--primary-dark);
+  color: var(--text);
   line-height: 1.2;
-  font-family: "Georgia", serif;
+  font-weight: 700;
 }
 
 .hero-stat-label {
-  font-size: 0.76rem;
-  letter-spacing: 0.08em;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
   color: var(--muted);
   line-height: 1.3;
 }
@@ -224,26 +189,21 @@ body {
 
 .panel {
   background: var(--panel);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--panel-border);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: 28px;
-  border-top: 2px solid rgba(196, 154, 69, 0.15);
+  transition: box-shadow var(--transition);
 }
 
 .panel-form {
-  background:
-    linear-gradient(180deg, rgba(251, 243, 228, 0.94), rgba(242, 234, 216, 0.84)),
-    var(--panel);
   position: sticky;
   top: 20px;
 }
 
 .panel-list {
-  background:
-    linear-gradient(180deg, rgba(253, 248, 238, 0.95), rgba(242, 234, 216, 0.8)),
-    var(--panel);
   min-height: 300px;
 }
 
@@ -263,7 +223,7 @@ body {
   margin: 0;
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--primary-dark);
+  color: var(--text);
   letter-spacing: 0.03em;
 }
 
@@ -275,54 +235,59 @@ body {
   align-items: center;
 }
 
+/* ==============================
+   Auto-refresh toggle
+   ============================== */
+
 .auto-refresh-toggle {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 14px;
+  padding: 9px 16px;
   border-radius: 999px;
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.85), rgba(240, 230, 210, 0.7));
-  border: 1px solid rgba(196, 154, 69, 0.15);
-  color: var(--primary-dark);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
   box-shadow: var(--shadow-sm);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   line-height: 1;
   cursor: pointer;
   transition: background var(--transition);
+  font-family: inherit;
 }
 
 .auto-refresh-toggle:hover {
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .auto-refresh-toggle input {
   width: 16px;
   height: 16px;
-  accent-color: var(--primary);
 }
 
 .toolbar-select {
-  padding: 9px 14px;
+  padding: 9px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(196, 154, 69, 0.15);
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.85), rgba(240, 230, 210, 0.7));
-  color: var(--primary-dark);
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text);
   box-shadow: var(--shadow-sm);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   cursor: pointer;
   transition: background var(--transition);
+  font-family: inherit;
 }
 
 .toolbar-select:hover {
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
+  background: rgba(255, 255, 255, 0.8);
 }
 
 /* ==============================
-   Form — journal sections
+   Form
    ============================== */
 
 .task-form {
@@ -331,31 +296,31 @@ body {
 }
 
 .form-section {
-  background:
-    linear-gradient(180deg, rgba(255, 252, 245, 0.5), rgba(245, 238, 224, 0.35));
-  border: 1px solid rgba(138, 109, 59, 0.1);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
-  padding: 18px;
+  padding: 20px;
   display: grid;
   gap: 14px;
 }
 
 .form-section-title {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--primary-dark);
   margin: 0;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(196, 154, 69, 0.12);
-  font-family: "Georgia", serif;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary-soft);
 }
 
 .task-form label {
   display: grid;
   gap: 5px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--muted);
   font-weight: 600;
 }
@@ -365,24 +330,23 @@ body {
   width: 100%;
   padding: 11px 14px;
   border-radius: var(--radius-xs);
-  border: 1px solid rgba(138, 109, 59, 0.14);
-  background: rgba(255, 252, 245, 0.88);
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.8);
   color: var(--text);
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   font-family: inherit;
-  box-shadow: inset 0 1px 3px rgba(60, 40, 28, 0.04);
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .task-form input:focus,
 .task-form select:focus {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.1), inset 0 1px 3px rgba(60, 40, 28, 0.04);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
 .task-form input::placeholder {
-  color: #b8aa92;
+  color: #bbb;
 }
 
 .field-help {
@@ -393,17 +357,17 @@ body {
 }
 
 /* ==============================
-   Cron — mode tabs (brass)
+   Cron — mode tabs
    ============================== */
 
 .cron-mode-tabs {
   display: flex;
   gap: 4px;
   margin: 10px 0 12px;
-  background: rgba(138, 109, 59, 0.06);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: 999px;
   padding: 3px;
-  border: 1px solid rgba(196, 154, 69, 0.08);
+  border: 1px solid var(--panel-border);
 }
 
 .cron-mode-tab {
@@ -421,13 +385,18 @@ body {
 }
 
 .cron-mode-tab.active {
-  background: linear-gradient(160deg, #fbf3e4, #f2e4ca);
-  color: var(--primary-dark);
-  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.12);
+  background: var(--panel-strong);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
 }
 
 .cron-mode-tab:hover:not(.active) {
   color: var(--text);
+}
+
+.cron-advanced.hidden,
+.cron-simple.hidden {
+  display: none;
 }
 
 /* ==============================
@@ -440,13 +409,6 @@ body {
   margin: 10px 0;
 }
 
-.cron-advanced.hidden,
-.cron-simple.hidden {
-  display: none;
-}
-
-/* Frequency tabs */
-
 .cron-freq-tabs {
   display: flex;
   gap: 4px;
@@ -454,46 +416,42 @@ body {
 }
 
 .cron-freq-tab {
-  border: 1px solid rgba(138, 109, 59, 0.14);
+  border: 1px solid var(--panel-border);
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.6), rgba(240, 230, 210, 0.4));
+  background: rgba(255, 255, 255, 0.5);
   color: var(--muted);
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
   font-family: inherit;
 }
 
 .cron-freq-tab.active {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: #fbf3e4;
+  background: var(--primary);
+  color: #fff;
   border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(138, 109, 59, 0.25);
+  box-shadow: 0 4px 14px var(--primary-soft);
 }
 
 .cron-freq-tab:hover:not(.active) {
-  border-color: var(--gold);
-  color: var(--primary-dark);
+  border-color: var(--primary);
+  color: var(--text);
 }
 
-/* Panels */
-
 .cron-panel {
-  padding: 14px 16px;
-  background:
-    linear-gradient(160deg, rgba(255, 252, 245, 0.6), rgba(245, 238, 224, 0.4));
-  border: 1px solid rgba(196, 154, 69, 0.08);
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
 }
 
 .cron-panel.hidden {
   display: none;
 }
-
-/* Slider row */
 
 .cron-slider-row {
   display: flex;
@@ -503,7 +461,7 @@ body {
 }
 
 .cron-slider-label {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text);
   font-weight: 500;
   white-space: nowrap;
@@ -515,7 +473,7 @@ body {
   height: 5px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(138, 109, 59, 0.12) 50%);
+  background: linear-gradient(to right, var(--primary), var(--primary) 50%, rgba(0,0,0,0.06) 50%);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
@@ -527,11 +485,11 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #d4b86a, var(--primary) 60%, var(--primary-dark));
-  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.35);
+  background: var(--primary);
+  box-shadow: 0 2px 8px var(--primary-soft);
   cursor: pointer;
   transition: transform 0.12s ease;
-  border: 1px solid rgba(196, 154, 69, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .cron-slider::-webkit-slider-thumb:hover {
@@ -542,14 +500,14 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #d4b86a, var(--primary) 60%, var(--primary-dark));
-  box-shadow: 0 2px 8px rgba(138, 109, 59, 0.35);
+  background: var(--primary);
+  box-shadow: 0 2px 8px var(--primary-soft);
   cursor: pointer;
-  border: 1px solid rgba(196, 154, 69, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .cron-slider-value {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text);
   white-space: nowrap;
   min-width: 80px;
@@ -558,10 +516,7 @@ body {
 .cron-slider-value strong {
   color: var(--primary-dark);
   font-size: 1.05rem;
-  font-family: "Georgia", serif;
 }
-
-/* Time row */
 
 .cron-time-row {
   display: flex;
@@ -571,23 +526,21 @@ body {
 }
 
 .cron-time-input {
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-xs);
-  border: 1px solid rgba(138, 109, 59, 0.14);
-  background: rgba(255, 252, 245, 0.88);
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--text);
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   font-family: inherit;
-  transition: border-color var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .cron-time-input:focus {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
 }
-
-/* Weekday pills */
 
 .cron-weekday-row {
   display: flex;
@@ -609,9 +562,8 @@ body {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 1px solid rgba(138, 109, 59, 0.14);
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.7), rgba(240, 230, 210, 0.5));
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
@@ -629,18 +581,17 @@ body {
 }
 
 .cron-weekday-btn:has(input:checked) {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: var(--primary);
   border-color: var(--primary);
-  box-shadow: 0 3px 10px rgba(138, 109, 59, 0.2);
+  color: #fff;
 }
 
 .cron-weekday-btn:has(input:checked) span {
-  color: #fbf3e4;
+  color: #fff;
 }
 
 .cron-weekday-btn:hover:not(:has(input:checked)) {
-  border-color: var(--gold);
-  background: rgba(196, 154, 69, 0.06);
+  border-color: var(--primary);
 }
 
 /* ==============================
@@ -682,8 +633,6 @@ body {
   border-radius: 999px;
 }
 
-/* Checkbox row */
-
 .checkbox-row {
   display: flex !important;
   align-items: center;
@@ -694,7 +643,6 @@ body {
 .checkbox-row input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--primary);
   flex-shrink: 0;
 }
 
@@ -704,7 +652,7 @@ body {
 }
 
 /* ==============================
-   Buttons — brass / aged metal
+   Buttons
    ============================== */
 
 .primary-button,
@@ -714,32 +662,31 @@ body {
   padding: 11px 18px;
   font-size: 0.92rem;
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   white-space: nowrap;
   font-family: inherit;
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: #fbf3e4;
+  background: var(--primary);
+  color: #fff;
   font-weight: 700;
-  box-shadow: 0 12px 20px rgba(90, 62, 32, 0.25);
+  box-shadow: 0 12px 20px var(--primary-soft);
   justify-self: start;
   padding: 13px 28px;
   letter-spacing: 0.04em;
 }
 
 .ghost-button {
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.8), rgba(240, 230, 210, 0.6));
-  border: 1px solid rgba(138, 109, 59, 0.12);
-  color: var(--primary-dark);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
   box-shadow: var(--shadow-sm);
 }
 
 .ghost-button.danger {
   background: var(--danger-soft);
-  border-color: rgba(138, 42, 26, 0.15);
+  border-color: transparent;
   color: var(--danger);
 }
 
@@ -749,17 +696,15 @@ body {
 }
 
 .primary-button:hover {
-  box-shadow: 0 16px 28px rgba(90, 62, 32, 0.32);
+  box-shadow: 0 16px 28px var(--primary-soft);
 }
 
 .ghost-button:hover {
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.95), rgba(240, 230, 210, 0.85));
-  box-shadow: var(--shadow-soft);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .ghost-button.danger:hover {
-  background: rgba(138, 42, 26, 0.15);
+  background: rgba(204, 68, 68, 0.15);
 }
 
 .primary-button:active,
@@ -775,7 +720,7 @@ body {
 }
 
 /* ==============================
-   Task list & cards — aged journal
+   Task list & cards
    ============================== */
 
 .task-list {
@@ -788,9 +733,8 @@ body {
   border-radius: var(--radius-sm);
   text-align: center;
   color: var(--muted);
-  background:
-    linear-gradient(160deg, rgba(251, 243, 228, 0.7), rgba(240, 230, 210, 0.5));
-  border: 1px dashed rgba(138, 109, 59, 0.15);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed var(--panel-border);
   font-size: 0.95rem;
   font-style: italic;
 }
@@ -798,23 +742,16 @@ body {
 .task-card {
   padding: 20px 22px;
   border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(253, 248, 238, 0.88), rgba(245, 238, 224, 0.72));
-  border: 1px solid rgba(138, 109, 59, 0.1);
-  box-shadow:
-    var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 248, 248, 0.7));
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow-sm);
   transition: box-shadow var(--transition), border-color var(--transition);
 }
 
 .task-card:hover {
-  box-shadow:
-    var(--shadow-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  border-color: rgba(196, 154, 69, 0.15);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--primary-soft);
 }
-
-/* Card head */
 
 .task-card-head {
   display: flex;
@@ -840,7 +777,7 @@ body {
   margin: 0;
   font-size: 1.12rem;
   font-weight: 700;
-  color: var(--primary-dark);
+  color: var(--text);
 }
 
 .task-frequency {
@@ -849,17 +786,15 @@ body {
   border-radius: 999px;
   font-size: 0.74rem;
   font-weight: 600;
-  color: var(--gold);
-  background: rgba(196, 154, 69, 0.08);
   white-space: nowrap;
-  border: 1px solid rgba(196, 154, 69, 0.1);
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid var(--primary-soft);
 }
 
 .task-card.collapsed .task-frequency {
   display: inline-flex;
 }
-
-/* Meta info */
 
 .task-meta {
   margin: 0;
@@ -873,15 +808,13 @@ body {
 }
 
 .task-meta-label {
-  color: #9a8a78;
+  opacity: 0.7;
   font-weight: 500;
 }
 
 .task-meta-error {
   color: var(--danger);
 }
-
-/* Card tools */
 
 .task-card-tools {
   display: flex;
@@ -904,8 +837,6 @@ body {
   font-size: 0.78rem;
 }
 
-/* Status badge */
-
 .task-status {
   display: inline-flex;
   align-items: center;
@@ -927,7 +858,7 @@ body {
 }
 
 .task-status.running {
-  background: rgba(58, 106, 74, 0.1);
+  background: rgba(100, 180, 140, 0.1);
   color: var(--success);
 }
 
@@ -937,8 +868,8 @@ body {
 }
 
 .task-status.success {
-  background: rgba(138, 109, 59, 0.08);
-  color: var(--primary-dark);
+  background: var(--primary-soft);
+  color: var(--text);
 }
 
 .task-status.success::before {
@@ -955,21 +886,21 @@ body {
 }
 
 .task-status.never {
-  background: rgba(60, 40, 28, 0.05);
+  background: rgba(0, 0, 0, 0.03);
   color: var(--muted);
 }
 
 .task-status.never::before {
-  background: #b8aa92;
+  background: #bbb;
 }
 
 .task-status.stopped {
-  background: rgba(196, 154, 69, 0.1);
-  color: #8a6a30;
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--muted);
 }
 
 .task-status.stopped::before {
-  background: #c49030;
+  background: #aaa;
 }
 
 @keyframes pulse-dot {
@@ -977,35 +908,25 @@ body {
   50% { opacity: 0.5; transform: scale(0.85); }
 }
 
-/* Card body — collapsed by default */
-
 .task-card.collapsed .task-body {
   display: none;
 }
 
 .task-body {
-  animation: fade-slide-in 0.2s ease;
+  animation: fade-slide-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes fade-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-/* Detail grid */
 
 .task-detail {
   display: grid;
   grid-template-columns: 100px 1fr;
   gap: 8px 14px;
   margin: 18px 0 14px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
 }
 
 .task-detail dt {
@@ -1018,8 +939,6 @@ body {
   word-break: break-all;
 }
 
-/* Action row */
-
 .task-actions {
   display: flex;
   gap: 8px;
@@ -1029,10 +948,8 @@ body {
 
 .task-actions .ghost-button {
   padding: 7px 14px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
-
-/* Log block — aged parchment terminal */
 
 .log-block {
   margin-top: 6px;
@@ -1040,118 +957,89 @@ body {
 
 .log-block h4 {
   margin: 0 0 8px;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: var(--muted);
 }
 
 .task-log {
   margin: 0;
-  padding: 14px 16px;
+  padding: 14px 18px;
   max-height: 220px;
   overflow: auto;
   border-radius: var(--radius-sm);
-  background:
-    linear-gradient(180deg, #1e1a12 0%, #181410 100%);
-  color: #d8c8a4;
+  background: #1a1a1a;
+  color: #d0d0d0;
   font-size: 0.78rem;
   line-height: 1.55;
-  border: 1px solid rgba(196, 154, 69, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   font-family: "Cascadia Code", "JetBrains Mono", "Fira Code", "Consolas", monospace;
 }
 
+.task-log::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.task-log::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.task-log::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+.task-log::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 /* ==============================
-   Responsive breakpoints
+   Responsive — tablet
    ============================== */
 
-/* Tablet landscape & smaller desktops */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .layout {
-    grid-template-columns: 1fr 1.3fr;
-    gap: 24px;
+    grid-template-columns: 1fr;
   }
 
   .panel-form {
     position: static;
   }
+
+  .cron-builder-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* Tablet portrait — single column */
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
+/* ==============================
+   Responsive — mobile
+   ============================== */
 
+@media (max-width: 600px) {
   .app-shell {
-    padding: 20px 16px 36px;
+    padding: 16px 12px 32px;
   }
 
   .hero-copy-block {
-    padding: 22px;
+    padding: 24px 20px;
   }
 
   .hero-stats {
-    flex-wrap: wrap;
+    flex-direction: column;
   }
 
-  .hero-stat {
-    flex: 1;
-    min-width: 100px;
+  .panel {
+    padding: 18px 16px;
   }
 
   .section-head {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .toolbar-actions {
-    width: 100%;
-  }
-
-  .cron-builder-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .task-card-head {
-    flex-direction: column;
-  }
-
-  .task-card-tools,
-  .task-quick-actions {
-    width: 100%;
     justify-content: flex-start;
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .app-shell {
-    padding: 14px 12px 28px;
-  }
-
-  .panel {
-    padding: 18px;
-  }
-
-  .form-section {
-    padding: 14px;
-  }
-
-  .hero-copy-block {
-    padding: 18px;
-  }
-
-  .hero-stats {
-    flex-direction: column;
-  }
-
-  .hero-stat {
-    min-width: auto;
-  }
-
-  .cron-builder-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .task-card {

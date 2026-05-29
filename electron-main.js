@@ -1,11 +1,45 @@
 const path = require("path");
-const { app, BrowserWindow, Menu, Tray, dialog } = require("electron");
+const fs = require("fs");
+const { app, BrowserWindow, ipcMain, Menu, Tray, dialog } = require("electron");
 
 let mainWindow = null;
 let tray = null;
 let startServer;
 let stopServer;
 let isQuiting = false;
+
+// 🌸 主题 / 皮肤管理
+const THEMES = [
+  { id: "cardamom-maiden", label: "🌸 豆蔻少女" },
+  { id: "shinkai-twilight", label: "🌅 新海诚黄昏" },
+  { id: "deep-dream", label: "🌊 深海梦境" },
+  { id: "hackers-terminal", label: "💻 黑客终端" },
+  { id: "qin-empire", label: "🏯 秦帝国黑金" },
+  { id: "witch-alchemy", label: "🔮 魔女炼金" },
+];
+
+function getThemeFilePath() {
+  return path.join(app.getPath("userData"), "theme.json");
+}
+
+function loadTheme() {
+  try {
+    const raw = fs.readFileSync(getThemeFilePath(), "utf-8");
+    const data = JSON.parse(raw);
+    if (data && THEMES.some((t) => t.id === data.theme)) {
+      return data.theme;
+    }
+  } catch (_) { /* ignore */ }
+  return THEMES[0].id;
+}
+
+function saveTheme(name) {
+  try {
+    fs.writeFileSync(getThemeFilePath(), JSON.stringify({ theme: name }), "utf-8");
+  } catch (_) { /* ignore */ }
+}
+
+let currentTheme = THEMES[0].id;
 
 const APP_NAME_EN = "WeiScheduler";
 const APP_NAME_ZH = "尉定时任务调度器";
@@ -316,6 +350,15 @@ function showAboutDialog() {
 
 function buildApplicationMenu() {
   const openAtLogin = isAutoLaunchEnabled();
+  const themeItems = THEMES.map((t) => ({
+    label: t.label,
+    type: "radio",
+    checked: currentTheme === t.id,
+    click: () => {
+      setTheme(t.id);
+    },
+  }));
+
   const template = [
     {
       label: "设置",
@@ -331,6 +374,10 @@ function buildApplicationMenu() {
       ],
     },
     {
+      label: "皮肤",
+      submenu: themeItems,
+    },
+    {
       label: "关于",
       submenu: [
         {
@@ -342,6 +389,30 @@ function buildApplicationMenu() {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
+function setTheme(name) {
+  currentTheme = name;
+  saveTheme(name);
+
+  // Rebuild menu to reflect the new radio selection
+  buildApplicationMenu();
+
+  // Notify the renderer
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("theme-changed", name);
+  }
+}
+
+function setupThemeIPC() {
+  ipcMain.handle("get-theme", () => currentTheme);
+
+  ipcMain.handle("set-theme", (_event, name) => {
+    if (THEMES.some((t) => t.id === name)) {
+      setTheme(name);
+    }
+    return currentTheme;
+  });
 }
 
 function createWindow(port) {
@@ -356,11 +427,14 @@ function createWindow(port) {
     webPreferences: {
       contextIsolation: true,
       sandbox: false,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
+    // Notify the renderer of the current theme
+    mainWindow.webContents.send("theme-changed", currentTheme);
   });
 
   mainWindow.on("minimize", (event) => {
@@ -388,8 +462,10 @@ async function bootstrap() {
   try {
     app.setName(getLocalizedInstallName());
     process.env.WEISCHEDULER_DATA_DIR = app.getPath("userData");
+    currentTheme = loadTheme();
     ({ startServer, stopServer } = require("./server"));
     buildApplicationMenu();
+    setupThemeIPC();
     createTray();
     const { port } = await startServer();
     createWindow(port);
