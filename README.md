@@ -1,140 +1,148 @@
-# WeiScheduler（尉定时任务调度器）
+# 🌸 WeiScheduler（尉定时任务调度器）
 
-WeiScheduler 是一个基于 Node.js 的本地网页调度工具，用于按 Cron 表达式定时执行 Python 脚本。支持多种 Python/Conda 环境配置，适用于数据处理、自动化任务和脚本调度场景。
+> **A lightweight, local-first Python task scheduler with a dreamy anime-style UI**
+>
+> 一个轻量级、本地优先的 Python 定时任务调度器，拥有多套精美主题皮肤。
 
-English:
-WeiScheduler is a web-based local task scheduler built on Node.js, designed to execute Python scripts based on Cron expressions. It supports multiple Python and Conda environment configurations, making it suitable for data processing, automation workflows, and scheduled scripting tasks.
+---
 
-当前版本：`1.3.1`
-Latest Version: `1.3.1`
+## ✨ About / 关于
 
-核心定位：
-一个轻量级、本地优先的 Python 定时任务调度器，强调环境兼容性和可视化管理。
+**WeiScheduler** 是一个基于 Electron + Node.js 的桌面应用，用于按 Cron 表达式定时执行 Python 脚本。支持多种 Python / Conda 环境配置，适用于数据处理、自动化任务和脚本调度场景。
 
-Core Positioning:
+**Core Positioning:**
 A lightweight, local-first Python task scheduler focused on environment compatibility and visual management.
 
-版本更新记录见 [CHANGELOG.md](./CHANGELOG.md)。
+**核心定位：**
+一个轻量级、本地优先的 Python 定时任务调度器，强调环境兼容性和可视化管理。
 
-## 功能
+### Key Features
 
-- 配置任务名称、Python 可执行文件、脚本路径、参数、工作目录、Cron 表达式
-- 支持直接 Python、Conda 环境名、Conda 环境路径三种执行方式
-- 支持 Cron 五段自由组合输入，并保留常用预设
-- 可选配置时间参数名称和值，执行时自动追加到命令行
-- 启用或禁用调度
-- 立即手动执行任务
-- 支持最小化到系统托盘，关闭窗口后继续后台调度
-- 手动执行失败时，弹窗显示具体错误内容
-- 任务列表直接显示最近失败原因
-- 任务列表和详情显示“下次执行时间”
-- 保存最近运行日志和状态
-- 使用本地 `data/tasks.json` 持久化任务数据
-- Conda 环境名支持跨机器解析，优先读取 Conda 环境列表，不依赖固定用户名和固定盘符
-- Windows 安装器按系统语言显示名称：英文环境 `WeiScheduler`，中文环境 `尉定时任务调度器`
+- 🎨 **6 套精美主题皮肤** — 豆蔻少女、新海诚黄昏、深海梦境、黑客终端、秦帝国黑金、魔女炼金
+- 🐍 支持直接 Python、Conda 环境名、Conda 环境路径三种执行方式
+- ⏱ 可视化 Cron 表达式编辑器（齿轮滑块 + 高级编辑）
+- 📋 任务列表实时监控运行状态与日志
+- 🔄 自动刷新、手动触发、启停控制
+- 🖥 系统托盘驻留，关闭窗口后台继续调度
+- 🌏 跨机器 Conda 环境名解析
 
-## 版本亮点
+### 皮肤预览
 
-`1.3.1`：
+| 皮肤 | 风格 | 色系 |
+|------|------|------|
+| 🌸 **豆蔻少女** | 日系治愈·玻璃拟态 | 樱花粉 · 奶油白 · 淡紫 |
+| 🌅 **新海诚黄昏** | 青春电影·光影层次 | 晚霞橙 · 天空蓝 · 紫云 |
+| 🌊 **深海梦境** | 空灵冥想·水下梦境 | 深海蓝 · 冰川青 · 荧光 |
+| 💻 **黑客终端** | 极客赛博·CRT 质感 | 纯黑 · 荧光绿 · 暗灰 |
+| 🏯 **秦帝国黑金** | 帝国威严·青铜纹理 | 玄黑 · 暗金 · 青铜绿 |
+| 🔮 **魔女炼金** | 神秘幻想·古典魔法 | 深紫 · 暗金 · 月光银 |
 
-- Cron 表达式新增齿轮滑块可视化设置：频率标签切换、滑条、时间选择器、星期圆钮
-- 时间老人主题：暖棕/古铜金/羊皮纸色调，经典衬线字体，钟表装饰
+当前版本：**`1.4.0`**
 
-`1.3.0`：
+---
 
-- 全面优化页面显示和布局：表单分组、任务卡片视觉升级、响应式三阶断点、状态圆点指示器、CSS 细节打磨。
-
-`1.2.2`：
-
-- 修复任务数据文件损坏时桌面端启动直接失败的问题，损坏数据会自动备份并重建空任务库
-- 补充 README 中的清理旧产物与 Windows 安装包打包指令
-
-`1.2.1`：
-
-- 新增最小化到系统托盘能力，关闭窗口后调度器仍可在后台继续运行
-- 补充软件中英文简介、核心定位和版本说明，统一更新关于页元数据
-- 安装器按系统语言显示名称：英文环境为 `WeiScheduler`，中文环境为 `尉定时任务调度器`
-
-`1.2.0`：
-
-- 修复跨小时 Cron 任务稳定性问题，为 `每 3 小时`、`每 6 小时` 等表达式增加服务端补偿触发
-- 新增 `每 6 小时` 预设，并在任务列表中显示对应的人类可读描述
-
-`1.1.10`：
-
-- 任务列表和详情新增“下次执行”具体时间显示，便于直接确认下一次触发时刻
-
-`1.1.9`：
-
-- 提升 Conda 环境名解析稳定性，适配不同电脑上的不同环境目录
-- 手动执行失败时显示更完整的错误详情
-- 修复失败日志丢失后只显示 `failed` 的问题
-- 增强 Cron 配置交互，支持更灵活的时间组合
-
-## 启动
+## 🚀 Quick Start / 快速开始
 
 ```bash
 npm install
 npm start
 ```
 
-Web 开发模式默认从 `http://localhost:3000` 启动；如果 `3000` 已被占用，程序会自动切换到可用端口。
-
-桌面版会自动打开实际运行端口对应的页面，无需手动处理端口。
-
-开发模式下，Electron 会直接加载本地源码。
-
-重新构建 Windows 安装包前，建议先清理旧产物：
+Web 模式（浏览器访问 `localhost:3000`）：
 
 ```bash
-Remove-Item -Recurse -Force release, dist
+npm run start:web
 ```
 
-然后执行打包：
-
-```bash
-npm run dist
-```
-
-打包完成后，安装包和解包目录会生成在 `release/` 下。
-
-## 脚本说明
+### Scripts / 脚本说明
 
 | 命令 | 说明 |
 |------|------|
-| `npm run start` | 启动 Electron 桌面应用 |
-| `npm run start:web` | 启动纯 Web 服务（浏览器访问 `localhost:3000`） |
+| `npm start` | 启动 Electron 桌面应用 |
+| `npm run start:web` | 启动纯 Web 服务 |
 | `npm run dist` | 打包为 Windows 安装包（NSIS） |
-| `npm run build:installer` | `dist` 的别名，等同上述打包命令 |
 
-## 字段说明
+### Build / 构建 Windows 安装包
 
-- `执行方式`: 选择直接 Python 或 Conda 环境
-- `Python/Conda 命令路径`: 直接 Python 时必填 `python.exe`；Conda 模式选填，建议填写 Conda 根目录或 `conda.exe` 路径以提高解析稳定性
-- `Conda 环境名或路径`: Conda 模式必填
-- `脚本路径`: 需要执行的 `.py` 文件
-- `启动参数`: 按命令行形式填写，例如 `--name demo --count 5`
-- `时间参数名`: 可选，例如 `--run-time`
-- `时间参数值`: 可选，留空时执行时自动传当前时间
-- `工作目录`: 可选，不填时默认用脚本所在目录
-- `Cron 时间表达式`: 使用 `分 时 日 月 周` 五段格式，例如 `*/5 * * * *` 表示每 5 分钟执行一次，`0 9 * * 1-5` 表示工作日 09:00 执行
+```bash
+# 清理旧产物
+Remove-Item -Recurse -Force release, dist
 
-## 常见 Cron 示例
+# 打包
+npm run dist
+```
 
-- `*/5 * * * *`: 每 5 分钟执行一次
-- `0 * * * *`: 每小时整点执行
-- `0 */3 * * *`: 每 3 小时执行一次
-- `0 */6 * * *`: 每 6 小时执行一次
-- `0 9 * * 1-5`: 工作日 09:00 执行
-- `30 23 * * *`: 每天 23:30 执行
+打包完成后安装包生成在 `release/` 下。
 
-## 数据文件
+---
 
-任务保存在 `data/tasks.json`。
+## 🛠 Usage Guide / 使用指南
 
-## Conda 跨机器建议
+### 任务字段说明
 
-- 跨电脑共享任务时，优先使用 `Conda 环境名`
-- `Conda 目标` 只填环境名，例如 `py3143`
-- 不要把任务绑定到某一台机器的绝对环境路径，例如 `C:\Users\Administrator\.conda\envs\py3143`
-- 程序会优先通过 Conda 环境列表定位环境，解析不到时再回退到本机目录扫描和 `conda run`
+| 字段 | 说明 |
+|------|------|
+| 任务名称 | 自定义任务标识，例如「日报生成」 |
+| 执行方式 | 直接 Python / Conda 环境名 / Conda 环境路径 |
+| Python / Conda 命令路径 | Python 模式必填 `python.exe`；Conda 模式选填 |
+| Conda 环境名或路径 | Conda 模式必填 |
+| 脚本路径 | 需要执行的 `.py` 文件路径 |
+| 启动参数 | 可选，例如 `--date "2026-03-19"` |
+| 时间参数名/值 | 可选，执行时自动追加到命令行 |
+| 工作目录 | 可选，默认脚本所在目录 |
+| Cron 表达式 | 五段格式，可视化滑块 + 高级编辑双模式 |
+
+### 常见 Cron 示例
+
+| 表达式 | 含义 |
+|--------|------|
+| `*/5 * * * *` | 每 5 分钟 |
+| `0 * * * *` | 每小时整点 |
+| `0 */3 * * *` | 每 3 小时 |
+| `0 9 * * *` | 每天 09:00 |
+| `0 9 * * 1-5` | 工作日 09:00 |
+| `30 23 * * *` | 每天 23:30 |
+| `0 0 1 * *` | 每月 1 日 |
+
+---
+
+## 📁 Data / 数据文件
+
+任务数据保存在 `data/tasks.json`，主题偏好保存在 Electron 用户数据目录下的 `theme.json`。
+
+### Conda 跨机器建议
+
+- 跨电脑共享任务时优先使用 **Conda 环境名**
+- 例如填写 `py3143` 而非 `C:\Users\xxx\.conda\envs\py3143`
+- 程序会优先通过 Conda 环境列表定位环境
+
+---
+
+## 📦 Tech Stack / 技术栈
+
+- **Frontend:** Vanilla JS, CSS Custom Properties, Glassmorphism
+- **Backend:** Node.js, Express
+- **Desktop:** Electron
+- **Scheduling:** node-cron
+
+---
+
+## 📜 License
+
+MIT © 2026 [Ethan Wilkins](https://github.com/phoenixlucky)
+
+---
+
+## 📋 Changelog
+
+完整版本更新记录见 [CHANGELOG.md](./CHANGELOG.md)。
+
+### v1.4.0
+
+- 🌸 **全新豆蔻少女版 UI** — 樱花粉 × 奶油白 × 淡紫渐变，玻璃拟态卡片
+- 🎨 **主题系统架构** — 支持 6 套皮肤动态切换，主菜单「皮肤」子菜单
+- 🌅 **新海诚黄昏风** — 晚霞橙电影光影，城市灯火闪烁
+- 🌊 **深海梦境风** — 深海蓝冥想氛围，荧光粒子飘浮
+- 💻 **黑客终端风** — 荧光绿 CRT 扫描线，矩阵数据流
+- 🏯 **秦帝国黑金风** — 玄黑暗金青铜纹理，帝国威严布局
+- 🔮 **魔女炼金风** — 深紫月光银，魔法星象与炼金符号
