@@ -6,27 +6,7 @@
 
 ---
 
-## ✨ About / 关于
-
-**WeiScheduler** 是一个基于 Electron + Node.js 的桌面应用，用于按 Cron 表达式定时执行 Python 脚本。支持多种 Python / Conda 环境配置，适用于数据处理、自动化任务和脚本调度场景。
-
-**Core Positioning:**
-A lightweight, local-first Python task scheduler focused on environment compatibility and visual management.
-
-**核心定位：**
-一个轻量级、本地优先的 Python 定时任务调度器，强调环境兼容性和可视化管理。
-
-### Key Features
-
-- 🎨 **6 套精美主题皮肤** — 豆蔻少女、新海诚黄昏、深海梦境、黑客终端、秦帝国黑金、魔女炼金
-- 🐍 支持直接 Python、Conda 环境名、Conda 环境路径三种执行方式
-- ⏱ 可视化 Cron 表达式编辑器（齿轮滑块 + 高级编辑）
-- 📋 任务列表实时监控运行状态与日志
-- 🔄 自动刷新、手动触发、启停控制
-- 🖥 系统托盘驻留，关闭窗口后台继续调度
-- 🌏 跨机器 Conda 环境名解析
-
-### 皮肤预览
+## 🎨 皮肤预览
 
 | 皮肤 | 风格 | 色系 |
 |------|------|------|
