@@ -9,14 +9,14 @@
   --bg-start: #f0f0f0;
   --bg-mid: #e8e8e8;
   --bg-end: #dcdcdc;
-  --panel: rgba(255, 255, 255, 0.6);
-  --panel-strong: rgba(255, 255, 255, 0.85);
-  --panel-border: rgba(0, 0, 0, 0.06);
-  --text: #333;
-  --muted: #888;
-  --primary: #999;
-  --primary-dark: #777;
-  --primary-soft: rgba(0, 0, 0, 0.06);
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-strong: rgba(255, 255, 255, 0.88);
+  --panel-border: rgba(0, 0, 0, 0.08);
+  --text: #2a2a2a;
+  --muted: #6a6a6a;
+  --primary: #888;
+  --primary-dark: #666;
+  --primary-soft: rgba(0, 0, 0, 0.08);
   --accent: #eee;
   --accent-glow: rgba(0, 0, 0, 0.04);
   --danger: #c44;
@@ -742,7 +742,7 @@ body {
 .task-card {
   padding: 20px 22px;
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 248, 248, 0.7));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 246, 248, 0.82));
   border: 1px solid var(--panel-border);
   box-shadow: var(--shadow-sm);
   transition: box-shadow var(--transition), border-color var(--transition);

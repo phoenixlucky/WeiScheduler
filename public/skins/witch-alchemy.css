@@ -10,18 +10,18 @@
   --bg-start: #0a0610;
   --bg-mid: #120a1e;
   --bg-end: #1a0e28;
-  --panel: rgba(10, 6, 18, 0.55);
-  --panel-strong: rgba(16, 10, 28, 0.8);
-  --panel-border: rgba(200, 160, 220, 0.06);
-  --text: #d4c8d8;
-  --muted: #8a7098;
-  --primary: #c080d0;
-  --primary-dark: #a060b8;
-  --primary-soft: rgba(192, 128, 208, 0.08);
+  --panel: rgba(10, 6, 18, 0.65);
+  --panel-strong: rgba(18, 12, 32, 0.85);
+  --panel-border: rgba(200, 160, 220, 0.1);
+  --text: #ddd0e0;
+  --muted: #a888b8;
+  --primary: #c888d8;
+  --primary-dark: #b070c8;
+  --primary-soft: rgba(200, 136, 216, 0.12);
   --accent: #d4a0e0;
   --accent-glow: rgba(192, 128, 208, 0.04);
-  --danger: #cc4466;
-  --danger-soft: rgba(204, 68, 102, 0.08);
+  --danger: #d06070;
+  --danger-soft: rgba(208, 96, 112, 0.1);
   --success: #80b090;
   --gold: #c89050;
   --gold-light: #d4a868;
@@ -205,8 +205,8 @@ body[data-theme="witch-alchemy"] {
 }
 
 [data-theme="witch-alchemy"] .hero-stat {
-  background: rgba(10, 6, 18, 0.4);
-  border: 1px solid rgba(200, 160, 220, 0.04);
+  background: rgba(10, 6, 18, 0.55);
+  border: 1px solid rgba(200, 160, 220, 0.06);
 }
 
 [data-theme="witch-alchemy"] .hero-stat-icon {
@@ -232,8 +232,8 @@ body[data-theme="witch-alchemy"] {
 
 [data-theme="witch-alchemy"] .task-form input,
 [data-theme="witch-alchemy"] .task-form select {
-  background: rgba(5, 2, 12, 0.5);
-  border: 1px solid rgba(200, 160, 220, 0.04);
+  background: rgba(5, 2, 12, 0.65);
+  border: 1px solid rgba(200, 160, 220, 0.06);
   color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
@@ -288,16 +288,16 @@ body[data-theme="witch-alchemy"] {
 }
 
 [data-theme="witch-alchemy"] .ghost-button {
-  background: rgba(10, 6, 18, 0.4);
-  border: 1px solid rgba(200, 160, 220, 0.03);
-  color: var(--muted);
+  background: rgba(10, 6, 18, 0.55);
+  border: 1px solid rgba(200, 160, 220, 0.05);
+  color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="witch-alchemy"] .ghost-button:hover {
-  background: rgba(20, 10, 30, 0.6);
+  background: rgba(24, 14, 38, 0.7);
   color: var(--text);
-  border-color: rgba(200, 160, 220, 0.06);
+  border-color: rgba(200, 160, 220, 0.08);
 }
 
 [data-theme="witch-alchemy"] .ghost-button.danger {
@@ -318,8 +318,8 @@ body[data-theme="witch-alchemy"] {
 }
 
 [data-theme="witch-alchemy"] .cron-freq-tab {
-  background: rgba(5, 2, 12, 0.3);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  background: rgba(5, 2, 12, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.05);
 }
 
 [data-theme="witch-alchemy"] .cron-freq-tab.active {
@@ -330,8 +330,8 @@ body[data-theme="witch-alchemy"] {
 }
 
 [data-theme="witch-alchemy"] .cron-panel {
-  background: rgba(5, 2, 12, 0.3);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  background: rgba(5, 2, 12, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.05);
 }
 
 /* Checkbox */
@@ -345,13 +345,13 @@ body[data-theme="witch-alchemy"] {
 
 /* Task cards */
 [data-theme="witch-alchemy"] .task-card {
-  background: rgba(10, 6, 18, 0.35);
+  background: rgba(10, 6, 18, 0.48);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  border: 1px solid rgba(200, 160, 220, 0.05);
 }
 
 [data-theme="witch-alchemy"] .task-card:hover {
-  border-color: rgba(200, 160, 220, 0.06);
+  border-color: rgba(200, 160, 220, 0.08);
 }
 
 [data-theme="witch-alchemy"] .task-name {
@@ -394,8 +394,8 @@ body[data-theme="witch-alchemy"] {
 
 /* Weekday */
 [data-theme="witch-alchemy"] .cron-weekday-btn {
-  background: rgba(5, 2, 12, 0.3);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  background: rgba(5, 2, 12, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.05);
 }
 
 [data-theme="witch-alchemy"] .cron-weekday-btn:has(input:checked) {
@@ -421,28 +421,28 @@ body[data-theme="witch-alchemy"] {
 /* Select */
 [data-theme="witch-alchemy"] .toolbar-select,
 [data-theme="witch-alchemy"] .auto-refresh-toggle {
-  background: rgba(10, 6, 18, 0.45);
-  border: 1px solid rgba(200, 160, 220, 0.03);
-  color: var(--muted);
+  background: rgba(10, 6, 18, 0.55);
+  border: 1px solid rgba(200, 160, 220, 0.05);
+  color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="witch-alchemy"] .empty-state {
-  background: rgba(10, 6, 18, 0.35);
-  border: 1px dashed rgba(200, 160, 220, 0.03);
+  background: rgba(10, 6, 18, 0.45);
+  border: 1px dashed rgba(200, 160, 220, 0.05);
   color: var(--muted);
 }
 
 /* Misc */
 [data-theme="witch-alchemy"] .cron-preset {
-  background: rgba(5, 2, 12, 0.3);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  background: rgba(5, 2, 12, 0.4);
+  border: 1px solid rgba(200, 160, 220, 0.05);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="witch-alchemy"] .form-section {
-  background: rgba(10, 6, 18, 0.2);
-  border: 1px solid rgba(200, 160, 220, 0.03);
+  background: rgba(10, 6, 18, 0.3);
+  border: 1px solid rgba(200, 160, 220, 0.05);
 }
 
 [data-theme="witch-alchemy"] .section-head h2 {

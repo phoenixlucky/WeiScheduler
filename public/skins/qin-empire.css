@@ -10,19 +10,19 @@
   --bg-start: #0a0806;
   --bg-mid: #12100c;
   --bg-end: #1a1610;
-  --panel: rgba(10, 8, 6, 0.6);
-  --panel-strong: rgba(14, 12, 8, 0.8);
-  --panel-border: rgba(180, 140, 60, 0.08);
-  --text: #d4c8a8;
-  --muted: #7a6e50;
-  --primary: #c49430;
-  --primary-dark: #a07a20;
-  --primary-soft: rgba(180, 140, 60, 0.08);
+  --panel: rgba(10, 8, 6, 0.68);
+  --panel-strong: rgba(18, 14, 10, 0.85);
+  --panel-border: rgba(180, 140, 60, 0.12);
+  --text: #ddd0b0;
+  --muted: #9a9070;
+  --primary: #c89838;
+  --primary-dark: #b08028;
+  --primary-soft: rgba(200, 152, 56, 0.12);
   --accent: #d4a840;
   --accent-glow: rgba(180, 140, 60, 0.04);
-  --danger: #8a2a20;
-  --danger-soft: rgba(138, 42, 32, 0.1);
-  --success: #5a8a5a;
+  --danger: #b84038;
+  --danger-soft: rgba(184, 64, 56, 0.12);
+  --success: #6a9a6a;
   --gold: #b8862a;
   --gold-light: #d4a840;
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -195,8 +195,8 @@ body[data-theme="qin-empire"] {
 }
 
 [data-theme="qin-empire"] .hero-stat {
-  background: rgba(10, 8, 6, 0.5);
-  border: 1px solid rgba(180, 140, 60, 0.06);
+  background: rgba(10, 8, 6, 0.6);
+  border: 1px solid rgba(180, 140, 60, 0.08);
 }
 
 [data-theme="qin-empire"] .hero-stat-icon {
@@ -225,8 +225,8 @@ body[data-theme="qin-empire"] {
 
 [data-theme="qin-empire"] .task-form input,
 [data-theme="qin-empire"] .task-form select {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(180, 140, 60, 0.06);
+  background: rgba(5, 4, 3, 0.6);
+  border: 1px solid rgba(180, 140, 60, 0.08);
   color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
@@ -279,16 +279,16 @@ body[data-theme="qin-empire"] {
 }
 
 [data-theme="qin-empire"] .ghost-button {
-  background: rgba(10, 8, 6, 0.4);
-  border: 1px solid rgba(180, 140, 60, 0.04);
-  color: var(--muted);
+  background: rgba(10, 8, 6, 0.55);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+  color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="qin-empire"] .ghost-button:hover {
-  background: rgba(20, 16, 10, 0.6);
+  background: rgba(24, 18, 12, 0.7);
   color: var(--text);
-  border-color: rgba(180, 140, 60, 0.08);
+  border-color: rgba(180, 140, 60, 0.1);
 }
 
 [data-theme="qin-empire"] .ghost-button.danger {
@@ -309,8 +309,8 @@ body[data-theme="qin-empire"] {
 }
 
 [data-theme="qin-empire"] .cron-freq-tab {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(5, 4, 3, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.06);
 }
 
 [data-theme="qin-empire"] .cron-freq-tab.active {
@@ -321,8 +321,8 @@ body[data-theme="qin-empire"] {
 }
 
 [data-theme="qin-empire"] .cron-panel {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(5, 4, 3, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.06);
 }
 
 [data-theme="qin-empire"] .cron-slider-value strong {
@@ -341,12 +341,12 @@ body[data-theme="qin-empire"] {
 
 /* Task cards */
 [data-theme="qin-empire"] .task-card {
-  background: rgba(10, 8, 6, 0.4);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(10, 8, 6, 0.5);
+  border: 1px solid rgba(180, 140, 60, 0.06);
 }
 
 [data-theme="qin-empire"] .task-card:hover {
-  border-color: rgba(180, 140, 60, 0.08);
+  border-color: rgba(180, 140, 60, 0.1);
 }
 
 [data-theme="qin-empire"] .task-name {
@@ -389,8 +389,8 @@ body[data-theme="qin-empire"] {
 
 /* Weekday */
 [data-theme="qin-empire"] .cron-weekday-btn {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(5, 4, 3, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.06);
 }
 
 [data-theme="qin-empire"] .cron-weekday-btn:has(input:checked) {
@@ -412,28 +412,28 @@ body[data-theme="qin-empire"] {
 /* Select */
 [data-theme="qin-empire"] .toolbar-select,
 [data-theme="qin-empire"] .auto-refresh-toggle {
-  background: rgba(10, 8, 6, 0.5);
-  border: 1px solid rgba(180, 140, 60, 0.04);
-  color: var(--muted);
+  background: rgba(10, 8, 6, 0.6);
+  border: 1px solid rgba(180, 140, 60, 0.06);
+  color: var(--text);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="qin-empire"] .empty-state {
-  background: rgba(10, 8, 6, 0.4);
-  border: 1px dashed rgba(180, 140, 60, 0.04);
+  background: rgba(10, 8, 6, 0.5);
+  border: 1px dashed rgba(180, 140, 60, 0.06);
   color: var(--muted);
 }
 
 /* Misc */
 [data-theme="qin-empire"] .cron-preset {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(5, 4, 3, 0.4);
+  border: 1px solid rgba(180, 140, 60, 0.06);
   font-family: "Noto Sans SC", sans-serif;
 }
 
 [data-theme="qin-empire"] .form-section {
-  background: rgba(10, 8, 6, 0.2);
-  border: 1px solid rgba(180, 140, 60, 0.04);
+  background: rgba(10, 8, 6, 0.3);
+  border: 1px solid rgba(180, 140, 60, 0.06);
 }
 
 [data-theme="qin-empire"] .section-head h2 {

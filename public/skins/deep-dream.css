@@ -10,14 +10,14 @@
   --bg-start: #020b1a;
   --bg-mid: #051530;
   --bg-end: #0a2040;
-  --panel: rgba(2, 12, 30, 0.5);
-  --panel-strong: rgba(4, 16, 38, 0.75);
-  --panel-border: rgba(150, 220, 255, 0.06);
-  --text: #c8dce8;
-  --muted: #6a8aa0;
+  --panel: rgba(2, 12, 30, 0.6);
+  --panel-strong: rgba(6, 20, 44, 0.82);
+  --panel-border: rgba(150, 220, 255, 0.1);
+  --text: #d2e4ee;
+  --muted: #88b0c8;
   --primary: #66ccff;
   --primary-dark: #44aadd;
-  --primary-soft: rgba(100, 210, 255, 0.08);
+  --primary-soft: rgba(100, 210, 255, 0.12);
   --accent: #88ddff;
   --accent-glow: rgba(100, 210, 255, 0.05);
   --danger: #ff6688;
@@ -207,8 +207,8 @@ body[data-theme="deep-dream"] {
 }
 
 [data-theme="deep-dream"] .hero-stat {
-  background: rgba(2, 12, 30, 0.4);
-  border: 1px solid rgba(100, 210, 255, 0.04);
+  background: rgba(2, 12, 30, 0.55);
+  border: 1px solid rgba(100, 210, 255, 0.06);
 }
 
 /* Forms */
@@ -266,12 +266,12 @@ body[data-theme="deep-dream"] {
 }
 
 [data-theme="deep-dream"] .ghost-button {
-  background: rgba(2, 12, 30, 0.4);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 12, 30, 0.55);
+  border-color: rgba(100, 210, 255, 0.06);
 }
 
 [data-theme="deep-dream"] .ghost-button:hover {
-  background: rgba(4, 18, 40, 0.6);
+  background: rgba(6, 22, 48, 0.7);
 }
 
 /* Tabs */
@@ -286,8 +286,8 @@ body[data-theme="deep-dream"] {
 }
 
 [data-theme="deep-dream"] .cron-freq-tab {
-  background: rgba(2, 8, 20, 0.4);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 8, 20, 0.5);
+  border-color: rgba(100, 210, 255, 0.06);
 }
 
 [data-theme="deep-dream"] .cron-freq-tab.active {
@@ -307,9 +307,9 @@ body[data-theme="deep-dream"] {
 
 /* Task cards */
 [data-theme="deep-dream"] .task-card {
-  background: rgba(2, 12, 30, 0.45);
+  background: rgba(2, 12, 30, 0.55);
   backdrop-filter: blur(20px);
-  border-color: rgba(100, 210, 255, 0.03);
+  border-color: rgba(100, 210, 255, 0.05);
 }
 
 [data-theme="deep-dream"] .task-card:hover {
@@ -345,8 +345,8 @@ body[data-theme="deep-dream"] {
 
 /* Weekday */
 [data-theme="deep-dream"] .cron-weekday-btn {
-  background: rgba(2, 8, 20, 0.4);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 8, 20, 0.55);
+  border-color: rgba(100, 210, 255, 0.06);
 }
 
 [data-theme="deep-dream"] .cron-weekday-btn:has(input:checked) {
@@ -372,14 +372,14 @@ body[data-theme="deep-dream"] {
 /* Misc */
 [data-theme="deep-dream"] .toolbar-select,
 [data-theme="deep-dream"] .auto-refresh-toggle {
-  background: rgba(2, 12, 30, 0.45);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 12, 30, 0.55);
+  border-color: rgba(100, 210, 255, 0.06);
   color: var(--text);
 }
 
 [data-theme="deep-dream"] .empty-state {
-  background: rgba(2, 12, 30, 0.4);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 12, 30, 0.5);
+  border-color: rgba(100, 210, 255, 0.06);
   color: var(--muted);
 }
 
@@ -391,13 +391,13 @@ body[data-theme="deep-dream"] {
 
 [data-theme="deep-dream"] .cron-preset,
 [data-theme="deep-dream"] .cron-panel {
-  background: rgba(2, 8, 20, 0.35);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 8, 20, 0.45);
+  border-color: rgba(100, 210, 255, 0.06);
 }
 
 [data-theme="deep-dream"] .form-section {
-  background: rgba(2, 12, 30, 0.25);
-  border-color: rgba(100, 210, 255, 0.04);
+  background: rgba(2, 12, 30, 0.35);
+  border-color: rgba(100, 210, 255, 0.06);
 }
 
 [data-theme="deep-dream"] .section-head h2,

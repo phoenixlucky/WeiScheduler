@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.0 - 2026-06-04
+
+### 🐛 修复
+
+- 修复 `45 * * * *` 等 Cron 表达式无法显示为中文描述的问题 — 新增"M分每小时"匹配分支
+- 全部 6 套主题对比度全面优化：辅助文字色统一提升到 WCAG AA 标准（≥4.7:1），面板背景更不透明，背景渐变不再干扰文字阅读
+- Qin Empire / Witch Alchemy 两主题危险色（danger）亮化，暗色背景下清晰可辨
+
+### 🔧 技术变更
+
+- `package.json`: version 1.4.0 → 1.5.0
+- `public/app.js`: `describeSchedule()` 新增 `M * * * *` 每小时指定分钟的中文翻译
+- 所有 6 个皮肤 CSS 文件：调整 `--text`、`--muted`、`--panel`、`--danger` 色值与透明度
+- `public/styles.css`: 基座变量调高对比度，`.task-card` 背景更实
+
 ## 1.4.0 - 2026-05-29
 
 ### 🌸 豆蔻少女版 UI 全面翻新

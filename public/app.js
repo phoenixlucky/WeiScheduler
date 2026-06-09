@@ -227,6 +227,13 @@ function describeSchedule(schedule) {
     return `每 ${everyMinutes[1]} 分钟`;
   }
 
+  // 每小时指定分钟: M * * * *
+  const everyHourFixedMinute = schedule.match(/^(\d+) \* \* \* \*$/);
+  if (everyHourFixedMinute) {
+    const min = everyHourFixedMinute[1].padStart(2, "0");
+    return `每小时 ${min} 分`;
+  }
+
   // 每 N 小时（指定分钟）: M */N * * *
   const everyNHoursWithMinute = schedule.match(/^(\d+|\*) \*\/(\d+) \* \* \*$/);
   if (everyNHoursWithMinute) {
