@@ -10,6 +10,7 @@ let isQuiting = false;
 
 // 🌸 主题 / 皮肤管理
 const THEMES = [
+  { id: "zhenji", label: "👑 甄姬背景" },
   { id: "cardamom-maiden", label: "🌸 豆蔻少女" },
   { id: "shinkai-twilight", label: "🌅 新海诚黄昏" },
   { id: "deep-dream", label: "🌊 深海梦境" },
