@@ -1,36 +1,36 @@
 /* ==============================
    👑 甄姬背景 — Zhenji
-   Character art background × Royal classic
-   Elegant · Chinese classic · Dark gold
+   月白 · 浅蓝 · 青灰 · 烟紫 · 淡粉
+   Elegant · Classical · Ethereal
    ============================== */
 
 [data-theme="zhenji"] {
-  --bg-start: #0e0a12;
-  --bg-mid: #16101e;
-  --bg-end: #1c1626;
-  --panel: rgba(12, 8, 18, 0.78);
-  --panel-strong: rgba(18, 14, 26, 0.9);
-  --panel-border: rgba(200, 160, 120, 0.15);
-  --text: #f0e4d6;
-  --text-secondary: #c8b8a8;
-  --text-tertiary: #a09080;
-  --muted: #a09080;
-  --primary: #c89060;
-  --primary-dark: #b07848;
-  --primary-soft: rgba(200, 144, 96, 0.15);
-  --accent: #d4a878;
-  --accent-glow: rgba(200, 144, 96, 0.06);
-  --danger: #d06060;
-  --danger-soft: rgba(208, 96, 96, 0.12);
-  --success: #80b090;
-  --gold: #c89850;
-  --gold-light: #d4b070;
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.28);
-  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.15);
-  --glow: 0 0 40px rgba(200, 144, 96, 0.04);
-  --scrollbar-track: rgba(200, 160, 120, 0.03);
-  --scrollbar-thumb: rgba(200, 160, 120, 0.1);
+  --bg-start: #e8eaf0;
+  --bg-mid: #e0e4ee;
+  --bg-end: #d8dce8;
+  --panel: rgba(245, 242, 248, 0.78);
+  --panel-strong: rgba(248, 246, 250, 0.92);
+  --panel-border: rgba(160, 160, 180, 0.15);
+  --text: #2a2a3a;
+  --text-secondary: #5a5a72;
+  --text-tertiary: #8a8a9e;
+  --muted: #7a7a8e;
+  --primary: #8aaccc;
+  --primary-dark: #6a8eb0;
+  --primary-soft: rgba(138, 172, 204, 0.15);
+  --accent: #d4c8e0;
+  --accent-glow: rgba(180, 160, 200, 0.10);
+  --danger: #c87a8a;
+  --danger-soft: rgba(200, 122, 138, 0.10);
+  --success: #7ab89a;
+  --gold: #c8a8c0;
+  --gold-light: #dcc8d8;
+  --shadow: 0 20px 60px rgba(120, 120, 160, 0.10);
+  --shadow-soft: 0 10px 28px rgba(120, 120, 160, 0.06);
+  --shadow-sm: 0 4px 16px rgba(120, 120, 160, 0.04);
+  --glow: 0 0 40px rgba(180, 160, 200, 0.06);
+  --scrollbar-track: rgba(180, 160, 200, 0.04);
+  --scrollbar-thumb: rgba(180, 160, 200, 0.12);
   --font-family: "Noto Serif SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif;
 }
 
@@ -40,82 +40,82 @@ body[data-theme="zhenji"] {
   color: var(--text);
   background:
     linear-gradient(
-      rgba(10, 6, 16, 0.55),
-      rgba(10, 6, 16, 0.55)
+      rgba(232, 234, 240, 0.72),
+      rgba(232, 234, 240, 0.72)
     ),
     url('/甄姬背景.webp') center center / cover no-repeat fixed;
 }
 
-/* Decorative orbs — subtle warm glow */
+/* Decorative orbs — soft smoky purple & light pink */
 [data-theme="zhenji"] .deco-orb {
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.2;
+  opacity: 0.25;
 }
 
 [data-theme="zhenji"] .deco-orb--1 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(200, 144, 96, 0.12) 0%, transparent 65%);
-  top: 10%; left: 3%;
-  animation: zhenji-float 10s ease-in-out infinite alternate;
-}
-
-[data-theme="zhenji"] .deco-orb--2 {
-  width: 160px; height: 160px;
-  background: radial-gradient(circle, rgba(200, 160, 120, 0.1) 0%, transparent 65%);
-  bottom: 12%; right: 5%;
-  animation: zhenji-float 8s ease-in-out infinite alternate-reverse;
-}
-
-[data-theme="zhenji"] .deco-orb--3 {
-  width: 120px; height: 120px;
-  background: radial-gradient(circle, rgba(200, 144, 96, 0.08) 0%, transparent 65%);
-  top: 50%; right: 10%;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(180, 160, 200, 0.18) 0%, transparent 65%);
+  top: 8%; left: 2%;
   animation: zhenji-float 12s ease-in-out infinite alternate;
 }
 
-[data-theme="zhenji"] .deco-orb--4 {
-  width: 100px; height: 100px;
-  background: radial-gradient(circle, rgba(200, 160, 120, 0.08) 0%, transparent 65%);
-  bottom: 30%; left: 8%;
+[data-theme="zhenji"] .deco-orb--2 {
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(200, 180, 220, 0.14) 0%, transparent 65%);
+  bottom: 10%; right: 4%;
   animation: zhenji-float 9s ease-in-out infinite alternate-reverse;
+}
+
+[data-theme="zhenji"] .deco-orb--3 {
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(235, 200, 210, 0.16) 0%, transparent 65%);
+  top: 45%; right: 12%;
+  animation: zhenji-float 8s ease-in-out infinite alternate;
+}
+
+[data-theme="zhenji"] .deco-orb--4 {
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(180, 200, 220, 0.12) 0%, transparent 65%);
+  bottom: 28%; left: 6%;
+  animation: zhenji-float 11s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes zhenji-float {
   0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(20px, -18px) scale(1.06); }
+  100% { transform: translate(22px, -20px) scale(1.06); }
 }
 
-/* Gradient bar on top */
+/* Gradient bar on top —月白→烟紫渐变 */
 [data-theme="zhenji"] .app-shell::before {
   content: "";
   position: absolute;
   top: 0; left: 50%;
   transform: translateX(-50%);
   width: 60%; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent);
   border-radius: 0 0 999px 999px;
   opacity: 0.5;
 }
 
-/* Slider thumb */
+/* Slider thumb —浅蓝→烟紫 */
 [data-theme="zhenji"] .cron-slider::-webkit-slider-thumb {
-  background: linear-gradient(135deg, var(--gold-light), var(--primary) 50%, var(--primary-dark));
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #b8cce0, var(--primary) 50%, var(--primary-dark));
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 [data-theme="zhenji"] .cron-slider::-moz-range-thumb {
-  background: linear-gradient(135deg, var(--gold-light), var(--primary) 50%, var(--primary-dark));
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #b8cce0, var(--primary) 50%, var(--primary-dark));
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 /* Weekday pill active */
 [data-theme="zhenji"] .cron-weekday-btn:has(input:checked) {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   border-color: var(--primary);
-  box-shadow: 0 3px 10px rgba(200, 144, 96, 0.2);
+  box-shadow: 0 3px 10px rgba(138, 172, 204, 0.2);
 }
 
 /* Frequency tab active */
@@ -124,8 +124,22 @@ body[data-theme="zhenji"] {
   border-color: var(--primary);
 }
 
-/* Log terminal */
+/* Primary button */
+[data-theme="zhenji"] .btn--primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+/* Log terminal —青灰底 */
 [data-theme="zhenji"] .log-content {
-  background: linear-gradient(180deg, #1a1410 0%, #120e0a 100%);
-  border: 1px solid rgba(200, 160, 120, 0.06);
+  background: linear-gradient(180deg, #2a2e3a 0%, #1e222e 100%);
+  border: 1px solid rgba(160, 160, 180, 0.08);
+}
+
+/* Status badge running —淡粉点缀 */
+[data-theme="zhenji"] .task-status-badge[data-status="running"] {
+  background: rgba(235, 200, 210, 0.2);
+  color: #c87a8a;
+}
+[data-theme="zhenji"] .task-status-badge[data-status="running"]::before {
+  background: #d88a9a;
 }
