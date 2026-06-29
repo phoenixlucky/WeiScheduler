@@ -7,13 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
 [data-theme="qin-empire"] {
-  --bg-start: #0a0806;
-  --bg-mid: #12100c;
-  --bg-end: #1a1610;
-  --panel: rgba(10, 8, 6, 0.68);
-  --panel-strong: rgba(18, 14, 10, 0.85);
+  --bg-start: #14100c;
+  --bg-mid: #1c1812;
+  --bg-end: #24201a;
+  --panel: rgba(16, 12, 8, 0.78);
+  --panel-strong: rgba(22, 18, 12, 0.9);
   --panel-border: rgba(180, 140, 60, 0.12);
-  --text: #ddd0b0;
+  --text: #e8dec4;
+  --text-secondary: #c4b89a;
+  --text-tertiary: #a09070;
   --muted: #9a9070;
   --primary: #c89838;
   --primary-dark: #b08028;

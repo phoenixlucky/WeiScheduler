@@ -7,13 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Zen+Antique&display=swap');
 
 [data-theme="shinkai-twilight"] {
-  --bg-start: #1a1a2e;
-  --bg-mid: #16213e;
-  --bg-end: #0f3460;
-  --panel: rgba(15, 22, 45, 0.62);
-  --panel-strong: rgba(22, 30, 58, 0.84);
+  --bg-start: #1e2038;
+  --bg-mid: #222a48;
+  --bg-end: #1a3860;
+  --panel: rgba(18, 24, 42, 0.76);
+  --panel-strong: rgba(24, 32, 56, 0.9);
   --panel-border: rgba(255, 180, 100, 0.15);
-  --text: #f2e8d8;
+  --text: #f7efe0;
+  --text-secondary: #d0c4cc;
+  --text-tertiary: #a898a8;
   --muted: #b0a4b8;
   --primary: #ff8844;
   --primary-dark: #e87030;

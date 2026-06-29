@@ -7,13 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
 [data-theme="hackers-terminal"] {
-  --bg-start: #050505;
-  --bg-mid: #0a0a0a;
-  --bg-end: #0f0f0f;
-  --panel: rgba(0, 0, 0, 0.78);
-  --panel-strong: rgba(8, 8, 8, 0.9);
+  --bg-start: #0c100c;
+  --bg-mid: #121812;
+  --bg-end: #181e18;
+  --panel: rgba(8, 14, 8, 0.82);
+  --panel-strong: rgba(14, 22, 14, 0.92);
   --panel-border: rgba(0, 255, 65, 0.12);
-  --text: #d0e0d0;
+  --text: #e0f0e0;
+  --text-secondary: #b0d0b0;
+  --text-tertiary: #80a880;
   --muted: #78a078;
   --primary: #00ff41;
   --primary-dark: #00dd33;

@@ -7,13 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Nunito:wght@200;300;400;600&display=swap');
 
 [data-theme="deep-dream"] {
-  --bg-start: #020b1a;
-  --bg-mid: #051530;
-  --bg-end: #0a2040;
-  --panel: rgba(2, 12, 30, 0.6);
-  --panel-strong: rgba(6, 20, 44, 0.82);
+  --bg-start: #08162e;
+  --bg-mid: #0c1e3a;
+  --bg-end: #122a4a;
+  --panel: rgba(8, 22, 46, 0.78);
+  --panel-strong: rgba(12, 30, 56, 0.9);
   --panel-border: rgba(150, 220, 255, 0.1);
-  --text: #d2e4ee;
+  --text: #e2eff5;
+  --text-secondary: #b8d4e4;
+  --text-tertiary: #8ab0c8;
   --muted: #88b0c8;
   --primary: #66ccff;
   --primary-dark: #44aadd;

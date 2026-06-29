@@ -7,13 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
 [data-theme="witch-alchemy"] {
-  --bg-start: #0a0610;
-  --bg-mid: #120a1e;
-  --bg-end: #1a0e28;
-  --panel: rgba(10, 6, 18, 0.65);
-  --panel-strong: rgba(18, 12, 32, 0.85);
+  --bg-start: #120c20;
+  --bg-mid: #1a122e;
+  --bg-end: #221a38;
+  --panel: rgba(14, 10, 26, 0.78);
+  --panel-strong: rgba(22, 16, 40, 0.9);
   --panel-border: rgba(200, 160, 220, 0.1);
-  --text: #ddd0e0;
+  --text: #e8dce8;
+  --text-secondary: #c8b4d0;
+  --text-tertiary: #a088b0;
   --muted: #a888b8;
   --primary: #c888d8;
   --primary-dark: #b070c8;
