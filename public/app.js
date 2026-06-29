@@ -24,7 +24,7 @@ let loadTimer = null;
 const expandedTaskIds = new Set();
 const cronPartInputs = [cronMinuteInput, cronHourInput, cronDayInput, cronMonthInput, cronWeekdayInput];
 
-// New simple-mode (gear/slider) elements
+// Simple-mode elements
 const cronSimple = document.getElementById("cron-simple");
 const cronAdvanced = document.getElementById("cron-advanced");
 const cronModeTabs = document.querySelectorAll(".cron-mode-tab");
@@ -45,7 +45,7 @@ const cronMonthlyTime = document.getElementById("cron-monthly-time");
 const cronWeekdayGrid = document.getElementById("cron-weekday-grid");
 const cronWeekdayBtns = cronWeekdayGrid?.querySelectorAll(".cron-weekday-btn");
 
-let cronSimpleMode = true; // true = simple (gear), false = advanced
+let cronSimpleMode = true;
 
 const beijingDateTimeFormatter = new Intl.DateTimeFormat("zh-CN", {
   timeZone: "Asia/Shanghai",
@@ -58,17 +58,12 @@ const beijingDateTimeFormatter = new Intl.DateTimeFormat("zh-CN", {
   hour12: false,
 });
 
+/* ─── Helpers ─────────────────────────────────────────────────────── */
+
 function formatDisplayTime(value) {
-  if (!value) {
-    return "-";
-  }
-
+  if (!value) return "-";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return beijingDateTimeFormatter.format(date).replace(/\//g, "-");
+  return Number.isNaN(date.getTime()) ? value : beijingDateTimeFormatter.format(date).replace(/\//g, "-");
 }
 
 function getAutoRefreshEnabled() {
@@ -88,34 +83,27 @@ function persistAutoRefreshPreferences() {
 function hydrateAutoRefreshPreferences() {
   const savedEnabled = window.localStorage.getItem(AUTO_REFRESH_ENABLED_KEY);
   const savedInterval = window.localStorage.getItem(AUTO_REFRESH_INTERVAL_KEY);
-
-  if (savedEnabled !== null) {
-    autoRefreshEnabledInput.checked = savedEnabled === "true";
-  }
-  if (savedInterval && [...autoRefreshIntervalInput.options].some((option) => option.value === savedInterval)) {
+  if (savedEnabled !== null) autoRefreshEnabledInput.checked = savedEnabled === "true";
+  if (savedInterval && [...autoRefreshIntervalInput.options].some((o) => o.value === savedInterval)) {
     autoRefreshIntervalInput.value = savedInterval;
   }
 }
 
 function clearLoadTimer() {
-  if (loadTimer) {
-    window.clearTimeout(loadTimer);
-    loadTimer = null;
-  }
+  if (loadTimer) { window.clearTimeout(loadTimer); loadTimer = null; }
 }
 
 function scheduleAutoRefresh() {
   clearLoadTimer();
-  if (!getAutoRefreshEnabled()) {
-    return;
-  }
-
+  if (!getAutoRefreshEnabled()) return;
   loadTimer = window.setTimeout(() => {
     loadTasks().catch((error) => {
       taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
     });
   }, getAutoRefreshInterval());
 }
+
+/* ─── Form helpers ────────────────────────────────────────────────── */
 
 function formToPayload() {
   const formData = new FormData(taskForm);
@@ -141,21 +129,21 @@ function updateRunnerFields() {
   const commandPathRow = document.getElementById("command-path-row");
   const commandPath = document.getElementById("commandPath");
   const condaTarget = document.getElementById("condaTarget");
-  const commandPathLabel = commandPathRow.querySelector(".field-label");
+  const label = document.getElementById("command-path-label");
 
   if (runnerType === "python") {
-    commandPathRow.style.display = "grid";
+    commandPathRow.style.display = "";
     condaRow.style.display = "none";
     commandPath.required = true;
-    commandPath.placeholder = "例如：D:\\ProgramData\\miniconda3\\envs\\py3143\\python.exe";
-    commandPathLabel.textContent = "Python 路径";
+    commandPath.placeholder = "例如：D:\\miniconda3\\envs\\py3143\\python.exe";
+    label.textContent = "Python 路径";
     condaTarget.required = false;
   } else {
-    commandPathRow.style.display = "grid";
-    condaRow.style.display = "grid";
+    commandPathRow.style.display = "";
+    condaRow.style.display = "";
     commandPath.required = false;
-    commandPath.placeholder = "可选：Miniconda 根目录、Scripts\\conda.exe 或 condabin\\conda.bat";
-    commandPathLabel.textContent = "Conda 根目录或命令路径";
+    commandPath.placeholder = "可选：Miniconda 根目录或 conda.exe 路径";
+    label.textContent = "Conda 命令路径";
     condaTarget.required = true;
   }
 }
@@ -170,6 +158,8 @@ function resetForm() {
   formTitle.textContent = "新建任务";
 }
 
+/* ─── Log rendering ───────────────────────────────────────────────── */
+
 function renderLog(task) {
   if (task.running && task.liveLog) {
     return [
@@ -182,12 +172,8 @@ function renderLog(task) {
       task.liveLog.stderr ? `stderr:\n${task.liveLog.stderr}` : "stderr:\n<empty>",
     ].join("\n");
   }
-
   const [latest] = task.logs || [];
-  if (!latest) {
-    return "暂无运行记录";
-  }
-
+  if (!latest) return "暂无运行记录";
   return [
     `[${latest.status}] ${formatDisplayTime(latest.startedAt)} -> ${formatDisplayTime(latest.finishedAt)}`,
     `trigger: ${latest.trigger}`,
@@ -199,108 +185,59 @@ function renderLog(task) {
   ].join("\n");
 }
 
+/* ─── Cron helpers ────────────────────────────────────────────────── */
+
 function describeSchedule(schedule) {
   const presets = {
-    "*/5 * * * *": "每 5 分钟",
-    "*/10 * * * *": "每 10 分钟",
-    "*/15 * * * *": "每 15 分钟",
-    "*/30 * * * *": "每 30 分钟",
-    "0 * * * *": "每小时",
-    "0 */2 * * *": "每 2 小时",
-    "0 */3 * * *": "每 3 小时",
-    "0 */6 * * *": "每 6 小时",
-    "0 */8 * * *": "每 8 小时",
-    "0 */12 * * *": "每 12 小时",
-    "0 9 * * *": "每天 09:00",
-    "0 0 */3 * *": "每 3 天",
-    "0 9 * * 1-5": "工作日 09:00",
-    "0 0 1 * *": "每月 1 日",
+    "*/5 * * * *": "每 5 分钟", "*/10 * * * *": "每 10 分钟",
+    "*/15 * * * *": "每 15 分钟", "*/30 * * * *": "每 30 分钟",
+    "0 * * * *": "每小时", "0 */2 * * *": "每 2 小时",
+    "0 */3 * * *": "每 3 小时", "0 */6 * * *": "每 6 小时",
+    "0 */8 * * *": "每 8 小时", "0 */12 * * *": "每 12 小时",
+    "0 9 * * *": "每天 09:00", "0 0 */3 * *": "每 3 天",
+    "0 9 * * 1-5": "工作日 09:00", "0 0 1 * *": "每月 1 日",
   };
+  if (presets[schedule]) return presets[schedule];
 
-  if (presets[schedule]) {
-    return presets[schedule];
+  const m = schedule.match(/^\*\/(\d+) \* \* \* \*$/);
+  if (m) return `每 ${m[1]} 分钟`;
+
+  const h = schedule.match(/^(\d+) \* \* \* \*$/);
+  if (h) return `每小时 ${h[1].padStart(2,"0")} 分`;
+
+  const nh = schedule.match(/^(\d+|\*) \*\/(\d+) \* \* \*$/);
+  if (nh) return nh[1] === "0" ? `每 ${nh[2]} 小时` : `每 ${nh[2]} 小时（第 ${nh[1]} 分）`;
+
+  const d = schedule.match(/^(\d+) (\d+) \* \* \*$/);
+  if (d) return `每天 ${d[2].padStart(2,"0")}:${d[1].padStart(2,"0")}`;
+
+  const w = schedule.match(/^(\d+) (\d+) \* \* (\d[\d,]*)$/);
+  if (w) {
+    const labels = {0:"日",1:"一",2:"二",3:"三",4:"四",5:"五",6:"六"};
+    return `每周${w[3].split(",").map(d=>labels[d]||`周${d}`).join("、")} ${w[2].padStart(2,"0")}:${w[1].padStart(2,"0")}`;
   }
 
-  // 每 N 分钟: */N * * * *
-  const everyMinutes = schedule.match(/^\*\/(\d+) \* \* \* \*$/);
-  if (everyMinutes) {
-    return `每 ${everyMinutes[1]} 分钟`;
-  }
-
-  // 每小时指定分钟: M * * * *
-  const everyHourFixedMinute = schedule.match(/^(\d+) \* \* \* \*$/);
-  if (everyHourFixedMinute) {
-    const min = everyHourFixedMinute[1].padStart(2, "0");
-    return `每小时 ${min} 分`;
-  }
-
-  // 每 N 小时（指定分钟）: M */N * * *
-  const everyNHoursWithMinute = schedule.match(/^(\d+|\*) \*\/(\d+) \* \* \*$/);
-  if (everyNHoursWithMinute) {
-    const min = everyNHoursWithMinute[1];
-    const hour = everyNHoursWithMinute[2];
-    if (min === "0") {
-      return `每 ${hour} 小时`;
-    }
-    return `每 ${hour} 小时（第 ${min} 分）`;
-  }
-
-  // 每天固定时间: M H * * *
-  const dailyFixed = schedule.match(/^(\d+) (\d+) \* \* \*$/);
-  if (dailyFixed) {
-    const h = dailyFixed[2].padStart(2, "0");
-    const m = dailyFixed[1].padStart(2, "0");
-    return `每天 ${h}:${m}`;
-  }
-
-  // 每周固定时间: M H * * <days>
-  const weeklyFixed = schedule.match(/^(\d+) (\d+) \* \* (\d[\d,]*)$/);
-  if (weeklyFixed) {
-    const h = weeklyFixed[2].padStart(2, "0");
-    const m = weeklyFixed[1].padStart(2, "0");
-    const days = weeklyFixed[3];
-    const dayLabels = { "0": "日", "1": "一", "2": "二", "3": "三", "4": "四", "5": "五", "6": "六" };
-    const dayNames = days.split(",").map((d) => dayLabels[d] || `周${d}`).join("、");
-    return `每周${dayNames} ${h}:${m}`;
-  }
-
-  // 每月固定日: M H D * *
-  const monthlyFixed = schedule.match(/^(\d+) (\d+) (\d+) \* \*$/);
-  if (monthlyFixed) {
-    const h = monthlyFixed[2].padStart(2, "0");
-    const m = monthlyFixed[1].padStart(2, "0");
-    const d = monthlyFixed[3];
-    return `每月 ${d} 日 ${h}:${m}`;
-  }
+  const mo = schedule.match(/^(\d+) (\d+) (\d+) \* \*$/);
+  if (mo) return `每月 ${mo[3]} 日 ${mo[2].padStart(2,"0")}:${mo[1].padStart(2,"0")}`;
 
   return schedule;
 }
 
 function splitCronExpression(schedule) {
-  const parts = String(schedule || "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
+  const parts = String(schedule || "").trim().split(/\s+/).filter(Boolean);
   return parts.length === 5 ? parts : null;
 }
 
 function syncCronBuilderFromSchedule(schedule) {
   const parts = splitCronExpression(schedule);
-  cronPartInputs.forEach((input, index) => {
-    input.value = parts ? parts[index] : "";
-  });
+  cronPartInputs.forEach((input, i) => { input.value = parts ? parts[i] : ""; });
 }
 
 function composeCronFromBuilder() {
-  return cronPartInputs
-    .map((input) => String(input.value || "").trim() || "*")
-    .join(" ");
+  return cronPartInputs.map((input) => String(input.value || "").trim() || "*").join(" ");
 }
 
-/* ==============================
-   Simple mode (gear/slider) ↔ Cron
-   ============================== */
+/* ─── Simple mode cron ────────────────────────────────────────────── */
 
 function getActiveFreq() {
   const active = document.querySelector(".cron-freq-tab.active");
@@ -308,373 +245,166 @@ function getActiveFreq() {
 }
 
 function setActiveFreq(freq) {
-  cronFreqTabs.forEach((tab) => {
-    tab.classList.toggle("active", tab.dataset.freq === freq);
-  });
-  cronPanels.forEach((panel) => {
-    panel.classList.toggle("hidden", panel.dataset.panel !== freq);
-  });
+  cronFreqTabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.freq === freq));
+  cronPanels.forEach((panel) => panel.classList.toggle("hidden", panel.dataset.panel !== freq));
 }
 
 function getWeekdayValues() {
   if (!cronWeekdayBtns) return [];
-  const checked = [];
-  cronWeekdayBtns.forEach((btn) => {
-    const cb = btn.querySelector("input[type=checkbox]");
-    if (cb && cb.checked) {
-      checked.push(btn.dataset.day);
-    }
-  });
-  return checked;
+  return [...cronWeekdayBtns].filter((btn) => btn.querySelector("input[type=checkbox]")?.checked).map((btn) => btn.dataset.day);
 }
 
 function setWeekdayValues(values) {
   if (!cronWeekdayBtns) return;
-  cronWeekdayBtns.forEach((btn) => {
-    const cb = btn.querySelector("input[type=checkbox]");
-    if (cb) {
-      cb.checked = values.includes(btn.dataset.day);
-    }
-  });
+  cronWeekdayBtns.forEach((btn) => { btn.querySelector("input[type=checkbox]").checked = values.includes(btn.dataset.day); });
 }
 
 function simpleModeToCron() {
   const freq = getActiveFreq();
-  const minute = "0";
-  const hour = "9";
-  const day = "*";
-  const month = "*";
-  const weekday = "*";
-  let m = minute, h = hour, d = day, mo = month, w = weekday;
-
+  let m = "0", h = "9", d = "*", mo = "*", w = "*";
   switch (freq) {
     case "every-n-minutes": {
       const n = parseInt(cronSliderEveryN?.value, 10) || 5;
-      m = `*/${n}`;
-      h = "*";
-      d = "*";
-      break;
+      m = `*/${n}`; h = "*"; d = "*"; break;
     }
     case "hourly": {
-      const min = parseInt(cronSliderHourly?.value, 10) || 0;
-      m = `${min}`;
-      h = "*";
-      d = "*";
-      break;
+      m = `${parseInt(cronSliderHourly?.value, 10) || 0}`; h = "*"; d = "*"; break;
     }
     case "daily": {
-      const timeVal = cronDailyTime?.value || "09:00";
-      const parts = timeVal.split(":");
-      h = parseInt(parts[0], 10).toString();
-      m = parseInt(parts[1], 10).toString();
-      d = "*";
-      break;
+      const t = (cronDailyTime?.value || "09:00").split(":");
+      h = parseInt(t[0],10).toString(); m = parseInt(t[1],10).toString(); d = "*"; break;
     }
     case "weekly": {
-      const wTime = cronWeeklyTime?.value || "09:00";
-      const wParts = wTime.split(":");
-      h = parseInt(wParts[0], 10).toString();
-      m = parseInt(wParts[1], 10).toString();
+      const wt = (cronWeeklyTime?.value || "09:00").split(":");
+      h = parseInt(wt[0],10).toString(); m = parseInt(wt[1],10).toString();
       const days = getWeekdayValues();
-      w = days.length ? days.sort((a, b) => parseInt(a) - parseInt(b)).join(",") : "*";
-      d = "*";
-      break;
+      w = days.length ? days.sort((a,b)=>parseInt(a)-parseInt(b)).join(",") : "*"; d = "*"; break;
     }
     case "monthly": {
-      const mTime = cronMonthlyTime?.value || "09:00";
-      const mParts = mTime.split(":");
-      h = parseInt(mParts[0], 10).toString();
-      m = parseInt(mParts[1], 10).toString();
-      d = cronSliderMonthly?.value || "1";
-      break;
+      const mt = (cronMonthlyTime?.value || "09:00").split(":");
+      h = parseInt(mt[0],10).toString(); m = parseInt(mt[1],10).toString();
+      d = cronSliderMonthly?.value || "1"; break;
     }
   }
-
   return `${m} ${h} ${d} ${mo} ${w}`;
 }
 
 function syncSimpleFromCron(schedule) {
   const parts = splitCronExpression(schedule);
   if (!parts) {
-    // Reset simple mode to default (every 5 min)
     setActiveFreq("every-n-minutes");
-    if (cronSliderEveryN) cronSliderEveryN.value = "5";
-    if (cronEveryNDisplay) cronEveryNDisplay.textContent = "5";
-    if (cronSliderHourly) cronSliderHourly.value = "0";
-    if (cronHourlyDisplay) cronHourlyDisplay.textContent = "0";
-    if (cronSliderMonthly) cronSliderMonthly.value = "1";
-    if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = "1";
+    if (cronSliderEveryN) { cronSliderEveryN.value = "5"; if (cronEveryNDisplay) cronEveryNDisplay.textContent = "5"; }
+    if (cronSliderHourly) { cronSliderHourly.value = "0"; if (cronHourlyDisplay) cronHourlyDisplay.textContent = "0"; }
+    if (cronSliderMonthly) { cronSliderMonthly.value = "1"; if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = "1"; }
     if (cronDailyTime) cronDailyTime.value = "09:00";
     if (cronWeeklyTime) cronWeeklyTime.value = "09:00";
     if (cronMonthlyTime) cronMonthlyTime.value = "09:00";
-    setWeekdayValues(["1", "2", "3", "4", "5"]);
+    setWeekdayValues([]);
     return;
   }
+  const [min, hour, day, , weekday] = parts;
+  const minNum = parseInt(min, 10);
+  const hourNum = parseInt(hour, 10);
+  const dayNum = parseInt(day, 10);
 
-  const [pMinute, pHour, pDay, pMonth, pWeekday] = parts;
-
-  // Detect frequency pattern
-  const everyNMatch = pMinute.match(/^\*\/(\d+)$/);
-  if (everyNMatch && pHour === "*" && pDay === "*" && pMonth === "*" && pWeekday === "*") {
-    // every N minutes
+  if (min.startsWith("*/")) {
     setActiveFreq("every-n-minutes");
-    if (cronSliderEveryN) cronSliderEveryN.value = everyNMatch[1];
-    if (cronEveryNDisplay) cronEveryNDisplay.textContent = everyNMatch[1];
-    return;
-  }
-
-  const isSimpleMinute = /^\d+$/.test(pMinute);
-  if (isSimpleMinute && pHour === "*" && pDay === "*" && pMonth === "*" && pWeekday === "*") {
-    // hourly — at specific minute
+    const n = min.slice(2);
+    if (cronSliderEveryN) { cronSliderEveryN.value = n; if (cronEveryNDisplay) cronEveryNDisplay.textContent = n; }
+  } else if (hour === "*") {
     setActiveFreq("hourly");
-    if (cronSliderHourly) cronSliderHourly.value = pMinute;
-    if (cronHourlyDisplay) cronHourlyDisplay.textContent = pMinute;
-    return;
-  }
-
-  const isSimpleHour = /^\d+$/.test(pHour);
-  const isSimpleDay = /^\d+$/.test(pDay);
-  const noCommaWeekday = !pWeekday.includes(",");
-
-  if (isSimpleMinute && isSimpleHour && pDay === "*" && pMonth === "*" && pWeekday === "*") {
-    // daily
+    if (cronSliderHourly) { cronSliderHourly.value = String(minNum); if (cronHourlyDisplay) cronHourlyDisplay.textContent = String(minNum); }
+  } else if (day === "*" && !Number.isNaN(hourNum) && weekday === "*") {
     setActiveFreq("daily");
-    if (cronDailyTime) cronDailyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
-    return;
-  }
-
-  if (isSimpleMinute && isSimpleHour && pDay === "*" && pMonth === "*" && pWeekday !== "*") {
-    // weekly
+    if (cronDailyTime) cronDailyTime.value = `${String(hourNum).padStart(2,"0")}:${String(minNum).padStart(2,"0")}`;
+  } else if (day === "*" && !Number.isNaN(hourNum) && weekday !== "*") {
     setActiveFreq("weekly");
-    if (cronWeeklyTime) cronWeeklyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
-    const days = pWeekday.split(",").map((d) => d.trim()).filter(Boolean);
-    setWeekdayValues(days);
-    return;
-  }
-
-  if (isSimpleMinute && isSimpleHour && isSimpleDay && pMonth === "*" && pWeekday === "*") {
-    // monthly
+    if (cronWeeklyTime) cronWeeklyTime.value = `${String(hourNum).padStart(2,"0")}:${String(minNum).padStart(2,"0")}`;
+    setWeekdayValues(weekday.split(","));
+  } else if (!Number.isNaN(dayNum) && !Number.isNaN(hourNum)) {
     setActiveFreq("monthly");
-    if (cronMonthlyTime) cronMonthlyTime.value = `${pHour.padStart(2, "0")}:${pMinute.padStart(2, "0")}`;
-    if (cronSliderMonthly) cronSliderMonthly.value = pDay;
-    if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = pDay;
-    return;
+    if (cronSliderMonthly) { cronSliderMonthly.value = day; if (cronMonthlyDisplay) cronMonthlyDisplay.textContent = day; }
+    if (cronMonthlyTime) cronMonthlyTime.value = `${String(hourNum).padStart(2,"0")}:${String(minNum).padStart(2,"0")}`;
   }
-
-  // Fallback — can't parse, show every-n-minutes
-  setActiveFreq("every-n-minutes");
-  if (cronSliderEveryN) cronSliderEveryN.value = "5";
-  if (cronEveryNDisplay) cronEveryNDisplay.textContent = "5";
 }
 
 function syncAllCron() {
   if (cronSimpleMode) {
     scheduleInput.value = simpleModeToCron();
+  } else {
+    scheduleInput.value = composeCronFromBuilder();
   }
-  syncCronBuilderFromSchedule(scheduleInput.value);
 }
 
 function syncFromSchedule() {
   syncCronBuilderFromSchedule(scheduleInput.value);
-  syncSimpleFromCron(scheduleInput.value);
+  if (cronSimpleMode) syncSimpleFromCron(scheduleInput.value);
 }
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    window.setTimeout(resolve, ms);
-  });
-}
-
-function getLatestTaskLog(task) {
-  return Array.isArray(task?.logs) && task.logs.length ? task.logs[0] : null;
-}
-
-function getMostRelevantFailedLog(task) {
-  if (!Array.isArray(task?.logs) || !task.logs.length) {
-    return null;
-  }
-
-  const failedLog = task.logs.find((log) => log?.status === "failed");
-  return failedLog || task.logs[0];
-}
-
-function getMeaningfulErrorLine(text) {
-  const lines = String(text || "")
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => {
-      if (!line) {
-        return false;
-      }
-      if (/^[#><=\-`.\s]+$/.test(line)) {
-        return false;
-      }
-      if (/^#\s*>+/.test(line)) {
-        return false;
-      }
-      return true;
-    });
-
-  if (!lines.length) {
-    return "";
-  }
-
-  const preferredLine = lines.find((line) => {
-    const normalized = line.toLowerCase();
-    return (
-      normalized.includes("error") ||
-      normalized.includes("exception") ||
-      normalized.includes("traceback") ||
-      normalized.includes("failed") ||
-      normalized.includes("cannot") ||
-      normalized.includes("not found") ||
-      normalized.includes("无法") ||
-      normalized.includes("失败") ||
-      normalized.includes("未找到")
-    );
-  });
-
-  return preferredLine || lines[0];
-}
-
-function summarizeTaskError(log) {
-  const stderrLine = getMeaningfulErrorLine(log?.stderr || "");
-
-  if (stderrLine) {
-    return stderrLine;
-  }
-
-  const stdoutLine = getMeaningfulErrorLine(log?.stdout || "");
-  if (stdoutLine) {
-    return stdoutLine;
-  }
-
-  if (typeof log?.exitCode === "number" && log.exitCode !== 0) {
-    return `进程退出码 ${log.exitCode}`;
-  }
-
-  return "执行失败，但没有返回更多错误信息";
-}
-
-function buildManualRunFailureDetails(task) {
-  const failedLog = getMostRelevantFailedLog(task);
-  const summary = task.lastError || summarizeTaskError(failedLog);
-  const stderr = String(failedLog?.stderr || "").trim();
-  const stdout = String(failedLog?.stdout || "").trim();
-  const detail = stderr || stdout;
-
-  if (!detail || detail === summary) {
-    return `${task.name} 执行失败：${summary}`;
-  }
-
-  return [
-    `${task.name} 执行失败：${summary}`,
-    "",
-    "详细信息：",
-    detail,
-  ].join("\n");
-}
-
-function buildManualRunError(task) {
-  return buildManualRunFailureDetails(task);
-}
-
-async function waitForManualRunResult(taskId, previousLogId) {
-  const startedAt = Date.now();
-  let sawRunning = false;
-
-  while (Date.now() - startedAt < 120000) {
-    const task = await request(`/api/tasks/${taskId}`);
-    const latest = getLatestTaskLog(task);
-    const hasNewLog = latest && latest.id !== previousLogId;
-
-    if (task.running) {
-      sawRunning = true;
-    }
-
-    if (hasNewLog && !task.running) {
-      return task;
-    }
-
-    if (sawRunning && !task.running) {
-      return task;
-    }
-
-    await sleep(700);
-  }
-
-  return request(`/api/tasks/${taskId}`);
-}
-
-function detailRows(task) {
-  const commandLabel = task.commandPath || task.pythonPath || "-";
-
-  return [
-    ["执行方式", task.runnerType],
-    ["命令路径", commandLabel],
-    ["Conda 目标", task.condaTarget || "-"],
-    ["脚本", task.scriptPath],
-    ["参数", task.args || "-"],
-    ["时间参数", task.timeArgName ? `${task.timeArgName} ${task.timeArgValue || "(执行时当前时间)"}` : "-"],
-    ["目录", task.workingDirectory || "-"],
-    ["Cron", task.schedule],
-    ["启用", task.enabled ? "是" : "否"],
-    ["最近执行", task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"],
-    ["下次执行", task.nextRunAt ? formatDisplayTime(task.nextRunAt) : task.enabled ? "暂未计算" : "已暂停"],
-  ]
-    .map(([label, value]) => `<dt>${label}</dt><dd>${value}</dd>`)
-    .join("");
-}
+/* ─── API helpers ─────────────────────────────────────────────────── */
 
 async function request(url, options = {}) {
   const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json", ...options.headers },
     ...options,
   });
-
   if (!response.ok) {
-    const data = await response.json().catch(() => ({ error: "请求失败" }));
-    throw new Error(data.error || "请求失败");
+    let message = `请求失败 (${response.status})`;
+    try {
+      const body = await response.json();
+      if (body.error) message = body.error;
+    } catch (_) { /* ignore */ }
+    throw new Error(message);
   }
+  return response.status === 204 ? null : response.json();
+}
 
-  if (response.status === 204) {
-    return null;
+function getLatestTaskLog(task) {
+  return Array.isArray(task.logs) ? task.logs[0] : null;
+}
+
+function summarizeTaskError(log) {
+  if (log?.stderr) {
+    const lines = log.stderr.split(/\r?\n/).filter(Boolean);
+    return lines[lines.length - 1] || "执行失败";
   }
+  return "执行失败";
+}
 
-  return response.json();
+function buildManualRunError(task) {
+  const log = getLatestTaskLog(task);
+  return log ? `任务执行失败: ${log.stderr || log.stdout || "未知错误"}` : "任务执行失败";
+}
+
+async function waitForManualRunResult(taskId, previousLogId) {
+  const maxAttempts = 60;
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const task = await request(`/api/tasks/${taskId}`);
+    const latest = getLatestTaskLog(task);
+    if (latest && latest.id !== previousLogId) return task;
+  }
+  throw new Error("任务执行超时");
 }
 
 async function exportTasks() {
   const response = await fetch("/api/tasks-export");
-  if (!response.ok) {
-    throw new Error("导出任务失败");
-  }
-
+  if (!response.ok) throw new Error("导出失败");
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
-  const contentDisposition = response.headers.get("Content-Disposition") || "";
-  const fileNameMatch = contentDisposition.match(/filename="(.+)"/i);
-  const fileName = fileNameMatch ? fileNameMatch[1] : "weischeduler-tasks.json";
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `weischeduler-tasks-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
 async function importTasks(file) {
   const text = await file.text();
-  let payload;
-  try {
-    payload = JSON.parse(text);
-  } catch (_error) {
-    throw new Error("导入文件不是有效的 JSON");
-  }
-
+  const payload = JSON.parse(text);
+  const tasks = Array.isArray(payload) ? payload : payload.tasks;
   const result = await request("/api/tasks-import", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -688,102 +418,128 @@ async function triggerManualRun(taskId) {
   await request(`/api/tasks/${taskId}/run`, { method: "POST" });
   const task = await waitForManualRunResult(taskId, previousLogId);
   await loadTasks();
-
   const latest = getLatestTaskLog(task);
   if (latest?.id !== previousLogId && latest?.status === "failed") {
     throw new Error(buildManualRunError(task));
   }
 }
 
+/* ─── Render helpers ──────────────────────────────────────────────── */
+
+function getStatusData(task) {
+  if (task.running) return task.liveLog?.stopRequested ? "stopping" : "running";
+  return task.lastStatus || "never";
+}
+
+function getStatusLabel(task) {
+  const map = {
+    running: "运行中", stopping: "终止中", success: "成功",
+    failed: "失败", never: "未运行", stopped: "已暂停",
+  };
+  return map[getStatusData(task)] || task.lastStatus;
+}
+
+function detailRows(task) {
+  const rows = [
+    ["执行方式", task.runnerType === "python" ? "Python" : task.runnerType === "conda-name" ? "Conda 环境名" : "Conda 路径"],
+    ["脚本路径", task.scriptPath],
+  ];
+  if (task.commandPath) rows.push(["命令路径", task.commandPath]);
+  if (task.condaTarget) rows.push(["Conda 目标", task.condaTarget]);
+  if (task.args) rows.push(["启动参数", task.args]);
+  if (task.timeArgName) rows.push(["时间参数名", task.timeArgName]);
+  if (task.workingDirectory) rows.push(["工作目录", task.workingDirectory]);
+  rows.push(["Cron", task.schedule]);
+  return rows.map(([dt, dd]) => `<dt>${dt}</dt><dd>${dd}</dd>`).join("");
+}
+
+/* ─── Main render ─────────────────────────────────────────────────── */
+
 async function loadTasks() {
   const tasks = await request("/api/tasks");
   taskList.innerHTML = "";
   heroTotal.textContent = String(tasks.length);
-  heroRunning.textContent = String(tasks.filter((task) => task.running).length);
-  heroEnabled.textContent = String(tasks.filter((task) => task.enabled).length);
+  heroRunning.textContent = String(tasks.filter((t) => t.running).length);
+  heroEnabled.textContent = String(tasks.filter((t) => t.enabled).length);
 
   if (!tasks.length) {
-    taskList.innerHTML = '<div class="empty-state">还没有任务，先在左侧创建一个。</div>';
+    taskList.innerHTML = '<div class="empty-state">📋 还没有任务<br/>先在左侧创建一个吧</div>';
     return;
   }
 
   for (const task of tasks) {
     const node = taskTemplate.content.firstElementChild.cloneNode(true);
-    node.querySelector(".task-name").textContent = task.name;
-    node.querySelector(".task-frequency").textContent = describeSchedule(task.schedule);
-    const nextRunText = task.nextRunAt ? formatDisplayTime(task.nextRunAt) : task.enabled ? "暂未计算" : "已暂停";
-    const failedLog = getMostRelevantFailedLog(task);
-    const failureText = task.lastStatus === "failed" ? task.lastError || summarizeTaskError(failedLog) : "";
-    const metaEl = node.querySelector(".task-meta");
-    if (task.running) {
-      metaEl.innerHTML = `
-        <span class="task-meta-line"><span class="task-meta-label">触发方式</span> ${task.liveLog?.trigger || "manual"}</span>
-        <span class="task-meta-line"><span class="task-meta-label">开始于</span> ${formatDisplayTime(task.liveLog?.startedAt)}</span>
-        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
-      `.trim();
-    } else if (task.lastStatus === "failed") {
-      metaEl.innerHTML = `
-        <span class="task-meta-line task-meta-error">${failureText}</span>
-        <span class="task-meta-line"><span class="task-meta-label">最近执行</span> ${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"}</span>
-        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
-      `.trim();
-    } else {
-      metaEl.innerHTML = `
-        <span class="task-meta-line"><span class="task-meta-label">最近执行</span> ${task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行"}</span>
-        <span class="task-meta-line"><span class="task-meta-label">下次执行</span> ${nextRunText}</span>
-      `.trim();
+    const status = getStatusData(task);
+    const statusLabel = getStatusLabel(task);
+
+    // Status badge
+    const badge = node.querySelector(".task-status-badge");
+    badge.dataset.status = status;
+    badge.textContent = statusLabel;
+
+    // Name
+    node.querySelector(".task-card__name").textContent = task.name;
+
+    // Frequency pill
+    const freqEl = node.querySelector(".task-frequency");
+    freqEl.textContent = describeSchedule(task.schedule);
+
+    // Meta
+    node.querySelector(".meta-schedule").textContent = task.schedule;
+    node.querySelector(".meta-last-run").textContent = task.lastRunAt ? formatDisplayTime(task.lastRunAt) : "从未执行";
+    const nextRunText = task.nextRunAt ? formatDisplayTime(task.nextRunAt) : (task.enabled ? "暂未计算" : "已暂停");
+    node.querySelector(".meta-next-run").textContent = nextRunText;
+
+    // Error block
+    const errorBlock = node.querySelector(".task-card__error");
+    if (task.lastStatus === "failed" && (task.lastError || task.logs?.length)) {
+      const failedLog = task.logs?.find((l) => l?.status === "failed");
+      const errMsg = task.lastError || summarizeTaskError(failedLog);
+      if (errMsg) {
+        errorBlock.textContent = errMsg;
+        errorBlock.style.display = "block";
+      }
     }
 
-    const status = node.querySelector(".task-status");
-    const isRunning = task.running;
-    const statusText = isRunning ? (task.liveLog?.stopRequested ? "终止中" : "运行中") : task.lastStatus;
-    status.textContent = statusText;
-    status.className = "task-status";
-    if (isRunning) {
-      status.classList.add("running");
-    } else if (task.lastStatus === "failed") {
-      status.classList.add("failed");
-    } else if (task.lastStatus === "never") {
-      status.classList.add("never");
-    } else if (task.lastStatus === "stopped") {
-      status.classList.add("stopped");
-    } else {
-      status.classList.add("success");
-    }
+    // Detail grid
+    node.querySelector(".detail-grid").innerHTML = detailRows(task);
 
-    const toggleButton = node.querySelector(".action-toggle");
-    const startButton = node.querySelector(".action-start");
-    const pauseButton = node.querySelector(".action-pause");
-    const headStopButton = node.querySelector(".action-stop-head");
-    const runOnceButton = node.querySelector(".action-run-once");
-    const stopButton = node.querySelector(".action-stop");
-    const clearLogsButton = node.querySelector(".action-clear-logs");
+    // Log
+    node.querySelector(".log-content").textContent = renderLog(task);
+
+    // Toggle
     const isCollapsed = !expandedTaskIds.has(task.id);
     node.classList.toggle("collapsed", isCollapsed);
-    toggleButton.textContent = isCollapsed ? "展开详情" : "折叠详情";
-    startButton.disabled = task.enabled;
-    pauseButton.disabled = !task.enabled;
-    runOnceButton.disabled = task.running;
-    headStopButton.disabled = !task.running;
-    headStopButton.textContent = task.liveLog?.stopRequested ? "终止中" : "终止";
-    stopButton.disabled = !task.running;
-    stopButton.textContent = task.liveLog?.stopRequested ? "终止中..." : "终止任务";
-    clearLogsButton.disabled = !(task.logs && task.logs.length);
+    const toggleBtn = node.querySelector(".task-card__toggle");
+    const toggleText = toggleBtn.querySelector(".toggle-text");
+    toggleText.textContent = isCollapsed ? "展开详情" : "折叠详情";
 
-    node.querySelector(".task-detail").innerHTML = detailRows(task);
-    node.querySelector(".task-log").textContent = renderLog(task);
+    // Button states
+    const startBtn = node.querySelector(".action-start");
+    const pauseBtn = node.querySelector(".action-pause");
+    const runOnceBtn = node.querySelector(".action-run-once");
+    const headStopBtn = node.querySelector(".action-stop-head");
+    const stopBtn = node.querySelector(".action-stop");
+    const clearLogsBtn = node.querySelector(".action-clear-logs");
 
-    toggleButton.addEventListener("click", () => {
-      if (expandedTaskIds.has(task.id)) {
-        expandedTaskIds.delete(task.id);
-      } else {
-        expandedTaskIds.add(task.id);
-      }
-      loadTasks().catch((error) => {
-        taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
-      });
+    startBtn.disabled = task.enabled;
+    pauseBtn.disabled = !task.enabled;
+    runOnceBtn.disabled = task.running;
+    headStopBtn.disabled = !task.running;
+    headStopBtn.textContent = task.liveLog?.stopRequested ? "⏳" : "⏹";
+    stopBtn.disabled = !task.running;
+    stopBtn.textContent = task.liveLog?.stopRequested ? "终止中..." : "终止";
+    clearLogsBtn.disabled = !(task.logs && task.logs.length);
+
+    /* ─── Event listeners ─── */
+
+    toggleBtn.addEventListener("click", () => {
+      if (expandedTaskIds.has(task.id)) expandedTaskIds.delete(task.id);
+      else expandedTaskIds.add(task.id);
+      loadTasks().catch((err) => { taskList.innerHTML = `<div class="empty-state">${err.message}</div>`; });
     });
 
+    // Edit
     node.querySelector(".action-edit").addEventListener("click", () => {
       document.getElementById("task-id").value = task.id;
       document.getElementById("name").value = task.name;
@@ -799,83 +555,51 @@ async function loadTasks() {
       syncFromSchedule();
       document.getElementById("enabled").checked = task.enabled;
       updateRunnerFields();
-      formTitle.textContent = `编辑任务: ${task.name}`;
+      formTitle.textContent = `编辑: ${task.name}`;
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    startButton.addEventListener("click", async () => {
-      try {
-        await request(`/api/tasks/${task.id}/start`, { method: "POST" });
-        await loadTasks();
-      } catch (error) {
-        alert(error.message);
-      }
+    // Start / Pause
+    startBtn.addEventListener("click", async () => {
+      try { await request(`/api/tasks/${task.id}/start`, { method: "POST" }); await loadTasks(); }
+      catch (e) { alert(e.message); }
+    });
+    pauseBtn.addEventListener("click", async () => {
+      try { await request(`/api/tasks/${task.id}/pause`, { method: "POST" }); await loadTasks(); }
+      catch (e) { alert(e.message); }
     });
 
-    pauseButton.addEventListener("click", async () => {
-      try {
-        await request(`/api/tasks/${task.id}/pause`, { method: "POST" });
-        await loadTasks();
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    runOnceButton.addEventListener("click", async () => {
-      try {
-        await triggerManualRun(task.id);
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    node.querySelector(".action-run").addEventListener("click", async () => {
-      try {
-        await triggerManualRun(task.id);
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    const stopTask = async () => {
-      try {
-        await request(`/api/tasks/${task.id}/stop`, { method: "POST" });
-        await loadTasks();
-      } catch (error) {
-        alert(error.message);
-      }
+    // Run once (both buttons)
+    const runHandler = async () => {
+      try { await triggerManualRun(task.id); }
+      catch (e) { alert(e.message); }
     };
+    runOnceBtn.addEventListener("click", runHandler);
+    node.querySelector(".action-run").addEventListener("click", runHandler);
 
-    stopButton.addEventListener("click", stopTask);
-    headStopButton.addEventListener("click", stopTask);
+    // Stop
+    const stopHandler = async () => {
+      try { await request(`/api/tasks/${task.id}/stop`, { method: "POST" }); await loadTasks(); }
+      catch (e) { alert(e.message); }
+    };
+    stopBtn.addEventListener("click", stopHandler);
+    headStopBtn.addEventListener("click", stopHandler);
 
-    clearLogsButton.addEventListener("click", async () => {
-      const confirmed = window.confirm(`确认清除任务“${task.name}”的最近日志吗？`);
-      if (!confirmed) {
-        return;
-      }
-      try {
-        await request(`/api/tasks/${task.id}/logs`, { method: "DELETE" });
-        await loadTasks();
-      } catch (error) {
-        alert(error.message);
-      }
+    // Clear logs
+    clearLogsBtn.addEventListener("click", async () => {
+      if (!window.confirm(`确认清除"${task.name}"的日志？`)) return;
+      try { await request(`/api/tasks/${task.id}/logs`, { method: "DELETE" }); await loadTasks(); }
+      catch (e) { alert(e.message); }
     });
 
+    // Delete
     node.querySelector(".action-delete").addEventListener("click", async () => {
-      const confirmed = window.confirm(`确认删除任务“${task.name}”吗？`);
-      if (!confirmed) {
-        return;
-      }
+      if (!window.confirm(`确认删除"${task.name}"？`)) return;
       try {
         await request(`/api/tasks/${task.id}`, { method: "DELETE" });
-        if (document.getElementById("task-id").value === task.id) {
-          resetForm();
-        }
+        if (document.getElementById("task-id").value === task.id) resetForm();
         await loadTasks();
-      } catch (error) {
-        alert(error.message);
-      }
+      } catch (e) { alert(e.message); }
     });
 
     taskList.appendChild(node);
@@ -884,24 +608,18 @@ async function loadTasks() {
   scheduleAutoRefresh();
 }
 
+/* ─── Event wiring ────────────────────────────────────────────────── */
+
 taskForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const taskId = document.getElementById("task-id").value;
   const payload = formToPayload();
-
   try {
     if (taskId) {
-      await request(`/api/tasks/${taskId}`, {
-        method: "PUT",
-        body: JSON.stringify(payload),
-      });
+      await request(`/api/tasks/${taskId}`, { method: "PUT", body: JSON.stringify(payload) });
     } else {
-      await request("/api/tasks", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      await request("/api/tasks", { method: "POST", body: JSON.stringify(payload) });
     }
-
     resetForm();
     await loadTasks();
   } catch (error) {
@@ -911,88 +629,59 @@ taskForm.addEventListener("submit", async (event) => {
 
 resetButton.addEventListener("click", resetForm);
 refreshButton.addEventListener("click", loadTasks);
-autoRefreshEnabledInput.addEventListener("change", () => {
-  persistAutoRefreshPreferences();
-  scheduleAutoRefresh();
-});
-autoRefreshIntervalInput.addEventListener("change", () => {
-  persistAutoRefreshPreferences();
-  scheduleAutoRefresh();
-});
+autoRefreshEnabledInput.addEventListener("change", () => { persistAutoRefreshPreferences(); scheduleAutoRefresh(); });
+autoRefreshIntervalInput.addEventListener("change", () => { persistAutoRefreshPreferences(); scheduleAutoRefresh(); });
+
 exportButton.addEventListener("click", async () => {
-  try {
-    await exportTasks();
-  } catch (error) {
-    alert(error.message);
-  }
+  try { await exportTasks(); } catch (e) { alert(e.message); }
 });
-importButton.addEventListener("click", () => {
-  importFileInput.click();
-});
+importButton.addEventListener("click", () => importFileInput.click());
 importFileInput.addEventListener("change", async (event) => {
   const [file] = event.target.files || [];
-  if (!file) {
-    return;
-  }
-
+  if (!file) return;
   try {
     const imported = await importTasks(file);
     alert(`已导入 ${imported} 个任务`);
     await loadTasks();
-  } catch (error) {
-    alert(error.message);
+  } catch (e) {
+    alert(e.message);
   } finally {
     importFileInput.value = "";
   }
 });
-document.getElementById("runnerType").addEventListener("change", updateRunnerFields);
-cronPartInputs.forEach((input) => {
-  input.addEventListener("input", () => {
-    if (!cronSimpleMode) {
-      scheduleInput.value = composeCronFromBuilder();
-    }
-  });
-});
-scheduleInput.addEventListener("input", () => {
-  syncFromSchedule();
-});
 
-/* ==============================
-   Cron mode tab switching
-   ============================== */
+document.getElementById("runnerType").addEventListener("change", updateRunnerFields);
+
+cronPartInputs.forEach((input) => {
+  input.addEventListener("input", () => { if (!cronSimpleMode) scheduleInput.value = composeCronFromBuilder(); });
+});
+scheduleInput.addEventListener("input", syncFromSchedule);
+
+/* ─── Cron mode tabs ─────────────────────────────────────────────── */
 
 cronModeTabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     cronSimpleMode = tab.dataset.mode === "simple";
-    cronModeTabs.forEach((t) => t.classList.toggle("active", t === tab));
+    cronModeTabs.forEach((t) => {
+      t.classList.toggle("active", t === tab);
+      t.setAttribute("aria-selected", t === tab ? "true" : "false");
+    });
     cronSimple.classList.toggle("hidden", !cronSimpleMode);
     cronAdvanced.classList.toggle("hidden", cronSimpleMode);
-    if (cronSimpleMode) {
-      syncSimpleFromCron(scheduleInput.value);
-    }
+    if (cronSimpleMode) syncSimpleFromCron(scheduleInput.value);
   });
 });
 
-/* ==============================
-   Cron frequency tab switching
-   ============================== */
+/* ─── Cron freq tabs ─────────────────────────────────────────────── */
 
 cronFreqTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    setActiveFreq(tab.dataset.freq);
-    syncAllCron();
-  });
+  tab.addEventListener("click", () => { setActiveFreq(tab.dataset.freq); syncAllCron(); });
 });
 
-/* ==============================
-   Simple mode control listeners
-   ============================== */
+/* ─── Simple mode controls ───────────────────────────────────────── */
 
-function onSimpleChange() {
-  syncAllCron();
-}
+function onSimpleChange() { syncAllCron(); }
 
-// Sliders
 if (cronSliderEveryN) {
   cronSliderEveryN.addEventListener("input", () => {
     if (cronEveryNDisplay) cronEveryNDisplay.textContent = cronSliderEveryN.value;
@@ -1012,27 +701,25 @@ if (cronSliderMonthly) {
   });
 }
 
-// Time inputs
 if (cronDailyTime) cronDailyTime.addEventListener("change", onSimpleChange);
 if (cronWeeklyTime) cronWeeklyTime.addEventListener("change", onSimpleChange);
 if (cronMonthlyTime) cronMonthlyTime.addEventListener("change", onSimpleChange);
 
-// Weekday checkboxes
 if (cronWeekdayBtns) {
   cronWeekdayBtns.forEach((btn) => {
     const cb = btn.querySelector("input[type=checkbox]");
-    if (cb) {
-      cb.addEventListener("change", onSimpleChange);
-    }
+    if (cb) cb.addEventListener("change", onSimpleChange);
   });
 }
-document.querySelectorAll(".cron-preset").forEach((button) => {
+
+document.querySelectorAll(".cron-presets .btn--chip").forEach((button) => {
   button.addEventListener("click", () => {
     scheduleInput.value = button.dataset.cron || "";
     syncFromSchedule();
-    scheduleInput.focus();
   });
 });
+
+/* ─── Init ────────────────────────────────────────────────────────── */
 
 hydrateAutoRefreshPreferences();
 updateRunnerFields();
@@ -1041,23 +728,15 @@ loadTasks().catch((error) => {
   taskList.innerHTML = `<div class="empty-state">${error.message}</div>`;
 });
 
-// ==============================
-// 🌸 主题切换 — 豆蔻少女皮肤系统
-// ==============================
+/* ─── Theme system ────────────────────────────────────────────────── */
+
 (function () {
   const themeAPI = window.__theme;
   if (!themeAPI) return;
 
-  // Apply theme: set data-theme on <html>, load/unload skin CSS
   function applyTheme(name) {
     document.documentElement.dataset.theme = name;
-
-    // Remove any previously loaded skin CSS
-    document.querySelectorAll('link[data-skin]').forEach(function (el) {
-      el.remove();
-    });
-
-    // Load the skin CSS file dynamically
+    document.querySelectorAll('link[data-skin]').forEach(function (el) { el.remove(); });
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = '/skins/' + name + '.css';
@@ -1065,13 +744,6 @@ loadTasks().catch((error) => {
     document.head.appendChild(link);
   }
 
-  // Listen for theme changes from the main process (menu)
-  themeAPI.onThemeChanged(function (name) {
-    applyTheme(name);
-  });
-
-  // Also fetch the current theme on startup (in case ready-to-show fires before we're ready)
-  themeAPI.getTheme().then(function (name) {
-    applyTheme(name);
-  });
+  themeAPI.onThemeChanged(function (name) { applyTheme(name); });
+  themeAPI.getTheme().then(function (name) { applyTheme(name); });
 })();

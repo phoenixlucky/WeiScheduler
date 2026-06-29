@@ -655,7 +655,7 @@ async function runTask(taskId, trigger) {
       exitCode: -1,
     });
 
-    appendRunLog(taskId, {
+    await appendRunLog(taskId, {
       id: `run_${Date.now()}`,
       trigger,
       startedAt,
@@ -669,7 +669,7 @@ async function runTask(taskId, trigger) {
     });
 
     const updatedTask = getTask(taskId);
-    saveTask({
+    await saveTask({
       ...updatedTask,
       lastRunAt: finishedAt,
       lastStatus: "failed",
@@ -732,28 +732,30 @@ async function runTask(taskId, trigger) {
             })
           : "";
 
-      appendRunLog(taskId, {
-        id: `run_${Date.now()}`,
-        trigger,
-        startedAt,
-        finishedAt,
-        exitCode: code,
-        status,
-        command: execution.command,
-        commandArgs: execution.args,
-        stdout: stdout.trim(),
-        stderr: stderr.trim(),
-      });
+      (async () => {
+        await appendRunLog(taskId, {
+          id: `run_${Date.now()}`,
+          trigger,
+          startedAt,
+          finishedAt,
+          exitCode: code,
+          status,
+          command: execution.command,
+          commandArgs: execution.args,
+          stdout: stdout.trim(),
+          stderr: stderr.trim(),
+        });
 
-      saveTask({
-        ...getTask(taskId),
-        lastRunAt: finishedAt,
-        lastStatus: status,
-        lastError,
-      });
+        await saveTask({
+          ...getTask(taskId),
+          lastRunAt: finishedAt,
+          lastStatus: status,
+          lastError,
+        });
 
-      clearActiveRun(taskId);
-      resolve();
+        clearActiveRun(taskId);
+        resolve();
+      })();
     });
 
     child.on("error", (error) => {
@@ -773,28 +775,30 @@ async function runTask(taskId, trigger) {
             })
           : "";
 
-      appendRunLog(taskId, {
-        id: `run_${Date.now()}`,
-        trigger,
-        startedAt,
-        finishedAt,
-        exitCode: -1,
-        status,
-        command: execution.command,
-        commandArgs: execution.args,
-        stdout: stdout.trim(),
-        stderr: mergedStderr,
-      });
+      (async () => {
+        await appendRunLog(taskId, {
+          id: `run_${Date.now()}`,
+          trigger,
+          startedAt,
+          finishedAt,
+          exitCode: -1,
+          status,
+          command: execution.command,
+          commandArgs: execution.args,
+          stdout: stdout.trim(),
+          stderr: mergedStderr,
+        });
 
-      saveTask({
-        ...getTask(taskId),
-        lastRunAt: finishedAt,
-        lastStatus: status,
-        lastError,
-      });
+        await saveTask({
+          ...getTask(taskId),
+          lastRunAt: finishedAt,
+          lastStatus: status,
+          lastError,
+        });
 
-      clearActiveRun(taskId);
-      resolve();
+        clearActiveRun(taskId);
+        resolve();
+      })();
     });
   });
 }
@@ -1040,6 +1044,9 @@ module.exports = {
 };
 
 if (require.main === module) {
+  if (!process.env.WEISCHEDULER_DATA_DIR) {
+    process.env.WEISCHEDULER_DATA_DIR = __dirname;
+  }
   startServer().catch((error) => {
     console.error(`Failed to start server: ${error.message}`);
     process.exit(1);
