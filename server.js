@@ -54,17 +54,17 @@ function normalizeTask(payload) {
   if (!task.name) {
     throw new Error("任务名称不能为空");
   }
-  if (!["python", "conda-name", "conda-path"].includes(task.runnerType)) {
+  if (!["python", "conda-name", "conda-path", "cmd"].includes(task.runnerType)) {
     throw new Error("执行方式无效");
   }
   if (task.runnerType === "python" && !task.commandPath) {
     throw new Error("Python 环境路径不能为空");
   }
-  if (task.runnerType !== "python" && !task.condaTarget) {
+  if (task.runnerType.startsWith("conda") && !task.condaTarget) {
     throw new Error(task.runnerType === "conda-name" ? "Conda 环境名不能为空" : "Conda 环境路径不能为空");
   }
   if (!task.scriptPath) {
-    throw new Error("Python 脚本路径不能为空");
+    throw new Error(task.runnerType === "cmd" ? "CMD 命令不能为空" : "Python 脚本路径不能为空");
   }
   if (!task.schedule || !cron.validate(task.schedule)) {
     throw new Error("Cron 表达式无效");
@@ -296,6 +296,30 @@ function formatTimeArgValue(value) {
     return `${value}:00`;
   }
   return value;
+}
+
+function quoteCmdToken(value) {
+  const text = String(value || "");
+  if (!text || /^[^&|<>()^"\s]+$/.test(text)) {
+    return text;
+  }
+  return `"${text.replace(/"/g, '\\"')}"`;
+}
+
+function buildCmdLine(task, timeArgs) {
+  const commandText = stripWrappingQuotes(task.scriptPath);
+  const looksLikeFile = /\.(bat|cmd|exe)$/i.test(commandText);
+  const command = fs.existsSync(commandText) || looksLikeFile ? quoteCmdToken(commandText) : commandText;
+  const rawArgs = String(task.args || "").trim();
+  return [command, rawArgs, ...timeArgs.map(quoteCmdToken)].filter(Boolean).join(" ");
+}
+
+function getTaskWorkingDirectory(task) {
+  if (task.workingDirectory) {
+    return task.workingDirectory;
+  }
+  const scriptPath = stripWrappingQuotes(task.scriptPath);
+  return fs.existsSync(scriptPath) ? path.dirname(scriptPath) : process.cwd();
 }
 
 function getErrorSummary({ stderr, stdout, exitCode, fallbackMessage }) {
@@ -561,6 +585,13 @@ function buildExecution(task) {
     : [];
   const scriptArgs = [task.scriptPath, ...baseArgs, ...timeArgs];
 
+  if (task.runnerType === "cmd") {
+    return {
+      command: process.platform === "win32" ? "cmd.exe" : "cmd",
+      args: ["/d", "/s", "/c", buildCmdLine(task, timeArgs)],
+    };
+  }
+
   if (task.runnerType === "conda-name") {
     try {
       return {
@@ -679,7 +710,7 @@ async function runTask(taskId, trigger) {
   }
 
   const child = spawn(execution.command, execution.args, {
-    cwd: task.workingDirectory || path.dirname(task.scriptPath),
+    cwd: getTaskWorkingDirectory(task),
     windowsHide: true,
     env: {
       ...process.env,
@@ -1041,6 +1072,10 @@ function stopServer() {
 module.exports = {
   startServer,
   stopServer,
+  _private: {
+    buildExecution,
+    normalizeTask,
+  },
 };
 
 if (require.main === module) {

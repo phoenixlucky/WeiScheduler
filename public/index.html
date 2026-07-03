@@ -19,7 +19,7 @@
         <div class="hero-inner">
           <div class="hero-brand">
             <h1 class="hero-title">尉定时任务</h1>
-            <p class="hero-tagline">选择 Python 环境与 Cron 表达式，轻松调度脚本执行</p>
+            <p class="hero-tagline">选择执行方式与 Cron 表达式，轻松调度脚本或 CMD 命令</p>
           </div>
           <div class="hero-stats">
             <div class="stat-chip">
@@ -66,7 +66,7 @@
                 <input id="name" name="name" class="input" placeholder="例如：日报生成" required />
               </div>
               <div class="field">
-                <label class="field-label" for="scriptPath">脚本路径</label>
+                <label class="field-label" id="script-path-label" for="scriptPath">脚本路径</label>
                 <input id="scriptPath" name="scriptPath" class="input" placeholder="例如：D:\jobs\report.py" required />
               </div>
               <div class="field-row">
@@ -89,6 +89,7 @@
                   <option value="python">直接调用 Python</option>
                   <option value="conda-name">Conda 环境名</option>
                   <option value="conda-path">Conda 环境路径</option>
+                  <option value="cmd">CMD / BAT 命令</option>
                 </select>
               </div>
               <div id="command-path-row" class="field">

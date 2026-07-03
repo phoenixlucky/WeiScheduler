@@ -1,8 +1,8 @@
 # 🌸 WeiScheduler（尉定时任务调度器）
 
-> **A lightweight, local-first Python task scheduler with a dreamy anime-style UI**
+> **A lightweight, local-first script scheduler with a dreamy anime-style UI**
 >
-> 一个轻量级、本地优先的 Python 定时任务调度器，拥有多套精美主题皮肤。
+> 一个轻量级、本地优先的脚本 / CMD 定时任务调度器，拥有多套精美主题皮肤。
 
 ---
 
@@ -17,7 +17,7 @@
 | 🏯 **秦帝国黑金** | 帝国威严·青铜纹理 | 玄黑 · 暗金 · 青铜绿 |
 | 🔮 **魔女炼金** | 神秘幻想·古典魔法 | 深紫 · 暗金 · 月光银 |
 
-当前版本：**`1.4.0`**
+当前版本：**`1.7.0`**
 
 ---
 
@@ -63,10 +63,10 @@ npm run dist
 | 字段 | 说明 |
 |------|------|
 | 任务名称 | 自定义任务标识，例如「日报生成」 |
-| 执行方式 | 直接 Python / Conda 环境名 / Conda 环境路径 |
+| 执行方式 | 直接 Python / Conda 环境名 / Conda 环境路径 / CMD 或 BAT |
 | Python / Conda 命令路径 | Python 模式必填 `python.exe`；Conda 模式选填 |
 | Conda 环境名或路径 | Conda 模式必填 |
-| 脚本路径 | 需要执行的 `.py` 文件路径 |
+| 脚本路径 / CMD 命令 | Python/Conda 填 `.py` 文件路径；CMD 模式填命令文本或 `.bat` / `.cmd` 路径 |
 | 启动参数 | 可选，例如 `--date "2026-03-19"` |
 | 时间参数名/值 | 可选，执行时自动追加到命令行 |
 | 工作目录 | 可选，默认脚本所在目录 |

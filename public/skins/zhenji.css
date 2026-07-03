@@ -40,8 +40,8 @@ body[data-theme="zhenji"] {
   color: var(--text);
   background:
     linear-gradient(
-      rgba(232, 234, 240, 0.72),
-      rgba(232, 234, 240, 0.72)
+      rgba(232, 234, 240, 0.50),
+      rgba(232, 234, 240, 0.50)
     ),
     url('/甄姬背景.webp') center center / cover no-repeat fixed;
 }

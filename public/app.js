@@ -129,22 +129,35 @@ function updateRunnerFields() {
   const commandPathRow = document.getElementById("command-path-row");
   const commandPath = document.getElementById("commandPath");
   const condaTarget = document.getElementById("condaTarget");
-  const label = document.getElementById("command-path-label");
+  const commandPathLabel = document.getElementById("command-path-label");
+  const scriptPathLabel = document.getElementById("script-path-label");
+  const scriptPath = document.getElementById("scriptPath");
 
   if (runnerType === "python") {
     commandPathRow.style.display = "";
     condaRow.style.display = "none";
     commandPath.required = true;
     commandPath.placeholder = "例如：D:\\miniconda3\\envs\\py3143\\python.exe";
-    label.textContent = "Python 路径";
+    commandPathLabel.textContent = "Python 路径";
     condaTarget.required = false;
+    scriptPathLabel.textContent = "脚本路径";
+    scriptPath.placeholder = "例如：D:\\jobs\\report.py";
+  } else if (runnerType === "cmd") {
+    commandPathRow.style.display = "none";
+    condaRow.style.display = "none";
+    commandPath.required = false;
+    condaTarget.required = false;
+    scriptPathLabel.textContent = "CMD 命令或 BAT 路径";
+    scriptPath.placeholder = "例如：D:\\jobs\\run.bat 或 echo hello";
   } else {
     commandPathRow.style.display = "";
     condaRow.style.display = "";
     commandPath.required = false;
     commandPath.placeholder = "可选：Miniconda 根目录或 conda.exe 路径";
-    label.textContent = "Conda 命令路径";
+    commandPathLabel.textContent = "Conda 命令路径";
     condaTarget.required = true;
+    scriptPathLabel.textContent = "脚本路径";
+    scriptPath.placeholder = "例如：D:\\jobs\\report.py";
   }
 }
 
@@ -440,9 +453,15 @@ function getStatusLabel(task) {
 }
 
 function detailRows(task) {
+  const runnerLabel = {
+    python: "Python",
+    "conda-name": "Conda 环境名",
+    "conda-path": "Conda 路径",
+    cmd: "CMD / BAT",
+  }[task.runnerType] || task.runnerType;
   const rows = [
-    ["执行方式", task.runnerType === "python" ? "Python" : task.runnerType === "conda-name" ? "Conda 环境名" : "Conda 路径"],
-    ["脚本路径", task.scriptPath],
+    ["执行方式", runnerLabel],
+    [task.runnerType === "cmd" ? "CMD 命令" : "脚本路径", task.scriptPath],
   ];
   if (task.commandPath) rows.push(["命令路径", task.commandPath]);
   if (task.condaTarget) rows.push(["Conda 目标", task.condaTarget]);
