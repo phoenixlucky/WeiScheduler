@@ -407,3 +407,147 @@ body[data-theme="deep-dream"] {
   font-weight: 300;
   letter-spacing: 0.08em;
 }
+
+/* ═══ v1.6+ 结构适配与强化（新类名） ═══ */
+
+/* Hero logo — 深海珠光 */
+[data-theme="deep-dream"] .hero-logo {
+  background: linear-gradient(145deg, #88ddff 0%, #44aadd 45%, #1a5580 100%);
+  box-shadow: 0 10px 26px rgba(0, 80, 140, 0.35), 0 0 24px rgba(100, 210, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="deep-dream"] .hero-title {
+  font-weight: 300;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="deep-dream"] .hero-tagline {
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+/* 面板标题 — 轻量呼吸感 */
+[data-theme="deep-dream"] .panel-title {
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+}
+
+/* 表单分组标题 */
+[data-theme="deep-dream"] .fieldset-legend {
+  background: rgba(100, 210, 255, 0.08);
+  color: var(--gold);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+}
+
+[data-theme="deep-dream"] .fieldset-legend::before {
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(100, 210, 255, 0.5);
+}
+
+/* 主按钮 — 深海渐变 */
+[data-theme="deep-dream"] .btn--primary {
+  background: linear-gradient(135deg, #3399cc 0%, #1a5580 100%);
+  box-shadow: 0 12px 24px rgba(0, 60, 100, 0.35), 0 0 20px rgba(100, 210, 255, 0.06);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="deep-dream"] .btn--primary:hover {
+  box-shadow: 0 16px 32px rgba(0, 60, 100, 0.4), 0 0 28px rgba(100, 210, 255, 0.1);
+}
+
+/* 状态徽章 */
+[data-theme="deep-dream"] .task-status-badge[data-status="running"] {
+  background: rgba(68, 221, 187, 0.08);
+  color: var(--success);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="running"]::before {
+  background: var(--success);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="success"] {
+  background: rgba(100, 210, 255, 0.08);
+  color: var(--gold);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="success"]::before {
+  background: var(--primary);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="failed"] {
+  background: rgba(255, 102, 136, 0.08);
+  color: var(--danger);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="failed"]::before {
+  background: var(--danger);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="never"] {
+  background: rgba(100, 210, 255, 0.04);
+  color: var(--muted);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="never"]::before {
+  background: var(--muted);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="stopped"],
+[data-theme="deep-dream"] .task-status-badge[data-status="stopping"] {
+  background: rgba(255, 170, 85, 0.08);
+  color: var(--gold);
+}
+[data-theme="deep-dream"] .task-status-badge[data-status="stopped"]::before,
+[data-theme="deep-dream"] .task-status-badge[data-status="stopping"]::before {
+  background: var(--gold);
+}
+
+/* 日志终端 — 深海墨色 */
+[data-theme="deep-dream"] .log-content {
+  background: linear-gradient(180deg, #030d1e 0%, #010410 100%);
+  color: #7fa8cc;
+  border: 1px solid rgba(100, 210, 255, 0.05);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="deep-dream"] .log-title {
+  color: var(--gold);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+/* 任务名 */
+[data-theme="deep-dream"] .task-card__name {
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* 元数据竖条 */
+[data-theme="deep-dream"] .task-meta-line {
+  border-left-color: rgba(100, 210, 255, 0.14);
+}
+[data-theme="deep-dream"] .task-meta-line:first-child {
+  border-left-color: var(--primary);
+}
+
+/* 复选框 / 开关 */
+[data-theme="deep-dream"] .checkbox-field input[type="checkbox"],
+[data-theme="deep-dream"] .toolbar-toggle input {
+  accent-color: var(--primary);
+}
+
+/* 展开按钮 */
+[data-theme="deep-dream"] .task-card__toggle:hover {
+  background: rgba(100, 210, 255, 0.05);
+  color: var(--gold);
+}
+
+/* 危险按钮 */
+[data-theme="deep-dream"] .btn--danger {
+  background: rgba(255, 102, 136, 0.08);
+  border-color: rgba(255, 102, 136, 0.12);
+  color: var(--danger);
+}
+
+/* 帮助文案 */
+[data-theme="deep-dream"] .field-hint {
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}

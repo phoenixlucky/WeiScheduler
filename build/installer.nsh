@@ -1,3 +1,12 @@
+; 拉伸安装界面位图以适配显示区域（对标准尺寸无影响，支持更高清位图）
+; 注意：这两个宏必须带有效值（MUI2 会用 ${...} 展开后作为宏参数传递），不能空定义
+!ifndef MUI_WELCOMEFINISHPAGE_BITMAP_STRETCH
+  !define MUI_WELCOMEFINISHPAGE_BITMAP_STRETCH "FitControl"
+!endif
+!ifndef MUI_HEADERIMAGE_BITMAP_STRETCH
+  !define MUI_HEADERIMAGE_BITMAP_STRETCH "FitControl"
+!endif
+
 !macro SetLocalizedInstallerStrings
   StrCpy $R7 "WeiScheduler"
   StrCpy $R8 "WeiScheduler"

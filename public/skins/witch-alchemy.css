@@ -461,3 +461,195 @@ body[data-theme="witch-alchemy"] {
 [data-theme="witch-alchemy"] .cron-mode-tab {
   font-family: "Noto Sans SC", sans-serif;
 }
+
+/* ═══ v1.6+ 结构适配与强化（新类名） ═══ */
+
+/* Hero logo — 炼金符印 */
+[data-theme="witch-alchemy"] .hero-logo {
+  background: linear-gradient(145deg, #3a2048 0%, #28183a 55%, #180e28 100%);
+  border: 1px solid rgba(200, 160, 220, 0.25);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 128, 208, 0.08),
+    inset 0 0 16px rgba(200, 160, 220, 0.05);
+}
+
+[data-theme="witch-alchemy"] .hero-logo__glyph {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 1.45rem;
+}
+
+[data-theme="witch-alchemy"] .hero-title {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="witch-alchemy"] .hero-tagline {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--gold);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+/* 面板标题 */
+[data-theme="witch-alchemy"] .panel-title {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+}
+
+/* 表单分组标题 — 羊皮纸题字 */
+[data-theme="witch-alchemy"] .fieldset-legend {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  background: rgba(200, 140, 80, 0.07);
+  border: 1px solid rgba(200, 140, 80, 0.1);
+  text-transform: none;
+}
+
+[data-theme="witch-alchemy"] .fieldset-legend::before {
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(200, 140, 80, 0.5);
+}
+
+/* 表单标签 */
+[data-theme="witch-alchemy"] .field-label {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* 主按钮 — 暗紫法阵 */
+[data-theme="witch-alchemy"] .btn--primary {
+  background: linear-gradient(135deg, #3a2048 0%, #28183a 100%);
+  color: var(--primary);
+  border: 1px solid rgba(200, 160, 220, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="witch-alchemy"] .btn--primary:hover {
+  background: linear-gradient(135deg, #4a2858 0%, #3a2048 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 22px rgba(192, 128, 208, 0.08);
+}
+
+/* 状态徽章 */
+[data-theme="witch-alchemy"] .task-status-badge {
+  font-family: "Noto Sans SC", sans-serif;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="witch-alchemy"] .task-status-badge[data-status="running"] {
+  background: rgba(128, 176, 144, 0.08);
+  color: var(--success);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="running"]::before {
+  background: var(--success);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="success"] {
+  background: rgba(200, 160, 220, 0.08);
+  color: var(--primary);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="success"]::before {
+  background: var(--primary);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="failed"] {
+  background: rgba(208, 96, 112, 0.08);
+  color: var(--danger);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="failed"]::before {
+  background: var(--danger);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="never"] {
+  background: rgba(200, 160, 220, 0.04);
+  color: var(--muted);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="never"]::before {
+  background: var(--muted);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="stopped"],
+[data-theme="witch-alchemy"] .task-status-badge[data-status="stopping"] {
+  background: rgba(200, 140, 80, 0.06);
+  color: var(--gold);
+}
+[data-theme="witch-alchemy"] .task-status-badge[data-status="stopped"]::before,
+[data-theme="witch-alchemy"] .task-status-badge[data-status="stopping"]::before {
+  background: var(--gold);
+}
+
+/* 任务名 */
+[data-theme="witch-alchemy"] .task-card__name {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* 日志终端 — 墨紫炼金釜 */
+[data-theme="witch-alchemy"] .log-content {
+  background: linear-gradient(180deg, #080410 0%, #040208 100%);
+  color: #b098b8;
+  border: 1px solid rgba(200, 160, 220, 0.04);
+  font-family: "Noto Sans SC", sans-serif;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="witch-alchemy"] .log-title {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* 详情网格 */
+[data-theme="witch-alchemy"] .detail-grid dt {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--muted);
+}
+
+/* 元数据竖条 */
+[data-theme="witch-alchemy"] .task-meta-line {
+  border-left-color: rgba(200, 160, 220, 0.12);
+}
+[data-theme="witch-alchemy"] .task-meta-line:first-child {
+  border-left-color: var(--primary);
+}
+
+/* 复选框 / 开关 */
+[data-theme="witch-alchemy"] .checkbox-field input[type="checkbox"],
+[data-theme="witch-alchemy"] .toolbar-toggle input {
+  accent-color: var(--primary);
+}
+
+/* 展开按钮 */
+[data-theme="witch-alchemy"] .task-card__toggle {
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="witch-alchemy"] .task-card__toggle:hover {
+  background: rgba(192, 128, 208, 0.05);
+  color: var(--primary);
+}
+
+/* 危险按钮 */
+[data-theme="witch-alchemy"] .btn--danger {
+  background: rgba(208, 96, 112, 0.08);
+  border-color: rgba(208, 96, 112, 0.14);
+  color: var(--danger);
+}
+
+/* 帮助文案 */
+[data-theme="witch-alchemy"] .field-hint {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--muted);
+}

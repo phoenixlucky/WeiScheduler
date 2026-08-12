@@ -534,3 +534,220 @@ body[data-theme="hackers-terminal"] {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.78rem;
 }
+
+/* ═══ v1.6+ 结构适配与强化（新类名） ═══ */
+
+/* Hero logo — 终端徽标 */
+[data-theme="hackers-terminal"] .hero-logo {
+  background: #000;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.12), inset 0 0 14px rgba(0, 255, 65, 0.05);
+}
+
+[data-theme="hackers-terminal"] .hero-logo__glyph {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  color: var(--primary);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  font-size: 1.2rem;
+}
+
+[data-theme="hackers-terminal"] .hero-title {
+  font-family: "JetBrains Mono", "Noto Sans SC", monospace;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="hackers-terminal"] .hero-tagline {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+/* 面板标题 — 终端提示符风格 */
+[data-theme="hackers-terminal"] .panel-title {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+/* 表单分组标题 */
+[data-theme="hackers-terminal"] .fieldset-legend {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(0, 255, 65, 0.06);
+  color: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.08);
+  border-radius: 4px;
+}
+
+[data-theme="hackers-terminal"] .fieldset-legend::before {
+  background: var(--primary);
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
+}
+
+/* 表单标签 — 终端大写提示 */
+[data-theme="hackers-terminal"] .field-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* 主按钮 — 终端描边 */
+[data-theme="hackers-terminal"] .btn--primary {
+  background: #000;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 400;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.06), inset 0 0 20px rgba(0, 255, 65, 0.02);
+}
+
+[data-theme="hackers-terminal"] .btn--primary:hover {
+  background: rgba(0, 255, 65, 0.05);
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.12), inset 0 0 30px rgba(0, 255, 65, 0.03);
+}
+
+/* 状态徽章 — 终端风格 */
+[data-theme="hackers-terminal"] .task-status-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="hackers-terminal"] .task-status-badge[data-status="running"] {
+  background: rgba(0, 255, 136, 0.07);
+  color: var(--success);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="running"]::before {
+  background: var(--success);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="success"] {
+  background: rgba(0, 255, 65, 0.07);
+  color: var(--primary);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="success"]::before {
+  background: var(--primary);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="failed"] {
+  background: rgba(255, 51, 85, 0.07);
+  color: var(--danger);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="failed"]::before {
+  background: var(--danger);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="never"] {
+  background: rgba(0, 255, 65, 0.04);
+  color: var(--muted);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="never"]::before {
+  background: var(--muted);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="stopped"],
+[data-theme="hackers-terminal"] .task-status-badge[data-status="stopping"] {
+  background: rgba(0, 220, 60, 0.05);
+  color: var(--gold);
+}
+[data-theme="hackers-terminal"] .task-status-badge[data-status="stopped"]::before,
+[data-theme="hackers-terminal"] .task-status-badge[data-status="stopping"]::before {
+  background: var(--gold);
+}
+
+/* 任务名 */
+[data-theme="hackers-terminal"] .task-card__name {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* 日志终端 — 纯黑绿字 */
+[data-theme="hackers-terminal"] .log-content {
+  background: #000;
+  color: var(--primary);
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.02);
+}
+
+[data-theme="hackers-terminal"] .log-title {
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--primary);
+}
+
+/* 详情网格 */
+[data-theme="hackers-terminal"] .detail-grid {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+}
+
+[data-theme="hackers-terminal"] .detail-grid dt {
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+/* 元数据竖条 */
+[data-theme="hackers-terminal"] .task-meta-line {
+  border-left-color: rgba(0, 255, 65, 0.12);
+}
+[data-theme="hackers-terminal"] .task-meta-line:first-child {
+  border-left-color: var(--primary);
+}
+
+[data-theme="hackers-terminal"] .meta-schedule,
+[data-theme="hackers-terminal"] .meta-last-run,
+[data-theme="hackers-terminal"] .meta-next-run {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+}
+
+/* 复选框 / 开关 */
+[data-theme="hackers-terminal"] .checkbox-field input[type="checkbox"],
+[data-theme="hackers-terminal"] .toolbar-toggle input {
+  accent-color: var(--primary);
+}
+
+/* 展开按钮 */
+[data-theme="hackers-terminal"] .task-card__toggle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="hackers-terminal"] .task-card__toggle:hover {
+  background: rgba(0, 255, 65, 0.05);
+  color: var(--primary);
+}
+
+/* 危险按钮 */
+[data-theme="hackers-terminal"] .btn--danger {
+  background: rgba(255, 51, 85, 0.07);
+  border-color: rgba(255, 51, 85, 0.12);
+  color: var(--danger);
+}
+
+/* 帮助文案 */
+[data-theme="hackers-terminal"] .field-hint {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+}

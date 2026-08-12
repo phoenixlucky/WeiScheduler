@@ -482,7 +482,7 @@ async function loadTasks() {
   heroEnabled.textContent = String(tasks.filter((t) => t.enabled).length);
 
   if (!tasks.length) {
-    taskList.innerHTML = '<div class="empty-state">📋 还没有任务<br/>先在左侧创建一个吧</div>';
+    taskList.innerHTML = '<div class="empty-state"><span class="empty-state__icon" aria-hidden="true">📋</span><p class="empty-state__title">还没有任务</p><p class="empty-state__hint">在左侧表单填写信息，创建第一个定时任务吧</p></div>';
     return;
   }
 

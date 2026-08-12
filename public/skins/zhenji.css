@@ -143,3 +143,128 @@ body[data-theme="zhenji"] {
 [data-theme="zhenji"] .task-status-badge[data-status="running"]::before {
   background: #d88a9a;
 }
+
+/* ═══ 结构适配与强化 ═══ */
+
+/* Hero logo — 月白→浅蓝→烟紫 */
+[data-theme="zhenji"] .hero-logo {
+  background: linear-gradient(145deg, #e8eef4 0%, #b8cce0 40%, var(--primary) 70%, var(--primary-dark) 100%);
+  box-shadow: 0 10px 26px rgba(138, 172, 204, 0.35), 0 0 22px rgba(180, 160, 200, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="zhenji"] .hero-title {
+  font-family: "Noto Serif SC", "Noto Sans SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+[data-theme="zhenji"] .hero-tagline {
+  color: var(--primary-dark);
+  opacity: 0.85;
+  letter-spacing: 0.04em;
+}
+
+/* 面板标题 */
+[data-theme="zhenji"] .panel-title {
+  font-family: "Noto Serif SC", serif;
+  color: var(--primary-dark);
+  letter-spacing: 0.08em;
+}
+
+/* 表单分组标题 — 烟紫 */
+[data-theme="zhenji"] .fieldset-legend {
+  background: rgba(180, 160, 200, 0.16);
+  color: var(--primary-dark);
+  letter-spacing: 0.14em;
+  border: 1px solid rgba(180, 160, 200, 0.18);
+  font-family: "Noto Serif SC", serif;
+  text-transform: none;
+}
+
+[data-theme="zhenji"] .fieldset-legend::before {
+  background: var(--primary);
+  box-shadow: 0 0 6px rgba(138, 172, 204, 0.5);
+}
+
+/* 状态徽章 — 月白烟紫系 */
+[data-theme="zhenji"] .task-status-badge[data-status="success"] {
+  background: rgba(138, 172, 204, 0.16);
+  color: var(--primary-dark);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="success"]::before {
+  background: var(--primary);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="failed"] {
+  background: rgba(200, 122, 138, 0.12);
+  color: var(--danger);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="failed"]::before {
+  background: var(--danger);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="never"] {
+  background: rgba(180, 160, 200, 0.1);
+  color: var(--text-tertiary);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="never"]::before {
+  background: var(--text-tertiary);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="stopped"],
+[data-theme="zhenji"] .task-status-badge[data-status="stopping"] {
+  background: rgba(180, 160, 200, 0.12);
+  color: var(--gold);
+}
+[data-theme="zhenji"] .task-status-badge[data-status="stopped"]::before,
+[data-theme="zhenji"] .task-status-badge[data-status="stopping"]::before {
+  background: var(--gold);
+}
+
+/* 任务名 */
+[data-theme="zhenji"] .task-card__name {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+}
+
+/* 日志标题 */
+[data-theme="zhenji"] .log-title {
+  font-family: "Noto Serif SC", serif;
+  color: var(--primary-dark);
+}
+
+/* 元数据竖条 */
+[data-theme="zhenji"] .task-meta-line {
+  border-left-color: rgba(180, 160, 200, 0.22);
+}
+[data-theme="zhenji"] .task-meta-line:first-child {
+  border-left-color: var(--primary);
+}
+
+/* 展开按钮 */
+[data-theme="zhenji"] .task-card__toggle:hover {
+  background: rgba(180, 160, 200, 0.1);
+  color: var(--primary-dark);
+}
+
+/* 复选框 / 开关 */
+[data-theme="zhenji"] .checkbox-field input[type="checkbox"],
+[data-theme="zhenji"] .toolbar-toggle input {
+  accent-color: var(--primary);
+}
+
+/* 危险按钮 */
+[data-theme="zhenji"] .btn--danger {
+  background: rgba(200, 122, 138, 0.12);
+  border-color: rgba(200, 122, 138, 0.18);
+  color: var(--danger);
+}
+
+/* 图标按钮 hover */
+[data-theme="zhenji"] .btn--icon:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* 帮助文案 */
+[data-theme="zhenji"] .field-hint {
+  color: var(--text-tertiary);
+}

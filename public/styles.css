@@ -92,6 +92,42 @@ body {
 .hero-brand {
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* App logo — 圆角渐变印章 */
+.hero-logo {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 8px 22px var(--primary-soft), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.hero-logo__glyph {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.hero-brand:hover .hero-logo {
+  transform: translateY(-2px) rotate(-2deg);
+  box-shadow: 0 12px 28px var(--primary-soft), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.hero-text {
+  min-width: 0;
 }
 
 .hero-title {
@@ -104,7 +140,7 @@ body {
 }
 
 .hero-tagline {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
   font-size: 0.85rem;
   color: var(--text-secondary, var(--muted));
   line-height: 1.5;
@@ -120,18 +156,19 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 18px 8px 14px;
+  padding: 8px 18px 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.42));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--panel-border);
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
 .stat-chip:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
+  border-color: var(--primary-soft);
 }
 
 .stat-icon {
@@ -141,14 +178,16 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  color: #fff;
   flex-shrink: 0;
-  border: 1px solid var(--panel-border);
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
-.stat-icon--total  { background: var(--primary-soft); }
-.stat-icon--running { background: var(--success-soft); }
-.stat-icon--enabled { background: var(--primary-soft); }
+.stat-icon--total  { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+.stat-icon--running { background: linear-gradient(135deg, var(--success) 0%, color-mix(in srgb, var(--success) 55%, var(--text)) 100%); }
+.stat-icon--enabled { background: linear-gradient(135deg, var(--primary-dark) 0%, color-mix(in srgb, var(--primary-dark) 55%, var(--text)) 100%); }
 
 .stat-body {
   display: flex;
@@ -160,6 +199,7 @@ body {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
@@ -218,28 +258,50 @@ body {
 
 .fieldset {
   margin: 0;
-  padding: 18px 20px;
+  padding: 18px 20px 20px;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: grid;
-  gap: 12px;
+  gap: 14px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.fieldset:focus-within {
+  border-color: var(--primary-soft);
+  box-shadow: 0 0 0 3px var(--primary-soft);
 }
 
 .fieldset-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--primary-dark);
-  padding: 0 6px;
+  background: var(--primary-soft);
+  padding: 3px 12px;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
+.fieldset-legend::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 .field {
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
 
 .field-row {
@@ -264,7 +326,11 @@ body {
   color: var(--text);
   font-size: 0.9rem;
   font-family: inherit;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.input:hover {
+  border-color: var(--primary-soft);
 }
 
 .input:focus {
@@ -273,7 +339,7 @@ body {
   box-shadow: 0 0 0 3px var(--primary-soft);
 }
 
-.input::placeholder { color: #bbb; }
+.input::placeholder { color: var(--text-tertiary, #bbb); }
 
 select.input {
   cursor: pointer;
@@ -323,6 +389,13 @@ select.input {
 .form-actions {
   display: flex;
   gap: 10px;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--panel-border);
+}
+
+.form-actions .btn--primary {
+  flex: 1;
 }
 
 /* ─── Buttons ───────────────────────────────────────────────────────── */
@@ -404,7 +477,17 @@ select.input {
 }
 
 .btn--icon:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--primary-soft);
+}
+
+.btn--icon.btn--danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  box-shadow: 0 4px 12px var(--danger-soft);
 }
 
 .btn--chip {
@@ -708,7 +791,11 @@ select.input {
 }
 
 .empty-state {
-  padding: 48px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 56px 24px;
   text-align: center;
   color: var(--text-secondary, var(--muted));
   background: rgba(255, 255, 255, 0.4);
@@ -716,6 +803,27 @@ select.input {
   border-radius: var(--radius-md);
   font-size: 0.92rem;
   line-height: 1.7;
+}
+
+.empty-state__icon {
+  font-size: 2.6rem;
+  line-height: 1;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  filter: drop-shadow(0 6px 14px var(--accent-glow, rgba(0,0,0,0.06)));
+}
+
+.empty-state__title {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.empty-state__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-tertiary, var(--muted));
 }
 
 /* ─── Task card ─────────────────────────────────────────────────────── */
@@ -826,6 +934,10 @@ select.input {
   font-weight: 700;
   color: var(--text);
   line-height: 1.3;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .task-frequency {
@@ -851,24 +963,43 @@ select.input {
 /* ─── Meta info row ─── */
 
 .task-card__meta {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  padding-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid var(--panel-border);
 }
 
 .task-meta-line {
-  font-size: 0.8rem;
-  color: var(--text-secondary, var(--muted));
+  min-width: 0;
   display: flex;
-  gap: 4px;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 10px;
+  border-left: 2px solid var(--primary-soft);
+}
+
+.task-meta-line:first-child {
+  border-left-color: var(--primary);
 }
 
 .meta-label {
-  opacity: 0.65;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary, var(--muted));
   font-weight: 500;
+}
+
+.meta-schedule,
+.meta-last-run,
+.meta-next-run {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ─── Toggle button ─── */
@@ -876,9 +1007,10 @@ select.input {
 .task-card__toggle {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  margin-top: 8px;
-  padding: 4px 0;
+  margin-top: 10px;
+  padding: 5px 0;
   border: none;
   background: none;
   color: var(--text-tertiary, var(--muted));
@@ -886,10 +1018,15 @@ select.input {
   font-family: inherit;
   cursor: pointer;
   width: 100%;
-  transition: color var(--transition);
+  border-top: 1px dashed var(--panel-border);
+  transition: color var(--transition), background var(--transition);
+  border-radius: var(--radius-xs);
 }
 
-.task-card__toggle:hover { color: var(--text); }
+.task-card__toggle:hover {
+  color: var(--primary-dark);
+  background: var(--primary-soft);
+}
 
 .toggle-arrow {
   display: inline-block;
@@ -1022,6 +1159,10 @@ select.input {
     text-align: center;
   }
 
+  .hero-brand {
+    justify-content: center;
+  }
+
   .hero-stats {
     justify-content: center;
   }
@@ -1084,8 +1225,12 @@ select.input {
   }
 
   .task-card__meta {
-    flex-direction: column;
-    gap: 4px;
+    grid-template-columns: 1fr;
+    gap: 8px 0;
+  }
+
+  .task-meta-line {
+    padding-left: 10px;
   }
 
   .detail-grid {
@@ -1115,5 +1260,188 @@ select.input {
 @media (max-width: 400px) {
   .cron-builder-grid {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Global polish ───────────────────────────────────────────────── */
+
+/* Dark-skin shared component base — fixes legacy skins whose component
+   selectors (.primary-button, .ghost-button, .task-status, .task-log,
+   .form-section …) no longer exist after the v1.6 UI restructure.
+   Without this layer, dark skins render white glass blocks from the
+   light default components in styles.css. */
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) {
+  --panel-inset: rgba(255, 255, 255, 0.035);
+  --panel-inset-strong: rgba(255, 255, 255, 0.06);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .fieldset {
+  background: linear-gradient(180deg, var(--panel-inset-strong), var(--panel-inset));
+  border-color: var(--panel-border);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--ghost {
+  background: var(--panel-inset-strong);
+  border-color: var(--panel-border);
+  color: var(--text);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--icon {
+  background: var(--panel-inset-strong);
+  border-color: var(--panel-border);
+  color: var(--text);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .stat-chip {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border-color: var(--panel-border);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .toolbar-toggle,
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .toolbar-select {
+  background: var(--panel-inset-strong);
+  border-color: var(--panel-border);
+  color: var(--text);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .cron-time-input {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--panel-border);
+  color: var(--text);
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--chip {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: var(--panel-border);
+  color: var(--text-secondary, var(--muted));
+}
+
+:where(
+  [data-theme="deep-dream"],
+  [data-theme="hackers-terminal"],
+  [data-theme="qin-empire"],
+  [data-theme="shinkai-twilight"],
+  [data-theme="witch-alchemy"]
+) .btn--chip:hover {
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--text);
+}
+
+/* Keyboard focus ring — visible only for keyboard/tab navigation */
+.btn:focus-visible,
+.cron-mode-tab:focus-visible,
+.cron-freq-tab:focus-visible,
+.cron-weekday-btn:focus-visible,
+.toolbar-toggle:focus-visible,
+.toolbar-select:focus-visible,
+.task-card__toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Page scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, rgba(0, 0, 0, 0.14));
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb, rgba(0, 0, 0, 0.24));
+  background-clip: content-box;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

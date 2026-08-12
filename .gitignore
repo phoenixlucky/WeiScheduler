@@ -5,3 +5,7 @@ dist/
 release/
 release-build/
 *.log
+.reasonix/attachments/
+.reasonix/tasks/
+.reasonix/desktop-topic-auto-title-meta.json
+.reasonix/desktop-topic-created-at.json

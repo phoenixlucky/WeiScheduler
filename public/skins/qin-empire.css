@@ -443,3 +443,193 @@ body[data-theme="qin-empire"] {
   font-weight: 700;
   letter-spacing: 0.08em;
 }
+
+/* ═══ v1.6+ 结构适配与强化（新类名） ═══ */
+
+/* Hero logo — 印章 */
+[data-theme="qin-empire"] .hero-logo {
+  background: linear-gradient(135deg, #2a2418 0%, #1a1410 100%);
+  border: 1px solid rgba(200, 152, 56, 0.35);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 0 18px rgba(180, 140, 60, 0.06);
+}
+
+[data-theme="qin-empire"] .hero-logo__glyph {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 1.4rem;
+  letter-spacing: 0;
+}
+
+[data-theme="qin-empire"] .hero-title {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="qin-empire"] .hero-tagline {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* 面板标题 */
+[data-theme="qin-empire"] .panel-title {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+}
+
+/* 表单分组标题 — 卷轴题字 */
+[data-theme="qin-empire"] .fieldset-legend {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+  background: rgba(180, 140, 60, 0.08);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  border: 1px solid rgba(180, 140, 60, 0.1);
+  border-radius: var(--radius-xs);
+  text-transform: none;
+}
+
+[data-theme="qin-empire"] .fieldset-legend::before {
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(180, 140, 60, 0.5);
+}
+
+/* 表单标签 */
+[data-theme="qin-empire"] .field-label {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* 主按钮 — 黑金描边 */
+[data-theme="qin-empire"] .btn--primary {
+  background: linear-gradient(135deg, #2a2418 0%, #1a1410 100%);
+  color: var(--gold);
+  border: 1px solid rgba(200, 152, 56, 0.25);
+  border-radius: var(--radius-xs);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  font-family: "Noto Serif SC", serif;
+}
+
+[data-theme="qin-empire"] .btn--primary:hover {
+  background: linear-gradient(135deg, #3a3020 0%, #2a2418 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(180, 140, 60, 0.08);
+}
+
+/* 状态徽章 — 青铜铭文 */
+[data-theme="qin-empire"] .task-status-badge {
+  font-family: "Noto Sans SC", sans-serif;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="qin-empire"] .task-status-badge[data-status="running"] {
+  background: rgba(106, 154, 106, 0.08);
+  color: var(--success);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="running"]::before {
+  background: var(--success);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="success"] {
+  background: rgba(200, 152, 56, 0.08);
+  color: var(--gold);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="success"]::before {
+  background: var(--gold);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="failed"] {
+  background: rgba(184, 64, 56, 0.08);
+  color: var(--danger);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="failed"]::before {
+  background: var(--danger);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="never"] {
+  background: rgba(180, 140, 60, 0.04);
+  color: var(--muted);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="never"]::before {
+  background: var(--muted);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="stopped"],
+[data-theme="qin-empire"] .task-status-badge[data-status="stopping"] {
+  background: rgba(200, 152, 56, 0.05);
+  color: var(--gold);
+}
+[data-theme="qin-empire"] .task-status-badge[data-status="stopped"]::before,
+[data-theme="qin-empire"] .task-status-badge[data-status="stopping"]::before {
+  background: var(--gold);
+}
+
+/* 任务名 */
+[data-theme="qin-empire"] .task-card__name {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* 日志终端 — 竹简墨色 */
+[data-theme="qin-empire"] .log-content {
+  background: linear-gradient(180deg, #0a0806 0%, #050403 100%);
+  color: #a89870;
+  border: 1px solid rgba(180, 140, 60, 0.06);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+[data-theme="qin-empire"] .log-title {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* 详情网格 */
+[data-theme="qin-empire"] .detail-grid dt {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--muted);
+}
+
+/* 元数据竖条 */
+[data-theme="qin-empire"] .task-meta-line {
+  border-left-color: rgba(180, 140, 60, 0.12);
+}
+[data-theme="qin-empire"] .task-meta-line:first-child {
+  border-left-color: var(--gold);
+}
+
+/* 复选框 / 开关 */
+[data-theme="qin-empire"] .checkbox-field input[type="checkbox"],
+[data-theme="qin-empire"] .toolbar-toggle input {
+  accent-color: var(--gold);
+}
+
+/* 展开按钮 */
+[data-theme="qin-empire"] .task-card__toggle {
+  font-family: "Noto Sans SC", sans-serif;
+  letter-spacing: 0.1em;
+}
+
+[data-theme="qin-empire"] .task-card__toggle:hover {
+  background: rgba(180, 140, 60, 0.05);
+  color: var(--gold);
+}
+
+/* 危险按钮 */
+[data-theme="qin-empire"] .btn--danger {
+  background: rgba(184, 64, 56, 0.08);
+  border-color: rgba(184, 64, 56, 0.14);
+  color: var(--danger);
+}
+
+/* 帮助文案 */
+[data-theme="qin-empire"] .field-hint {
+  font-family: "Noto Sans SC", sans-serif;
+  color: var(--muted);
+}
