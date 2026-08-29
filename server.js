@@ -89,7 +89,7 @@ function generateTaskId(existingIds) {
   return candidate;
 }
 
-function importTasks(items) {
+async function importTasks(items) {
   if (!Array.isArray(items) || !items.length) {
     throw new Error("导入内容不能为空");
   }
@@ -112,7 +112,7 @@ function importTasks(items) {
 
     existingIds.add(candidate.id);
     existingByName.set(candidate.name, candidate);
-    saveTask(candidate);
+    await saveTask(candidate);
     scheduleTask(candidate);
     imported.push(candidate);
   }
@@ -120,7 +120,7 @@ function importTasks(items) {
   return imported;
 }
 
-function setTaskEnabled(taskId, enabled) {
+async function setTaskEnabled(taskId, enabled) {
   const existing = getTask(taskId);
   if (!existing) {
     return null;
@@ -131,7 +131,7 @@ function setTaskEnabled(taskId, enabled) {
     enabled,
     updatedAt: new Date().toISOString(),
   };
-  saveTask(task);
+  await saveTask(task);
   scheduleTask(task);
   return task;
 }
@@ -264,7 +264,7 @@ function refreshSchedules() {
   startScheduleCompensation();
 }
 
-function backfillTaskErrors() {
+async function backfillTaskErrors() {
   for (const task of getTasks()) {
     if (task.lastStatus !== "failed" || task.lastError) {
       continue;
@@ -281,7 +281,7 @@ function backfillTaskErrors() {
       continue;
     }
 
-    saveTask({
+    await saveTask({
       ...task,
       lastError,
     });
@@ -764,28 +764,32 @@ async function runTask(taskId, trigger) {
           : "";
 
       (async () => {
-        await appendRunLog(taskId, {
-          id: `run_${Date.now()}`,
-          trigger,
-          startedAt,
-          finishedAt,
-          exitCode: code,
-          status,
-          command: execution.command,
-          commandArgs: execution.args,
-          stdout: stdout.trim(),
-          stderr: stderr.trim(),
-        });
+        try {
+          await appendRunLog(taskId, {
+            id: `run_${Date.now()}`,
+            trigger,
+            startedAt,
+            finishedAt,
+            exitCode: code,
+            status,
+            command: execution.command,
+            commandArgs: execution.args,
+            stdout: stdout.trim(),
+            stderr: stderr.trim(),
+          });
 
-        await saveTask({
-          ...getTask(taskId),
-          lastRunAt: finishedAt,
-          lastStatus: status,
-          lastError,
-        });
-
-        clearActiveRun(taskId);
-        resolve();
+          await saveTask({
+            ...getTask(taskId),
+            lastRunAt: finishedAt,
+            lastStatus: status,
+            lastError,
+          });
+        } catch (error) {
+          console.error(`Failed to persist task ${taskId} result:`, error);
+        } finally {
+          clearActiveRun(taskId);
+          resolve();
+        }
       })();
     });
 
@@ -807,28 +811,32 @@ async function runTask(taskId, trigger) {
           : "";
 
       (async () => {
-        await appendRunLog(taskId, {
-          id: `run_${Date.now()}`,
-          trigger,
-          startedAt,
-          finishedAt,
-          exitCode: -1,
-          status,
-          command: execution.command,
-          commandArgs: execution.args,
-          stdout: stdout.trim(),
-          stderr: mergedStderr,
-        });
+        try {
+          await appendRunLog(taskId, {
+            id: `run_${Date.now()}`,
+            trigger,
+            startedAt,
+            finishedAt,
+            exitCode: -1,
+            status,
+            command: execution.command,
+            commandArgs: execution.args,
+            stdout: stdout.trim(),
+            stderr: mergedStderr,
+          });
 
-        await saveTask({
-          ...getTask(taskId),
-          lastRunAt: finishedAt,
-          lastStatus: status,
-          lastError,
-        });
-
-        clearActiveRun(taskId);
-        resolve();
+          await saveTask({
+            ...getTask(taskId),
+            lastRunAt: finishedAt,
+            lastStatus: status,
+            lastError,
+          });
+        } catch (error) {
+          console.error(`Failed to persist task ${taskId} result:`, error);
+        } finally {
+          clearActiveRun(taskId);
+          resolve();
+        }
       })();
     });
   });
@@ -838,7 +846,6 @@ function createApp() {
   const app = express();
 
   ensureStore();
-  backfillTaskErrors();
   app.use(express.json());
   app.use(express.static(path.join(__dirname, "public")));
 
@@ -855,10 +862,10 @@ function createApp() {
     return res.json(serializeTask(task));
   });
 
-  app.post("/api/tasks", (req, res) => {
+  app.post("/api/tasks", async (req, res) => {
     try {
       const task = normalizeTask(req.body);
-      saveTask(task);
+      await saveTask(task);
       scheduleTask(task);
       res.status(201).json(task);
     } catch (error) {
@@ -866,7 +873,7 @@ function createApp() {
     }
   });
 
-  app.put("/api/tasks/:id", (req, res) => {
+  app.put("/api/tasks/:id", async (req, res) => {
     try {
       const existing = getTask(req.params.id);
       if (!existing) {
@@ -880,7 +887,7 @@ function createApp() {
         createdAt: existing.createdAt,
       });
 
-      saveTask(task);
+      await saveTask(task);
       scheduleTask(task);
       return res.json(task);
     } catch (error) {
@@ -888,19 +895,23 @@ function createApp() {
     }
   });
 
-  app.delete("/api/tasks/:id", (req, res) => {
-    const existing = getTask(req.params.id);
-    if (!existing) {
-      return res.status(404).json({ error: "任务不存在" });
-    }
+  app.delete("/api/tasks/:id", async (req, res) => {
+    try {
+      const existing = getTask(req.params.id);
+      if (!existing) {
+        return res.status(404).json({ error: "任务不存在" });
+      }
 
-    if (activeProcesses.has(req.params.id)) {
-      return res.status(409).json({ error: "任务正在运行，无法删除" });
-    }
+      if (activeProcesses.has(req.params.id)) {
+        return res.status(409).json({ error: "任务正在运行，无法删除" });
+      }
 
-    unscheduleTask(req.params.id);
-    deleteTask(req.params.id);
-    return res.status(204).end();
+      unscheduleTask(req.params.id);
+      await deleteTask(req.params.id);
+      return res.status(204).end();
+    } catch (error) {
+      return res.status(500).json({ error: `任务删除失败: ${error.message}` });
+    }
   });
 
   app.post("/api/tasks/:id/run", async (req, res) => {
@@ -943,28 +954,40 @@ function createApp() {
     }
   });
 
-  app.post("/api/tasks/:id/start", (req, res) => {
-    const task = setTaskEnabled(req.params.id, true);
-    if (!task) {
-      return res.status(404).json({ error: "任务不存在" });
+  app.post("/api/tasks/:id/start", async (req, res) => {
+    try {
+      const task = await setTaskEnabled(req.params.id, true);
+      if (!task) {
+        return res.status(404).json({ error: "任务不存在" });
+      }
+      return res.json(task);
+    } catch (error) {
+      return res.status(500).json({ error: `任务启动状态保存失败: ${error.message}` });
     }
-    return res.json(task);
   });
 
-  app.post("/api/tasks/:id/pause", (req, res) => {
-    const task = setTaskEnabled(req.params.id, false);
-    if (!task) {
-      return res.status(404).json({ error: "任务不存在" });
+  app.post("/api/tasks/:id/pause", async (req, res) => {
+    try {
+      const task = await setTaskEnabled(req.params.id, false);
+      if (!task) {
+        return res.status(404).json({ error: "任务不存在" });
+      }
+      return res.json(task);
+    } catch (error) {
+      return res.status(500).json({ error: `任务暂停状态保存失败: ${error.message}` });
     }
-    return res.json(task);
   });
 
-  app.delete("/api/tasks/:id/logs", (req, res) => {
-    const task = clearTaskLogs(req.params.id);
-    if (!task) {
-      return res.status(404).json({ error: "任务不存在" });
+  app.delete("/api/tasks/:id/logs", async (req, res) => {
+    try {
+      const task = await clearTaskLogs(req.params.id);
+      if (!task) {
+        return res.status(404).json({ error: "任务不存在" });
+      }
+      return res.status(204).end();
+    } catch (error) {
+      return res.status(500).json({ error: `日志清除失败: ${error.message}` });
     }
-    return res.status(204).end();
   });
 
   app.get("/api/tasks-export", (_req, res) => {
@@ -984,11 +1007,11 @@ function createApp() {
     );
   });
 
-  app.post("/api/tasks-import", (req, res) => {
+  app.post("/api/tasks-import", async (req, res) => {
     try {
       const payload = req.body || {};
       const tasks = Array.isArray(payload) ? payload : payload.tasks;
-      const imported = importTasks(tasks);
+      const imported = await importTasks(tasks);
       return res.status(201).json({ imported: imported.length });
     } catch (error) {
       return res.status(400).json({ error: error.message });
@@ -1002,14 +1025,16 @@ function createApp() {
   return app;
 }
 
-function startServer({ port = DEFAULT_PORT, retries = 20 } = {}) {
+async function startServer({ port = DEFAULT_PORT, retries = 20 } = {}) {
   if (serverInstance) {
-    return Promise.resolve({
+    return {
       server: serverInstance,
       port: serverInstance.address().port,
-    });
+    };
   }
 
+  ensureStore();
+  await backfillTaskErrors();
   refreshSchedules();
   const app = createApp();
 
@@ -1079,9 +1104,6 @@ module.exports = {
 };
 
 if (require.main === module) {
-  if (!process.env.WEISCHEDULER_DATA_DIR) {
-    process.env.WEISCHEDULER_DATA_DIR = __dirname;
-  }
   startServer().catch((error) => {
     console.error(`Failed to start server: ${error.message}`);
     process.exit(1);

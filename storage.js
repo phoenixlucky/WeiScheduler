@@ -1,5 +1,7 @@
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
+const { randomUUID } = require("crypto");
 
 // ─── Writer lock (serializes writes across async callbacks) ────────────
 // Node's event loop naturally serialises synchronous I/O in the main
@@ -9,18 +11,49 @@ const path = require("path");
 const writerQueue = new Map();
 
 function enqueueWrite(storeFile, fn) {
-  const chain = writerQueue.get(storeFile) || Promise.resolve();
-  const next = chain.then(() => fn()).catch(() => {});
-  writerQueue.set(storeFile, next);
-  return next;
+  const previous = writerQueue.get(storeFile) || Promise.resolve();
+  const operation = previous.then(fn);
+
+  // Keep the queue usable after a failed write, but return the original
+  // operation so callers can report the error instead of silently losing it.
+  writerQueue.set(storeFile, operation.catch(() => {}));
+  return operation;
 }
 
 // ─── Data paths ─────────────────────────────────────────────────────────
 
+const APP_DATA_DIR_NAME = "WeiScheduler";
+
+function getDefaultDataRoot() {
+  if (process.platform === "win32") {
+    return path.join(
+      process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"),
+      APP_DATA_DIR_NAME
+    );
+  }
+
+  if (process.platform === "darwin") {
+    return path.join(os.homedir(), "Library", "Application Support", APP_DATA_DIR_NAME);
+  }
+
+  return path.join(
+    process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config"),
+    APP_DATA_DIR_NAME
+  );
+}
+
+function getLegacyDataRoots() {
+  const configuredRoots = String(process.env.WEISCHEDULER_LEGACY_DATA_DIRS || "")
+    .split(path.delimiter)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const legacyRoot = process.pkg ? path.dirname(process.execPath) : __dirname;
+
+  return [...new Set([...configuredRoots, legacyRoot])];
+}
+
 function getDataPaths() {
-  const appRoot =
-    process.env.WEISCHEDULER_DATA_DIR ||
-    (process.pkg ? path.dirname(process.execPath) : __dirname);
+  const appRoot = process.env.WEISCHEDULER_DATA_DIR || getDefaultDataRoot();
   return {
     dataDir: path.join(appRoot, "data"),
     storeFile: path.join(appRoot, "data", "tasks.json"),
@@ -38,6 +71,9 @@ function ensureStore() {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
+  if (migrateLegacyStore(storeFile)) {
+    return;
+  }
   if (!fs.existsSync(storeFile)) {
     fs.writeFileSync(storeFile, JSON.stringify(createEmptyStore(), null, 2), "utf8");
   }
@@ -45,6 +81,61 @@ function ensureStore() {
 
 function isValidStore(store) {
   return Boolean(store) && typeof store === "object" && Array.isArray(store.tasks);
+}
+
+function readValidStore(filePath) {
+  try {
+    const store = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    return isValidStore(store) ? store : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function migrateLegacyStore(storeFile) {
+  const migrationMarker = `${storeFile}.legacy-migration-v1`;
+  if (fs.existsSync(migrationMarker)) {
+    return false;
+  }
+
+  const currentFileExists = fs.existsSync(storeFile);
+  const currentStore = currentFileExists ? readValidStore(storeFile) : null;
+  if (currentFileExists && !currentStore) {
+    // Preserve a broken current file so readStore() can back it up and report
+    // the problem instead of replacing potentially recoverable data.
+    return false;
+  }
+  if (currentStore && currentStore.tasks.length > 0) {
+    return false;
+  }
+
+  const legacyStores = [];
+  for (const legacyRoot of getLegacyDataRoots()) {
+    const legacyFile = path.join(legacyRoot, "data", "tasks.json");
+    if (path.resolve(legacyFile) === path.resolve(storeFile) || !fs.existsSync(legacyFile)) {
+      continue;
+    }
+
+    const legacyStore = readValidStore(legacyFile);
+    if (!legacyStore) {
+      continue;
+    }
+
+    legacyStores.push({ file: legacyFile, store: legacyStore });
+  }
+
+  const source = legacyStores.find(({ store }) => store.tasks.length > 0) || legacyStores[0];
+  if (!source || (currentStore && source.store.tasks.length === 0)) {
+    return false;
+  }
+
+  atomicWriteSync(storeFile, JSON.stringify(source.store, null, 2));
+  try {
+    fs.writeFileSync(migrationMarker, new Date().toISOString(), "utf8");
+  } catch (_) { /* migration succeeded; marker is only a best-effort guard */ }
+  console.warn(`Migrated task store from ${source.file} to ${storeFile}`);
+  return true;
+
 }
 
 function backupBrokenStore(storeFile, rawContent) {
@@ -59,9 +150,16 @@ function backupBrokenStore(storeFile, rawContent) {
 // old file or the new file, never a half-written one.
 
 function atomicWriteSync(filePath, data) {
-  const tmp = `${filePath}.tmp-${Date.now()}`;
-  fs.writeFileSync(tmp, data, "utf8");
-  fs.renameSync(tmp, filePath);
+  const tmp = `${filePath}.tmp-${process.pid}-${Date.now()}-${randomUUID()}`;
+  try {
+    fs.writeFileSync(tmp, data, "utf8");
+    fs.renameSync(tmp, filePath);
+  } catch (error) {
+    try {
+      fs.unlinkSync(tmp);
+    } catch (_) { /* best effort cleanup */ }
+    throw error;
+  }
 }
 
 // ─── Read store ─────────────────────────────────────────────────────────

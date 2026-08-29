@@ -462,7 +462,15 @@ function createWindow(port) {
 async function bootstrap() {
   try {
     app.setName(getLocalizedInstallName());
-    process.env.WEISCHEDULER_DATA_DIR = app.getPath("userData");
+    const dataRoot = path.join(app.getPath("appData"), APP_NAME_EN);
+    const legacyDataRoots = [
+      app.getPath("userData"),
+      path.join(app.getPath("appData"), APP_NAME_ZH),
+      path.dirname(process.execPath),
+      __dirname,
+    ];
+    process.env.WEISCHEDULER_DATA_DIR = dataRoot;
+    process.env.WEISCHEDULER_LEGACY_DATA_DIRS = [...new Set(legacyDataRoots)].join(path.delimiter);
     currentTheme = loadTheme();
     ({ startServer, stopServer } = require("./server"));
     buildApplicationMenu();
