@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.7.4 - 2026-08-12
 
 ### 🐛 修复
 
