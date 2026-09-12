@@ -1,0 +1,26 @@
+@import url("/skins/zhenji.css");
+@import url("/skins/shinkai-twilight.css");
+@import url("/skins/qin-empire.css");
+@import url("/skins/witch-alchemy.css");
+@import url("/skins/deep-dream.css");
+@import url("/skins/hackers-terminal.css");
+@import url("/skins/cardamom-maiden.css");
+
+/* The original skins were written for the legacy DOM. These adapters keep
+   their palette, backdrop and animation language on the Vue layout too. */
+html[data-theme] body { color: var(--text); }
+html[data-theme] .app-shell { color: var(--text); }
+html[data-theme] .topbar { border-color: var(--panel-border); }
+html[data-theme] .panel, html[data-theme] .task-card { background: var(--panel); border-color: var(--panel-border); box-shadow: var(--shadow-md, var(--shadow, 0 8px 28px rgba(0,0,0,.12))); }
+html[data-theme] .task-card .details-toggle { background: var(--primary-soft); border-color: var(--panel-border); }
+html[data-theme] input, html[data-theme] select { color: var(--text); background: color-mix(in srgb, var(--panel-strong) 65%, transparent); border-color: var(--panel-border); }
+html[data-theme] .button.ghost, html[data-theme] .icon-button { color: var(--text-secondary); background: color-mix(in srgb, var(--panel-strong) 70%, transparent); border-color: var(--panel-border); }
+html[data-theme] .button.primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-color: var(--primary); }
+html[data-theme] .eyebrow, html[data-theme] .task-meta, html[data-theme] footer { color: var(--text-tertiary); }
+html[data-theme] .lede, html[data-theme] label, html[data-theme] .task-meta b { color: var(--text-secondary); }
+html[data-theme] .task-title-row h4, html[data-theme] .panel-heading h3, html[data-theme] .overview h2 { color: var(--text); }
+html[data-theme] .frequency, html[data-theme] .presets button { color: var(--primary-dark); border-color: var(--primary-soft); background: var(--primary-soft); }
+html[data-theme] .cron-mode-tab.active, html[data-theme] .cron-freq-tab.active { color: #fff; background: var(--primary); border-color: var(--primary); }
+html[data-theme] .cron-panel { background: color-mix(in srgb, var(--panel-strong) 55%, transparent); border-color: var(--panel-border); }
+
+.theme-select { min-width: 112px; margin: 0; padding: 8px 10px; font-size: 11px; }

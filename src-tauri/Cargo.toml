@@ -1,0 +1,27 @@
+[package]
+name = "weischeduler"
+version = "1.0.0"
+description = "A local desktop task scheduler"
+authors = ["Ethan Wilkins"]
+edition = "2021"
+
+[lib]
+name = "weischeduler_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.4", features = [] }
+
+[dependencies]
+chrono = { version = "0.4", features = ["clock", "serde"] }
+cron = "0.15"
+dirs = "6"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tauri = { version = "2.11", features = [] }
+tokio = { version = "1", features = ["macros", "process", "sync", "time"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]

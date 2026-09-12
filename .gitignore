@@ -2,6 +2,8 @@ node_modules/
 data/
 npm-debug.log*
 dist/
+src-tauri/target/
+src-tauri/gen/
 release/
 release-build/
 *.log

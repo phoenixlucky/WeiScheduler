@@ -1,69 +1,28 @@
 {
   "name": "weischeduler",
-  "version": "1.7.4",
+  "version": "1.0.0",
   "private": true,
   "author": "Ethan Wilkins",
   "description": "WeiScheduler is a web-based local task scheduler built on Node.js, designed to execute Python scripts based on Cron expressions. It supports multiple Python and Conda environment configurations, making it suitable for data processing, automation workflows, and scheduled scripting tasks.",
-  "main": "electron-main.js",
   "scripts": {
-    "start": "electron .",
-    "start:web": "node server.js",
-    "check:cmd": "node scripts/check-cmd-runner.js",
-    "dist": "electron-builder --win nsis",
-    "build:installer": "electron-builder --win nsis"
+    "start": "npm run tauri:dev",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "version:sync": "node scripts/sync-version.cjs",
+    "tauri": "tauri",
+    "tauri:dev": "node scripts/sync-version.cjs && tauri dev",
+    "tauri:build": "node scripts/sync-version.cjs && tauri build"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "node-cron": "^3.0.3"
+    "@tauri-apps/api": "^2.11.0"
   },
   "devDependencies": {
-    "electron": "^42.2.0",
-    "electron-builder": "^26.0.12"
-  },
-  "build": {
-    "appId": "com.weischeduler.desktop",
-    "productName": "WeiScheduler",
-    "copyright": "Copyright © 2026 Ethan Wilkins",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "electron-main.js",
-      "preload.js",
-      "server.js",
-      "storage.js",
-      "public/**/*",
-      "build/icon.ico",
-      "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "build/icon.ico",
-        "to": "icon.ico"
-      }
-    ],
-    "win": {
-      "signAndEditExecutable": false,
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico",
-      "installerHeaderIcon": "build/icon.ico",
-      "installerSidebar": "build/installerSidebar.bmp",
-      "installerHeader": "build/installerHeader.bmp",
-      "shortcutName": "WeiScheduler",
-      "artifactName": "WeiScheduler-Setup-${version}.${ext}"
-    }
+    "@tauri-apps/cli": "^2.11.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "pinia": "^3.0.3",
+    "typescript": "^5.8.3",
+    "vite": "^8.0.0",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.10"
   }
 }
