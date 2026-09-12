@@ -120,7 +120,9 @@ npm start
 
 ---
 
-## 📦 构建 Windows 安装包
+## 📦 构建 Windows 安装包与便携版
+
+在 Windows 下可直接双击项目根目录的 `build.bat`，或在终端执行：
 
 ```powershell
 npm run tauri:build
@@ -134,6 +136,16 @@ src-tauri/target/release/bundle/
 ```
 
 安装器由 Tauri 生成，支持 Windows 桌面安装和卸载。
+
+`build.bat` 在完成 Tauri 构建后，还会生成：
+
+```
+release/
+├── WeiScheduler_<version>_portable/      # 解压后可直接运行
+└── WeiScheduler_<version>_portable.zip   # 便携版压缩包
+```
+
+便携版会将任务数据保存在自身目录下的 `data/` 文件夹，不写入 `%APPDATA%`，可直接复制到其他 Windows 电脑使用。解压后双击 `start-portable.bat` 或直接运行 `WeiScheduler.exe` 即可。
 
 ---
 

@@ -16,6 +16,7 @@ impl Repository {
     pub fn new() -> Result<Self, String> {
         let root = std::env::var_os("WEISCHEDULER_DATA_DIR")
             .map(PathBuf::from)
+            .or_else(portable_data_dir)
             .or_else(|| dirs::data_dir().map(|path| path.join("WeiScheduler")))
             .ok_or_else(|| "无法定位应用数据目录".to_string())?.join("data");
         fs::create_dir_all(&root).map_err(|error| format!("创建数据目录失败: {error}"))?;
@@ -78,6 +79,16 @@ impl Repository {
         fs::write(&tmp, content).map_err(|error| format!("写入任务存储失败: {error}"))?;
         commit_temp_file(&tmp, &self.file)
     }
+}
+
+/// A portable package contains this marker next to the executable. Checking
+/// it here keeps the portable build portable even when the user starts the
+/// executable directly instead of using a launcher script.
+fn portable_data_dir() -> Option<PathBuf> {
+    let executable = std::env::current_exe().ok()?;
+    let directory = executable.parent()?;
+    let marker = directory.join("portable.mode");
+    marker.is_file().then(|| directory.to_path_buf())
 }
 
 fn commit_temp_file(tmp: &Path, target: &Path) -> Result<(), String> {
