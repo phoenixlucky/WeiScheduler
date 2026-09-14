@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "author": "Ethan Wilkins",
-  "description": "WeiScheduler is a web-based local task scheduler built on Node.js, designed to execute Python scripts based on Cron expressions. It supports multiple Python and Conda environment configurations, making it suitable for data processing, automation workflows, and scheduled scripting tasks.",
+  "description": "WeiScheduler is a local task scheduler built on Tauri, designed to execute Python, shell, and arbitrary executable tasks based on Cron expressions.",
   "scripts": {
     "start": "npm run tauri:dev",
     "dev": "vite",
@@ -14,7 +14,8 @@
     "tauri:build": "node scripts/sync-version.cjs && tauri build"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.11.0"
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/plugin-autostart": "^2.5.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.0",

@@ -9,6 +9,7 @@ pub fn run() {
     let state = Arc::new(commands::AppState::new().expect("failed to initialize WeiScheduler data store"));
     let scheduler_state = state.clone();
     tauri::Builder::default()
+        .plugin(tauri_plugin_autostart::Builder::new().build())
         .manage(state)
         .setup(move |_app| {
             tauri::async_runtime::spawn(commands::scheduler_loop(scheduler_state));

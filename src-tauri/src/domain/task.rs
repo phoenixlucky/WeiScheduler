@@ -11,6 +11,7 @@ pub struct TaskInput {
     pub command_path: String,
     #[serde(default)]
     pub conda_target: String,
+    #[serde(default)]
     pub script_path: String,
     #[serde(default)]
     pub args: String,
@@ -20,6 +21,12 @@ pub struct TaskInput {
     pub time_arg_value: String,
     #[serde(default)]
     pub working_directory: String,
+    #[serde(default)]
+    pub environment: Vec<EnvironmentVariable>,
+    #[serde(default)]
+    pub retry_count: u32,
+    #[serde(default = "default_retry_delay_seconds")]
+    pub retry_delay_seconds: u64,
     pub schedule: String,
     pub enabled: bool,
 }
@@ -46,6 +53,12 @@ pub struct Task {
     #[serde(default)]
     pub working_directory: String,
     #[serde(default)]
+    pub environment: Vec<EnvironmentVariable>,
+    #[serde(default)]
+    pub retry_count: u32,
+    #[serde(default = "default_retry_delay_seconds")]
+    pub retry_delay_seconds: u64,
+    #[serde(default)]
     pub schedule: String,
     #[serde(default)]
     pub enabled: bool,
@@ -64,11 +77,26 @@ pub struct Task {
 
 fn default_runner_type() -> String { "python".into() }
 fn default_status() -> String { "never".into() }
+fn default_retry_delay_seconds() -> u64 { 60 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EnvironmentVariable {
+    pub key: String,
+    #[serde(default)]
+    pub value: String,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RunLog {
     pub id: String,
+    #[serde(default)]
+    pub execution_id: String,
+    #[serde(default = "default_attempt")]
+    pub attempt: u32,
+    #[serde(default = "default_attempt")]
+    pub max_attempts: u32,
     pub started_at: String,
     pub finished_at: Option<String>,
     pub status: String,
@@ -77,6 +105,8 @@ pub struct RunLog {
     pub stdout: String,
     pub stderr: String,
 }
+
+fn default_attempt() -> u32 { 1 }
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -93,4 +123,5 @@ pub struct Execution {
     pub command: String,
     pub args: Vec<String>,
     pub working_directory: Option<String>,
+    pub environment: Vec<(String, String)>,
 }

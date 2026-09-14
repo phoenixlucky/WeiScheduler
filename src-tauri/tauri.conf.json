@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "WeiScheduler",
+  "productName": "WJ 超级调度器",
   "identifier": "com.weischeduler.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -11,7 +11,7 @@
   "app": {
     "windows": [
       {
-        "title": "WeiScheduler · 任务调度",
+        "title": "WJ 超级调度器",
         "width": 1440,
         "height": 940,
         "minWidth": 960,

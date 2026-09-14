@@ -1,8 +1,16 @@
-export type RunnerType = "python" | "conda-name" | "conda-path" | "cmd";
-export type TaskStatus = "running" | "stopping" | "success" | "failed" | "never" | "stopped";
+export type RunnerType = "python" | "conda-name" | "conda-path" | "cmd" | "executable";
+export type TaskStatus = "running" | "stopping" | "retrying" | "success" | "failed" | "never" | "stopped";
+
+export interface EnvironmentVariable {
+  key: string;
+  value: string;
+}
 
 export interface RunLog {
   id: string;
+  executionId: string;
+  attempt: number;
+  maxAttempts: number;
   startedAt: string;
   finishedAt?: string;
   status: TaskStatus;
@@ -23,6 +31,9 @@ export interface Task {
   timeArgName: string;
   timeArgValue: string;
   workingDirectory: string;
+  environment: EnvironmentVariable[];
+  retryCount: number;
+  retryDelaySeconds: number;
   schedule: string;
   enabled: boolean;
   createdAt: string;
@@ -48,6 +59,9 @@ export const emptyTask = (): TaskInput => ({
   timeArgName: "",
   timeArgValue: "",
   workingDirectory: "",
+  environment: [],
+  retryCount: 0,
+  retryDelaySeconds: 60,
   schedule: "*/5 * * * *",
   enabled: true,
 });

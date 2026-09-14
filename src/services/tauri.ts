@@ -1,7 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
+import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
 import type { Task, TaskInput } from "../types/task";
 
-const isTauri = () => Boolean(window.__TAURI_INTERNALS__);
+export const isTauri = () => Boolean(window.__TAURI_INTERNALS__);
 
 export async function listTasks(): Promise<Task[]> {
   if (!isTauri()) return [];
@@ -46,6 +47,17 @@ export function openDataDirectory(): Promise<void> {
 
 export function dataDirectory(): Promise<string> {
   return invoke<string>("data_directory");
+}
+
+export async function isAutoStartEnabled(): Promise<boolean> {
+  if (!isTauri()) return false;
+  return isEnabled();
+}
+
+export async function setAutoStartEnabled(enabled: boolean): Promise<void> {
+  if (!isTauri()) throw new Error("开机自启动仅支持桌面应用");
+  if (enabled) await enable();
+  else await disable();
 }
 
 declare global {
