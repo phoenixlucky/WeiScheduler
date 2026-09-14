@@ -163,3 +163,14 @@ button.theme-select .ui-icon { flex: none; color: #8192ad; transition: transform
 @keyframes theme-menu-in { from { opacity: 0; transform: translateY(-5px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (max-width: 640px) { button.theme-select { width: 120px; }.theme-options { right: -4px; width: 190px; } }
 @media (prefers-reduced-motion: reduce) { .theme-options, .theme-options button, button.theme-select .ui-icon { animation: none; transition: none; } }
+
+.activation-panel { margin: 0 0 6px; padding: 9px; border: 1px solid rgba(213, 176, 82, .34); border-radius: 11px; background: rgba(255, 250, 232, .72); }
+.activation-panel.active { border-color: rgba(201, 151, 47, .42); background: linear-gradient(135deg, rgba(255, 248, 218, .92), rgba(246, 235, 255, .72)); }
+.activation-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #8e641c; font-size: 11px; font-weight: 700; }
+.activation-panel-head span { display: inline-flex; align-items: center; gap: 6px; }
+.activation-panel-head b { color: #b07a1c; font-size: 10px; }
+.activation-panel > small { display: block; margin-top: 6px; color: #a0875d; font-size: 10px; }
+.activation-input-row { display: flex; gap: 6px; margin-top: 8px; }
+.activation-input-row input { min-width: 0; flex: 1; margin: 0; padding: 8px 9px; border-color: #e5d6ad; border-radius: 8px; background: rgba(255, 255, 255, .84); font-size: 11px; }
+.activation-input-row button { padding: 0 11px; border: 0; border-radius: 8px; color: #fffdf3; background: linear-gradient(135deg, #bd8a2b, #9061b7); font-size: 11px; font-weight: 700; cursor: pointer; }
+.activation-input-row button:hover { box-shadow: 0 4px 12px rgba(167, 119, 37, .26); transform: translateY(-1px); }
