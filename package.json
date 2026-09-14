@@ -14,6 +14,7 @@
     "tauri:build": "node scripts/sync-version.cjs && tauri build"
   },
   "dependencies": {
+    "@phosphor-icons/vue": "^2.2.1",
     "@tauri-apps/api": "^2.11.0",
     "@tauri-apps/plugin-autostart": "^2.5.1"
   },

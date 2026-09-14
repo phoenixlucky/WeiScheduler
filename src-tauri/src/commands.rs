@@ -1,8 +1,8 @@
 use crate::{domain::{service, task::{RunLog, Task, TaskInput, TaskView}}, infrastructure::{crypto, process, storage::Repository}};
 use chrono::Utc;
 use serde_json::{json, Value};
-use std::{collections::{HashMap, HashSet}, sync::Arc};
-use tokio::{process::Child, sync::{Mutex, Notify}, time::{sleep, Duration}};
+use std::{collections::{HashMap, HashSet}, process::ExitStatus, sync::Arc};
+use tokio::{io::AsyncReadExt, process::Child, sync::{mpsc, Mutex, Notify}, time::{sleep, Duration}};
 
 pub struct AppState {
     pub repository: Repository,
@@ -77,18 +77,10 @@ async fn execute_task(state: SharedState, task_id: String, task: Task, stop_sign
             Ok((log, child)) => {
                 state.live_logs.lock().await.insert(task_id.clone(), log.clone());
                 state.processes.lock().await.insert(task_id.clone(), Arc::new(Mutex::new(Some(child))));
-                let child = state.processes.lock().await.get(&task_id).cloned();
-                let output = match child {
-                    Some(child) => match child.lock().await.take() {
-                        Some(process) => process.wait_with_output().await.map_err(|error| error.to_string()),
-                        None => Err("任务进程不存在".into()),
-                    },
-                    None => Err("任务进程不存在".into()),
-                };
-                state.processes.lock().await.remove(&task_id);
+                let output = collect_process_output(&state, &task_id).await;
                 let stopped = take_stop_request(&state, &task_id).await;
                 let (status, stdout, stderr) = match output {
-                    Ok(output) => (if stopped { "stopped" } else if output.status.success() { "success" } else { "failed" }, String::from_utf8_lossy(&output.stdout).into_owned(), String::from_utf8_lossy(&output.stderr).into_owned()),
+                    Ok((exit_status, stdout, stderr)) => (if stopped { "stopped" } else if exit_status.success() { "success" } else { "failed" }, stdout, stderr),
                     Err(error) => (if stopped { "stopped" } else { "failed" }, String::new(), error),
                 };
                 let finished_at = Utc::now().to_rfc3339();
@@ -128,6 +120,76 @@ async fn execute_task(state: SharedState, task_id: String, task: Task, stop_sign
     state.stop_signals.lock().await.remove(&task_id);
     state.stop_requested.lock().await.remove(&task_id);
     state.active_tasks.lock().await.remove(&task_id);
+}
+
+struct OutputChunk {
+    stderr: bool,
+    bytes: Vec<u8>,
+}
+
+async fn read_output<R>(mut reader: R, stderr: bool, sender: mpsc::Sender<OutputChunk>)
+where
+    R: tokio::io::AsyncRead + Unpin + Send + 'static,
+{
+    let mut buffer = [0u8; 4096];
+    loop {
+        match reader.read(&mut buffer).await {
+            Ok(0) | Err(_) => break,
+            Ok(size) => {
+                if sender.send(OutputChunk { stderr, bytes: buffer[..size].to_vec() }).await.is_err() { break; }
+            }
+        }
+    }
+}
+
+async fn collect_process_output(state: &SharedState, task_id: &str) -> Result<(ExitStatus, String, String), String> {
+    let child = state.processes.lock().await.get(task_id).cloned().ok_or_else(|| "任务进程不存在".to_string())?;
+    let (stdout, stderr) = {
+        let mut process = child.lock().await;
+        let process = process.as_mut().ok_or_else(|| "任务进程不存在".to_string())?;
+        (process.stdout.take(), process.stderr.take())
+    };
+
+    let (sender, mut receiver) = mpsc::channel(32);
+    if let Some(stdout) = stdout { tokio::spawn(read_output(stdout, false, sender.clone())); }
+    if let Some(stderr) = stderr { tokio::spawn(read_output(stderr, true, sender.clone())); }
+    drop(sender);
+
+    let mut output_closed = false;
+    let mut exit_status = None;
+    let mut stdout_text = String::new();
+    let mut stderr_text = String::new();
+    loop {
+        if exit_status.is_some() {
+            match receiver.recv().await {
+                Some(chunk) => append_output(state, task_id, &chunk, &mut stdout_text, &mut stderr_text).await,
+                None => break,
+            }
+        } else {
+            tokio::select! {
+                chunk = receiver.recv(), if !output_closed => match chunk {
+                    Some(chunk) => append_output(state, task_id, &chunk, &mut stdout_text, &mut stderr_text).await,
+                    None => output_closed = true,
+                },
+                _ = sleep(Duration::from_millis(50)) => {
+                    let mut process = child.lock().await;
+                    let process = process.as_mut().ok_or_else(|| "任务进程不存在".to_string())?;
+                    exit_status = process.try_wait().map_err(|error| error.to_string())?;
+                },
+            }
+        }
+    }
+
+    state.processes.lock().await.remove(task_id);
+    exit_status.map(|status| (status, stdout_text, stderr_text)).ok_or_else(|| "任务进程状态未知".to_string())
+}
+
+async fn append_output(state: &SharedState, task_id: &str, chunk: &OutputChunk, stdout_text: &mut String, stderr_text: &mut String) {
+    let text = String::from_utf8_lossy(&chunk.bytes);
+    if chunk.stderr { stderr_text.push_str(&text); } else { stdout_text.push_str(&text); }
+    if let Some(log) = state.live_logs.lock().await.get_mut(task_id) {
+        if chunk.stderr { log.stderr.push_str(&text); } else { log.stdout.push_str(&text); }
+    }
 }
 
 async fn persist_attempt(state: &SharedState, task_id: &str, log: &RunLog, finished_at: &str, status: &str, stderr: &str) {
