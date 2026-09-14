@@ -1,6 +1,6 @@
 {
   "name": "weischeduler",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "private": true,
   "author": "Ethan Wilkins",
   "description": "WeiScheduler is a local task scheduler built on Tauri, designed to execute Python, shell, and arbitrary executable tasks based on Cron expressions.",

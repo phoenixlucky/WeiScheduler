@@ -2,27 +2,24 @@
 
 - source visual truth: C:/Users/ADMINI~1/AppData/Local/Temp/codex-clipboard-a0f9e754-8b07-4016-9add-36d225ece184.png
 - implementation: local Vite preview at http://localhost:4173/
-- verification viewport: 733 × 551 CSS px, matching the supplied reference image dimensions
-- responsive check: default narrow viewport at 510 px wide
+- verification: narrow 510 px viewport and desktop 1280 × 800 viewport
 
 ## Visual checks
 
-- Rebuilt the shell around the reference hierarchy: compact title block, right-side search/actions, five statistic cards, full-width task table, status pills, and row-level controls.
-- Matched the reference palette with a white/light-blue surface system, blue primary action, restrained borders, compact typography, and task-oriented density.
-- Reused the existing local empty-list raster at public/assets/illustrations/empty-task-search.png; no new decorative placeholder assets were introduced.
-- Kept all bitmap assets under public/assets and extended the project-owned CSS-drawn icon library in src/components/UiIcon.vue; no SVG icons were added.
+- Restored the original product shell: WJ 超级调度器 brand, scheduler engine indicator, theme selector, data-directory button, administrator menu, overview copy, statistic cards, and persistent task editor.
+- Kept the task-list redesign: compact toolbar, full-width table header, status pills, row actions, expandable details, pagination footer, and reference-aligned light-blue surfaces.
+- Kept bitmap assets under public/assets and extended the project-owned CSS-drawn icon library in src/components/UiIcon.vue; no SVG icons were added.
+- Added six browser-only in-memory demo tasks in src/services/tauri.ts for visual testing; Tauri desktop builds continue to read the real local task store.
 
 ## Interaction checks
 
-- New task opens the right-side task configuration drawer.
-- Close/cancel dismisses the drawer and resets the draft.
-- Search input updates the visible task count/state.
-- Auto-refresh, refresh, import, and export controls remain wired to existing store actions.
+- The left task editor remains visible and can create and edit tasks.
+- Theme selector and administrator menu remain available.
+- Search, auto-refresh, refresh, import, and export remain wired to existing actions.
 - Task row actions remain wired for run, pause/start, expand details, edit, stop, and delete.
-- Desktop table headers are visible at the supplied 733 px reference width.
-- Narrow layout collapses table metadata into a readable task row without horizontal overflow.
+- Demo data covers Python, Conda, CMD, executable, success, running, paused, and failed states.
+- At narrow widths, the list remains first and the editor moves below it without horizontal overflow.
 - npm run build passed with vue-tsc --noEmit and Vite production build.
-- Browser console had no new errors or warnings after the final reload; one transient HMR reload warning occurred while replacing the stylesheet and did not recur.
 
 ## Findings
 

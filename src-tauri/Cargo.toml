@@ -1,6 +1,6 @@
 [package]
 name = "weischeduler"
-version = "1.8.0"
+version = "1.8.1"
 description = "A local desktop task scheduler"
 authors = ["Ethan Wilkins"]
 edition = "2021"

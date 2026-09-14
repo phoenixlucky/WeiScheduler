@@ -15,7 +15,6 @@ const importInput = ref<HTMLInputElement>();
 const searchQuery = ref("");
 const showAdvanced = ref(false);
 const adminMenuOpen = ref(false);
-const editorOpen = ref(false);
 const autoStartEnabled = ref(false);
 const autoStartBusy = ref(false);
 const ssvipSkin = ref(localStorage.getItem("weischeduler:ssvip-skin") !== "false");
@@ -52,13 +51,12 @@ function formatTime(value?: string | null) { if (!value) return "—"; return ne
 function describeSchedule(schedule: string) { if (schedule === "*/5 * * * *") return "每 5 分钟"; if (/^\*\/\d+ \* \* \* \*$/.test(schedule)) return `每 ${schedule.split("/")[1].split(" ")[0]} 分钟`; if (/^\d+ \* \* \* \*$/.test(schedule)) return `每小时第 ${schedule.split(" ")[0]} 分`; if (schedule === "0 9 * * *") return "每天 09:00"; return "自定义计划"; }
 function toggleExpanded(id: string) { const next = new Set(expanded.value); next.has(id) ? next.delete(id) : next.add(id); expanded.value = next; }
 async function runAction(action: () => Promise<void>) { try { await action(); } catch (cause) { window.alert(cause instanceof Error ? cause.message : "操作失败"); } }
-function openCreate() { store.reset(); editorOpen.value = true; }
-function openEdit(task: Task) { store.edit(task); editorOpen.value = true; }
-function closeEditor() { editorOpen.value = false; store.reset(); }
-async function saveTask() { const targetMissing = editing.value.runnerType === "executable" ? !editing.value.commandPath.trim() : !editing.value.scriptPath.trim(); if (!editing.value.name.trim() || targetMissing || !editing.value.schedule.trim()) { window.alert(editing.value.runnerType === "executable" ? "请填写任务名称、程序路径和 Cron 表达式" : "请填写任务名称、脚本路径和 Cron 表达式"); return; } await runAction(async () => { await store.save(); editorOpen.value = false; }); }
+function openCreate() { store.reset(); focusEditor(); }
+function openEdit(task: Task) { store.edit(task); focusEditor(); }
+async function saveTask() { const targetMissing = editing.value.runnerType === "executable" ? !editing.value.commandPath.trim() : !editing.value.scriptPath.trim(); if (!editing.value.name.trim() || targetMissing || !editing.value.schedule.trim()) { window.alert(editing.value.runnerType === "executable" ? "请填写任务名称、程序路径和 Cron 表达式" : "请填写任务名称、脚本路径和 Cron 表达式"); return; } await runAction(() => store.save()); }
 function addEnvironmentVariable() { editing.value.environment.push({ key: "", value: "" }); }
 function removeEnvironmentVariable(index: number) { editing.value.environment.splice(index, 1); }
-function focusEditor() { openCreate(); requestAnimationFrame(() => (document.querySelector(".editor-modal input") as HTMLInputElement | null)?.focus()); }
+function focusEditor() { requestAnimationFrame(() => (document.querySelector(".editor-panel input") as HTMLInputElement | null)?.focus()); }
 function confirmAction(message: string, action: () => Promise<void>) { if (window.confirm(message)) void runAction(action); }
 function activateSsvip() { if (activationKeyInput.value.trim().toLowerCase() !== SSVIP_ACTIVATION_KEY) { window.alert("激活秘钥不正确"); return; } activationStatus.value = true; ssvipSkin.value = true; activationKeyInput.value = ""; localStorage.setItem("weischeduler:ssvip-activation", "active"); window.alert("SSVIP 激活成功"); }
 async function toggleAutoStart() {
@@ -87,20 +85,19 @@ onUnmounted(() => store.stopPolling());
 <template>
   <div class="app-shell">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark"><UiIcon name="list" size="20" /></span><div><h1>任务列表</h1><p>管理和查看所有定时任务</p></div></div>
+      <div class="brand"><span class="brand-mark"><img src="/assets/icons/wj-super-scheduler-icon.png" alt="WJ 超级调度器图标" /></span><div><h1>WJ 超级调度器</h1><p>本地任务调度 · <b>SSVIP</b></p></div></div>
       <div class="topbar-actions">
-        <label class="search-box"><UiIcon name="search" size="15" /><input v-model="searchQuery" placeholder="搜索任务名称、脚本路径或关键字..." /></label>
-        <label class="switch-label"><input v-model="autoRefresh" type="checkbox" /><span class="switch"></span>自动刷新</label>
-        <button class="button ghost" @click="runAction(store.refresh)"><UiIcon name="refresh" size="14" />刷新</button>
-        <input ref="importInput" type="file" accept="application/json" hidden @change="handleImport" />
-        <button class="button ghost" @click="importInput?.click()"><UiIcon name="upload" size="14" />导入</button>
-        <button class="button ghost" @click="runAction(store.downloadExport)"><UiIcon name="download" size="14" />导出</button>
+        <span class="engine-pill"><i></i><span>快速</span><small>调度引擎</small></span>
+        <div class="theme-picker" :class="{ open: themeMenuOpen }"><button type="button" class="theme-select" aria-label="选择主题" :aria-expanded="themeMenuOpen" @click="themeMenuOpen = !themeMenuOpen"><span>预设：{{ currentThemeLabel }}</span><UiIcon name="chevron" size="11" /></button><div v-if="themeMenuOpen" class="theme-options"><button v-for="theme in themes" :key="theme[0]" type="button" :class="{ active: theme[0] === currentTheme }" @click="applyTheme(theme[0]); themeMenuOpen = false"><i></i><span>{{ theme[1].split("·").pop()?.trim() }}</span><b v-if="theme[0] === currentTheme">✓</b></button></div></div>
+        <button class="icon-button top-action" title="打开数据目录" @click="runAction(openDataDirectory)"><UiIcon name="gear" size="17" /></button>
+        <div class="admin-menu-wrap"><button class="user-chip" :aria-expanded="adminMenuOpen" title="管理员菜单" @click="adminMenuOpen = !adminMenuOpen"><span class="avatar"><img src="/assets/avatars/admin-male-vip.png" alt="管理员头像" /></span><span>管理员</span><UiIcon name="chevron" size="11" /></button><div v-if="adminMenuOpen" class="admin-menu"><div class="admin-menu-head"><span class="admin-menu-avatar"><img src="/assets/avatars/admin-male-vip.png" alt="管理员头像" /></span><div><b>SSVIP 年度版</b><small>专属权益已开启</small></div><strong>¥999<small>/年</small></strong></div><div class="activation-panel" :class="{ active: activationStatus }"><div class="activation-panel-head"><span><UiIcon name="shield" size="13" />付费激活</span><b>{{ activationStatus ? "已激活" : "待激活" }}</b></div><div v-if="!activationStatus" class="activation-input-row"><input v-model="activationKeyInput" type="password" placeholder="输入付费激活秘钥" @keyup.enter="activateSsvip" /><button type="button" @click="activateSsvip">激活</button></div><small v-else>SSVIP 权益已绑定此设备</small></div><button class="admin-menu-item" @click="ssvipSkin = !ssvipSkin"><span class="admin-item-icon"><UiIcon name="spark" size="14" /></span><span><b>SSVIP 专属皮肤</b><small>金紫光效与专属高光</small></span><span class="menu-switch" :class="{ active: ssvipSkin }"><i></i></span></button><button class="admin-menu-item" :disabled="autoStartBusy" @click="toggleAutoStart"><span class="admin-item-icon"><UiIcon name="refresh" size="14" /></span><span><b>开机自启动</b><small>{{ autoStartEnabled ? "系统启动时自动运行" : "系统启动时不运行" }}</small></span><span class="menu-switch" :class="{ active: autoStartEnabled }"><i></i></span></button><div class="admin-menu-item admin-menu-item--static"><span class="admin-item-icon"><UiIcon name="shield" size="14" /></span><span><b>本地优先 · 安全运行</b><small>任务数据仅保存在本机</small></span><span class="menu-check">✓</span></div></div></div>
       </div>
     </header>
 
     <main>
       <div v-if="notice" class="notice" role="status" @click="notice = ''">{{ notice }} <UiIcon name="close" size="12" /></div>
       <div v-if="error" class="error-banner">{{ error }}</div>
+      <section class="overview"><div class="overview-copy"><p class="eyebrow">WORKSPACE / SCHEDULER</p><h2>高效调度，让重复工作自动运行</h2><p class="lede">本地运行，数据归你所有。用 Cron 表达式安排 Python、Conda、CMD 或任意可执行程序。</p></div></section>
       <section class="stats-grid" aria-label="任务统计">
         <div class="stat-card"><span class="stat-icon stat-icon--blue"><UiIcon name="list" size="18" /></span><div><span>全部任务</span><strong>{{ tasks.length }}</strong></div></div>
         <div class="stat-card"><span class="stat-icon stat-icon--green"><UiIcon name="check" size="18" /></span><div><span>运行成功</span><strong>{{ successCount }}</strong></div></div>
@@ -109,6 +106,20 @@ onUnmounted(() => store.stopPolling());
         <div class="stat-card"><span class="stat-icon stat-icon--red"><UiIcon name="alert" size="18" /></span><div><span>运行失败</span><strong>{{ failedCount }}</strong></div></div>
       </section>
 
+      <section class="workspace-grid">
+      <aside class="panel editor-panel"><div class="editor-panel-heading"><div><span class="eyebrow">TASK BUILDER</span><h2>{{ editing.id ? "编辑任务" : "新建任务" }}</h2><p>配置任务信息，创建一个新的定时任务</p></div><button class="icon-button" title="清空表单" @click="store.reset"><UiIcon name="refresh" size="15" /></button></div>
+        <form class="editor-form" @submit.prevent="saveTask">
+          <label>任务名称 <em>*</em><span class="input-wrap"><UiIcon name="file" size="15" /><input v-model="editing.name" placeholder="例如：日报生成、数据备份" /></span></label>
+          <label>执行方式 <em>*</em><span class="runner-options"><button type="button" :class="{ active: editing.runnerType === 'python' }" @click="editing.runnerType = 'python'"><UiIcon name="spark" size="14" />Python</button><button type="button" :class="{ active: editing.runnerType.startsWith('conda') }" @click="editing.runnerType = 'conda-name'"><UiIcon name="database" size="14" />Conda</button><button type="button" :class="{ active: ['cmd','executable'].includes(editing.runnerType) }" @click="editing.runnerType = 'cmd'"><UiIcon name="terminal" size="14" />自定义命令</button></span></label>
+          <label>命令路径 <em>*</em><span class="input-wrap"><UiIcon name="terminal" size="15" /><input v-model="editing.commandPath" placeholder="例如：python.exe、cmd 或 node" /></span></label>
+          <label v-if="editing.runnerType !== 'executable'">脚本路径 <em>*</em><span class="input-wrap"><UiIcon name="file" size="15" /><input v-model="editing.scriptPath" placeholder="例如：D:\\jobs\\report.py" /></span></label>
+          <label>启动参数<span class="input-wrap"><UiIcon name="list" size="15" /><input v-model="editing.args" placeholder='例如：--date "2026-09-12"' /></span></label>
+          <div class="form-row"><label>工作目录<span class="input-wrap"><UiIcon name="folder" size="15" /><input v-model="editing.workingDirectory" placeholder="默认脚本所在目录" /></span></label><label>Conda 目标<span class="input-wrap"><UiIcon name="database" size="15" /><input v-model="editing.condaTarget" :disabled="!editing.runnerType.startsWith('conda')" placeholder="环境名或完整路径" /></span></label></div>
+          <div class="schedule-field"><label>调度配置 <em>*</em><input v-model="editing.schedule" placeholder="*/5 * * * *" @change="syncCronFromSchedule" /></label><span>5 段 Cron</span></div>
+          <details class="advanced-config" :open="showAdvanced" @toggle="showAdvanced = ($event.target as HTMLDetailsElement).open"><summary><span><UiIcon name="sliders" size="14" />更多调度配置</span><UiIcon name="chevron" size="13" /></summary><div class="advanced-body"><div class="subsection-heading"><span>环境变量</span><button type="button" class="text-button" @click="addEnvironmentVariable">＋ 添加</button></div><div v-if="editing.environment.length" class="environment-list"><div v-for="(variable, index) in editing.environment" :key="index" class="environment-row"><input v-model="variable.key" placeholder="变量名" /><input v-model="variable.value" placeholder="值" /><button type="button" @click="removeEnvironmentVariable(index)"><UiIcon name="close" size="12" /></button></div></div><p v-else class="field-hint">可选，仅对当前任务进程生效。</p><div class="form-row"><label>失败重试次数<input v-model.number="editing.retryCount" type="number" min="0" max="5" /></label><label>重试间隔（秒）<input v-model.number="editing.retryDelaySeconds" type="number" min="0" max="86400" /></label></div></div></details>
+          <label class="check"><input v-model="editing.enabled" type="checkbox" /><span>保存后启用调度</span></label><button class="button primary save-button" type="submit" :disabled="loading"><UiIcon name="check" size="14" />{{ editing.id ? "保存修改" : "创建任务" }}</button>
+        </form>
+      </aside>
       <section class="panel list-panel">
         <div class="list-toolbar"><div><h2>定时任务</h2><p>共 {{ filteredTasks.length }} 条任务，实时掌握调度状态</p></div><button class="button primary create-button" @click="openCreate"><UiIcon name="plus" size="14" />新建任务</button></div>
         <div class="table-head"><span>任务名称</span><span>执行方式</span><span>命令路径</span><span>脚本路径</span><span>Cron 表达式</span><span>状态</span><span>下次运行时间</span><span>操作</span></div>
@@ -130,24 +141,8 @@ onUnmounted(() => store.stopPolling());
         </div>
         <div class="list-footer"><span>共 {{ filteredTasks.length }} 条任务</span><div class="pagination"><button disabled><UiIcon name="chevron-left" size="11" /></button><button class="active">1</button><button disabled><UiIcon name="chevron-right" size="11" /></button><select aria-label="每页数量"><option>10 条/页</option></select></div></div>
       </section>
+      </section>
     </main>
 
-    <div v-if="editorOpen" class="modal-backdrop" @click.self="closeEditor">
-      <aside class="editor-modal" role="dialog" aria-modal="true" aria-label="任务编辑器">
-        <div class="modal-heading"><div><span class="modal-kicker">TASK CONFIGURATION</span><h2>{{ editing.id ? "编辑任务" : "新建任务" }}</h2><p>配置执行路径与调度计划</p></div><button class="icon-button" title="关闭" @click="closeEditor"><UiIcon name="close" size="16" /></button></div>
-        <form class="editor-form" @submit.prevent="saveTask">
-          <label>任务名称 <em>*</em><span class="input-wrap"><UiIcon name="file" size="15" /><input v-model="editing.name" placeholder="例如：日报生成、数据备份" /></span></label>
-          <label>执行方式 <em>*</em><span class="runner-options"><button type="button" :class="{ active: editing.runnerType === 'python' }" @click="editing.runnerType = 'python'"><UiIcon name="spark" size="14" />Python</button><button type="button" :class="{ active: editing.runnerType.startsWith('conda') }" @click="editing.runnerType = 'conda-name'"><UiIcon name="database" size="14" />Conda</button><button type="button" :class="{ active: ['cmd','executable'].includes(editing.runnerType) }" @click="editing.runnerType = 'cmd'"><UiIcon name="terminal" size="14" />自定义命令</button></span></label>
-          <label>{{ editing.runnerType === "executable" ? "程序路径" : "命令路径" }} <em>*</em><span class="input-wrap"><UiIcon name="terminal" size="15" /><input v-model="editing.commandPath" placeholder="例如：python.exe、cmd 或 node" /></span></label>
-          <label v-if="editing.runnerType !== 'executable'">脚本路径 <em>*</em><span class="input-wrap"><UiIcon name="file" size="15" /><input v-model="editing.scriptPath" placeholder="例如：D:\\jobs\\report.py" /></span></label>
-          <label>启动参数<span class="input-wrap"><UiIcon name="list" size="15" /><input v-model="editing.args" placeholder='例如：--date "2026-09-12"' /></span></label>
-          <div class="form-row"><label>工作目录<span class="input-wrap"><UiIcon name="folder" size="15" /><input v-model="editing.workingDirectory" placeholder="默认脚本所在目录" /></span></label><label>Conda 目标<span class="input-wrap"><UiIcon name="database" size="15" /><input v-model="editing.condaTarget" :disabled="!editing.runnerType.startsWith('conda')" placeholder="环境名或完整路径" /></span></label></div>
-          <div class="schedule-field"><label>调度配置 <em>*</em><input v-model="editing.schedule" placeholder="*/5 * * * *" @change="syncCronFromSchedule" /></label><span>5 段 Cron</span></div>
-          <details class="advanced-config" :open="showAdvanced" @toggle="showAdvanced = ($event.target as HTMLDetailsElement).open"><summary><span><UiIcon name="sliders" size="14" />更多调度配置</span><UiIcon name="chevron" size="13" /></summary><div class="advanced-body"><div class="subsection-heading"><span>环境变量</span><button type="button" class="text-button" @click="addEnvironmentVariable">＋ 添加</button></div><div v-if="editing.environment.length" class="environment-list"><div v-for="(variable, index) in editing.environment" :key="index" class="environment-row"><input v-model="variable.key" placeholder="变量名" /><input v-model="variable.value" placeholder="值" /><button type="button" @click="removeEnvironmentVariable(index)"><UiIcon name="close" size="12" /></button></div></div><p v-else class="field-hint">可选，仅对当前任务进程生效。</p><div class="form-row"><label>失败重试次数<input v-model.number="editing.retryCount" type="number" min="0" max="5" /></label><label>重试间隔（秒）<input v-model.number="editing.retryDelaySeconds" type="number" min="0" max="86400" /></label></div></div></details>
-          <label class="check"><input v-model="editing.enabled" type="checkbox" /><span>保存后启用调度</span></label>
-          <div class="modal-actions"><button type="button" class="button ghost" @click="closeEditor">取消</button><button class="button primary" type="submit" :disabled="loading"><UiIcon name="check" size="14" />{{ editing.id ? "保存修改" : "创建任务" }}</button></div>
-        </form>
-      </aside>
-    </div>
   </div>
 </template>
